@@ -1,33 +1,30 @@
 package com.vlkan.hrrs.api.base64;
 
-import com.vlkan.hrrs.api.HttpRequestRecordReader;
 import com.vlkan.hrrs.api.HttpRequestRecord;
-
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import com.vlkan.hrrs.api.HttpRequestRecordReader;
+import com.vlkan.hrrs.api.HttpRequestRecordSource;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class Base64HttpRequestRecordReader implements HttpRequestRecordReader {
 
+    private final HttpRequestRecordSource source;
+
     private final Base64Decoder decoder;
 
-    private final BufferedReader reader;
-
-    public Base64HttpRequestRecordReader(Base64Decoder decoder, InputStream inputStream) {
+    public Base64HttpRequestRecordReader(HttpRequestRecordSource source, Base64Decoder decoder) {
+        this.source = checkNotNull(source, "source");
         this.decoder = checkNotNull(decoder, "decoder");
-        this.reader = createBufferedReader(checkNotNull(inputStream, "inputStream"));
     }
 
-    private static BufferedReader createBufferedReader(InputStream inputStream) {
-        InputStreamReader inputStreamReader = new InputStreamReader(inputStream, Base64HttpRequestRecord.CHARSET);
-        return new BufferedReader(inputStreamReader);
+    @Override
+    public HttpRequestRecordSource getSource() {
+        return source;
     }
 
     @Override
     public Iterable<HttpRequestRecord> read() {
-        return new Base64HttpRequestRecordReaderIterable(decoder, reader);
+        return new Base64HttpRequestRecordReaderIterable(source, decoder);
     }
 
 }

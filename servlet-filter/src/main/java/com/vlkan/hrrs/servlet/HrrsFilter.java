@@ -4,6 +4,7 @@ import com.google.protobuf.ByteString;
 import com.vlkan.hrrs.api.HttpRequestMethod;
 import com.vlkan.hrrs.api.HttpRequestPayload;
 import com.vlkan.hrrs.api.HttpRequestRecord;
+import com.vlkan.hrrs.api.HttpRequestRecordWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-public class HrrsFilter implements Filter {
+public abstract class HrrsFilter implements Filter {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HrrsFilter.class);
 
@@ -34,6 +35,7 @@ public class HrrsFilter implements Filter {
             long totalPayloadByteCount = teeServletInputStream.getByteCount();
             byte[] recordedPayloadBytes = requestOutputStream.toByteArray();
             HttpRequestRecord record = createRecord(httpRequest, recordedPayloadBytes, totalPayloadByteCount);
+            getWriter().write(record);
         }
     }
 
@@ -55,7 +57,7 @@ public class HrrsFilter implements Filter {
         return HttpRequestRecord
                 .newBuilder()
                 .setId(id)
-                .setTimestamp(System.currentTimeMillis())
+                .setTimestampMillis(System.currentTimeMillis())
                 .setUri(request.getRequestURI())
                 .setMethod(method)
                 .setPayload(payload)
@@ -68,8 +70,8 @@ public class HrrsFilter implements Filter {
         return HttpRequestPayload
                 .newBuilder()
                 .setType(contentType)
-                .setData(ByteString.copyFrom(recordedPayloadBytes))
                 .setMissingByteCount(missingByteCount)
+                .setBytes(ByteString.copyFrom(recordedPayloadBytes))
                 .build();
     }
 
@@ -86,6 +88,8 @@ public class HrrsFilter implements Filter {
     protected String generateId(HttpServletRequest request) {
         return ID_GENERATOR.next();
     }
+
+    abstract protected HttpRequestRecordWriter getWriter();
 
     @Override
     public void destroy() {

@@ -1,0 +1,63 @@
+syntax = "proto3";
+
+package com.vlkan.hrrs.api;
+
+option java_outer_classname = "HrrsModel";
+
+option java_multiple_files = true;
+
+enum HttpRequestMethod {
+
+    UNKNOWN = 0;
+
+    DELETE = 1;
+
+    GET = 2;
+
+    HEAD = 3;
+
+    OPTIONS = 4;
+
+    PATCH = 5;
+
+    POST = 6;
+
+    PUT = 7;
+
+    TRACE = 8;
+
+}
+
+message HttpRequestHeader {
+
+    string name = 1;
+
+    string value = 2;
+
+}
+
+message HttpRequestPayload {
+
+    string type = 1;
+
+    uint64 missingByteCount = 2;
+
+    bytes bytes = 3;
+
+}
+
+message HttpRequestRecord {
+
+    string id = 1;
+
+    uint64 timestampMillis = 2;
+
+    string uri = 3;
+
+    HttpRequestMethod method = 4;
+
+    repeated HttpRequestHeader headers = 5;
+
+    HttpRequestPayload payload = 6;
+
+}
