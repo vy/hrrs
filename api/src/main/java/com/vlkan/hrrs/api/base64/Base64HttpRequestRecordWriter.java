@@ -4,8 +4,6 @@ import com.vlkan.hrrs.api.HttpRequestRecord;
 import com.vlkan.hrrs.api.HttpRequestRecordTarget;
 import com.vlkan.hrrs.api.HttpRequestRecordWriter;
 
-import java.io.BufferedWriter;
-
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.vlkan.hrrs.api.base64.Base64HttpRequestRecord.FIELD_SEPARATOR;
 import static com.vlkan.hrrs.api.base64.Base64HttpRequestRecord.RECORD_SEPARATOR;
@@ -28,14 +26,13 @@ public class Base64HttpRequestRecordWriter implements HttpRequestRecordWriter {
 
     @Override
     public synchronized void write(HttpRequestRecord record) {
-        BufferedWriter writer = target.getWriter();
         try {
-            writer.write(record.getId());
-            writer.write(FIELD_SEPARATOR);
+            target.write(record.getId());
+            target.write(FIELD_SEPARATOR);
             byte[] recordBytes = record.toByteArray();
             String encodedRecordBytes = encoder.encode(recordBytes);
-            writer.write(encodedRecordBytes);
-            writer.write(RECORD_SEPARATOR);
+            target.write(encodedRecordBytes);
+            target.write(RECORD_SEPARATOR);
         } catch (Throwable error) {
             String message = String.format("record serialization failure (id=%s)", record.getId());
             throw new RuntimeException(message, error);

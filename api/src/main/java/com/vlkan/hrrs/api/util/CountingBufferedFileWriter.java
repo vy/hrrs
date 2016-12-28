@@ -19,16 +19,16 @@ public class CountingBufferedFileWriter extends BufferedWriter {
 
     private final Writer writer;
 
-    private final BufferedWriterListener listener;
+    private final CountingBufferedFileWriterListener listener;
 
-    private CountingBufferedFileWriter(File file, Writer writer, BufferedWriterListener listener) {
+    private CountingBufferedFileWriter(File file, Writer writer, CountingBufferedFileWriterListener listener) {
         super(writer);
         this.file = file;
         this.writer = writer;
         this.listener = listener;
     }
 
-    public CountingBufferedFileWriter(File file, BufferedWriterListener listener) {
+    public CountingBufferedFileWriter(File file, CountingBufferedFileWriterListener listener) {
         this(file, createFileWriter(checkNotNull(file, "file")), checkNotNull(listener, "listener"));
     }
 

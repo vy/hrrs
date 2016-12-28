@@ -1,6 +1,6 @@
 package com.vlkan.hrrs.api.util;
 
-public interface BufferedWriterListener {
+public interface CountingBufferedFileWriterListener {
 
     void onBufferedWrite(long byteCount);
 

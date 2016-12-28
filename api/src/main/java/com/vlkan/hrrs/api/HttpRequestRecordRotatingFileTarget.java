@@ -1,20 +1,23 @@
 package com.vlkan.hrrs.api;
 
-import com.vlkan.hrrs.api.util.BufferedWriterListener;
+import com.vlkan.hrrs.api.util.CountingBufferedFileWriterListener;
 import com.vlkan.hrrs.api.util.CountingBufferedFileWriter;
+import com.vlkan.hrrs.api.util.FileRotationKey;
+import com.vlkan.hrrs.api.util.FileRotationKeyFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedWriter;
 import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
 import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
 
-public class HttpRequestRecordRotatingFileTarget implements HttpRequestRecordTarget, BufferedWriterListener {
+public class HttpRequestRecordRotatingFileTarget implements HttpRequestRecordTarget, CountingBufferedFileWriterListener {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HttpRequestRecordRotatingFileTarget.class);
 
@@ -23,6 +26,8 @@ public class HttpRequestRecordRotatingFileTarget implements HttpRequestRecordTar
      */
     private final String filenamePattern;
 
+    private final FileRotationKeyFactory rotationKeyFactory;
+
     /**
      * Allowed maximum number of bytes before rotation.
      */
@@ -30,16 +35,18 @@ public class HttpRequestRecordRotatingFileTarget implements HttpRequestRecordTar
 
     private volatile boolean rotating = false;
 
-    private volatile long rotationTimeMillis = getMidnightTimeMillis();
+    private volatile FileRotationKey rotationKey;
 
     private volatile CountingBufferedFileWriter writer = null;
 
-    public HttpRequestRecordRotatingFileTarget(String filenamePattern, long maxByteCount) {
+    public HttpRequestRecordRotatingFileTarget(String filenamePattern, FileRotationKeyFactory rotationKeyFactory, long maxByteCount) {
         checkFilenamePattern(filenamePattern);
+        checkNotNull(rotationKeyFactory, "rotationKeyFactory");
         checkArgument(maxByteCount > 0, "maxByteCount > 0, found: %s", maxByteCount);
         this.filenamePattern = filenamePattern;
+        this.rotationKeyFactory = rotationKeyFactory;
         this.maxByteCount = maxByteCount;
-        unsafeRotate(rotationTimeMillis);
+        this.rotationKey = rotationKeyFactory.getNextKey();
     }
 
     private static void checkFilenamePattern(String filenamePattern) {
@@ -50,21 +57,25 @@ public class HttpRequestRecordRotatingFileTarget implements HttpRequestRecordTar
                 "invalid filename pattern: %s", filenamePattern);
     }
 
-    public long getMaxByteCount() {
-        return maxByteCount;
-    }
-
     public String getFilenamePattern() {
         return filenamePattern;
     }
 
-    public long getRotationTimeMillis() {
-        return rotationTimeMillis;
+    public FileRotationKeyFactory getRotationKeyFactory() {
+        return rotationKeyFactory;
+    }
+
+    public long getMaxByteCount() {
+        return maxByteCount;
     }
 
     @Override
-    public BufferedWriter getWriter() {
-        return writer;
+    public void write(String value) {
+        try {
+            writer.write(value);
+        } catch (IOException error) {
+            throw new RuntimeException("write failure", error);
+        }
     }
 
     @Override
@@ -75,7 +86,7 @@ public class HttpRequestRecordRotatingFileTarget implements HttpRequestRecordTar
     }
 
     private boolean shouldRotate(long byteCount) {
-        return byteCount > maxByteCount && System.currentTimeMillis() >= rotationTimeMillis;
+        return byteCount > maxByteCount || System.currentTimeMillis() >= rotationKey.getRotationTimeMillis();
     }
 
     private void rotate() {
@@ -102,7 +113,7 @@ public class HttpRequestRecordRotatingFileTarget implements HttpRequestRecordTar
         if (oldWriter != null) {
             oldWriter.close();
         }
-        rotationTimeMillis = nextRotationTimeMillis;
+//        rotationTimeMillis = nextRotationTimeMillis;
         LOGGER.debug("completed rotation (oldWriter={}, newWriter={})", oldWriter, newWriter);
     }
 
@@ -125,10 +136,10 @@ public class HttpRequestRecordRotatingFileTarget implements HttpRequestRecordTar
 
     private long getNextRotationTimeMillis() {
         Calendar prevRotationCalendar = new GregorianCalendar();
-        prevRotationCalendar.setTimeInMillis(rotationTimeMillis);
+//        prevRotationCalendar.setTimeInMillis(rotationTimeMillis);
         int prevRotationDayOfMonth = prevRotationCalendar.get(Calendar.DAY_OF_MONTH);
         Calendar nextRotationCalendar = new GregorianCalendar();
-        nextRotationCalendar.setTimeInMillis(rotationTimeMillis);
+//        nextRotationCalendar.setTimeInMillis(rotationTimeMillis);
         int nextRotationDayOfMonth;
         do {
             nextRotationCalendar.add(Calendar.DAY_OF_MONTH, 1);
