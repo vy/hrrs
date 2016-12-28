@@ -2,7 +2,7 @@ package com.vlkan.hrrs.api;
 
 public interface HttpRequestRecordWriter {
 
-    HttpRequestRecordTarget getTarget();
+    HttpRequestRecordWriterTarget getTarget();
 
     void write(HttpRequestRecord record);
 

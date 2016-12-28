@@ -2,7 +2,7 @@ package com.vlkan.hrrs.api;
 
 public interface HttpRequestRecordReader {
 
-    HttpRequestRecordSource getSource();
+    HttpRequestRecordReaderSource getSource();
 
     Iterable<HttpRequestRecord> read();
 

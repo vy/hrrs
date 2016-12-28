@@ -5,24 +5,15 @@ import com.vlkan.hrrs.api.HttpRequestMethod;
 import com.vlkan.hrrs.api.HttpRequestPayload;
 import com.vlkan.hrrs.api.HttpRequestRecord;
 import com.vlkan.hrrs.api.HttpRequestRecordWriter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-public abstract class HrrsFilter implements Filter {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(HrrsFilter.class);
+public abstract class AbstractHrrsFilter implements Filter {
 
     private static final HrrsIdGenerator ID_GENERATOR = new HrrsIdGenerator(4);
-
-    @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
-        LOGGER.info("instantiated");
-    }
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
@@ -90,10 +81,5 @@ public abstract class HrrsFilter implements Filter {
     }
 
     abstract protected HttpRequestRecordWriter getWriter();
-
-    @Override
-    public void destroy() {
-        LOGGER.info("destroyed");
-    }
 
 }

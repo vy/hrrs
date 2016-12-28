@@ -1,7 +1,7 @@
 package com.vlkan.hrrs.api.base64;
 
 import com.vlkan.hrrs.api.HttpRequestRecord;
-import com.vlkan.hrrs.api.HttpRequestRecordTarget;
+import com.vlkan.hrrs.api.HttpRequestRecordWriterTarget;
 import com.vlkan.hrrs.api.HttpRequestRecordWriter;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -12,15 +12,15 @@ public class Base64HttpRequestRecordWriter implements HttpRequestRecordWriter {
 
     private final Base64Encoder encoder;
 
-    private final HttpRequestRecordTarget target;
+    private final HttpRequestRecordWriterTarget target;
 
-    public Base64HttpRequestRecordWriter(HttpRequestRecordTarget target, Base64Encoder encoder) {
+    public Base64HttpRequestRecordWriter(HttpRequestRecordWriterTarget target, Base64Encoder encoder) {
         this.target = checkNotNull(target, "target");
         this.encoder = checkNotNull(encoder, "encoder");
     }
 
     @Override
-    public HttpRequestRecordTarget getTarget() {
+    public HttpRequestRecordWriterTarget getTarget() {
         return target;
     }
 

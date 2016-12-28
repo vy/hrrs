@@ -23,7 +23,7 @@
 
         <!-- library versions -->
         <guava.version>20.0</guava.version>
-        <immutables.version>2.3.10</immutables.version>
+        <jsr305.version>3.0.1</jsr305.version>
         <slf4j-api.version>1.7.22</slf4j-api.version>
 
         <!-- plugin versions -->
@@ -49,9 +49,9 @@
             </dependency>
 
             <dependency>
-                <groupId>org.immutables</groupId>
-                <artifactId>value</artifactId>
-                <version>${immutables.version}</version>
+                <groupId>com.google.code.findbugs</groupId>
+                <artifactId>jsr305</artifactId>
+                <version>${jsr305.version}</version>
             </dependency>
 
         </dependencies>
