@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <artifactId>hrrs-parent</artifactId>
+        <groupId>com.vlkan.hrrs</groupId>
+        <version>1.0-SNAPSHOT</version>
+        <relativePath>../..</relativePath>
+    </parent>
+
+    <artifactId>hrrs-jaxrs-example</artifactId>
+    <packaging>war</packaging>
+
+    <properties>
+
+        <!-- library versions -->
+        <javax.ws.rs-api.version>2.0.1</javax.ws.rs-api.version>
+        <jaxrs-ri.version>2.25</jaxrs-ri.version>
+        <servlet-api.version>3.1.0</servlet-api.version>
+
+    </properties>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>com.vlkan.hrrs</groupId>
+            <artifactId>hrrs-servlet-filter</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>${servlet-api.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.ws.rs</groupId>
+            <artifactId>javax.ws.rs-api</artifactId>
+            <version>${javax.ws.rs-api.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.glassfish.jersey.bundles</groupId>
+            <artifactId>jaxrs-ri</artifactId>
+            <version>${jaxrs-ri.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>${slf4j-api.version}</version>
+        </dependency>
+
+    </dependencies>
+
+</project>

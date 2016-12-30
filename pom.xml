@@ -12,8 +12,9 @@
 
     <modules>
         <module>api</module>
-        <module>servlet-filter</module>
+        <module>examples/jaxrs</module>
         <module>examples/spring</module>
+        <module>servlet-filter</module>
     </modules>
 
     <properties>
