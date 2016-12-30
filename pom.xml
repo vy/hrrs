@@ -13,6 +13,7 @@
     <modules>
         <module>api</module>
         <module>servlet-filter</module>
+        <module>examples/spring</module>
     </modules>
 
     <properties>

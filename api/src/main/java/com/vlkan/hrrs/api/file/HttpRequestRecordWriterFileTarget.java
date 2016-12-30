@@ -1,5 +1,6 @@
 package com.vlkan.hrrs.api.file;
 
+import com.google.common.base.MoreObjects;
 import com.vlkan.hrrs.api.HttpRequestRecordWriterTarget;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +26,7 @@ public class HttpRequestRecordWriterFileTarget implements HttpRequestRecordWrite
         this.file = checkNotNull(file, "file");
         this.charset = checkNotNull(charset, "charset");
         this.writer = createWriter(file, charset);
+        LOGGER.trace("instantiated (file={}, charset={})", file, charset);
     }
 
     private static BufferedWriter createWriter(File file, Charset charset) {
@@ -57,13 +59,17 @@ public class HttpRequestRecordWriterFileTarget implements HttpRequestRecordWrite
     }
 
     @Override
-    public void close() {
-        try {
-            writer.close();
-        } catch (IOException error) {
-            String message = String.format("close failure (file=%s)", file);
-            LOGGER.error(message, error);
-        }
+    public void close() throws IOException {
+        LOGGER.trace("closing");
+        writer.close();
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("file", file)
+                .add("charset", charset)
+                .toString();
     }
 
 }

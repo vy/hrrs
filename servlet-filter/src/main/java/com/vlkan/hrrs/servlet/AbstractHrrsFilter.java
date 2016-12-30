@@ -82,4 +82,14 @@ public abstract class AbstractHrrsFilter implements Filter {
 
     abstract protected HttpRequestRecordWriter getWriter();
 
+    @Override
+    public void init(FilterConfig filterConfig) throws ServletException {
+        // Do nothing.
+    }
+
+    @Override
+    public void destroy() {
+        // Do nothing.
+    }
+
 }

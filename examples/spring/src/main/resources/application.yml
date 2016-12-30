@@ -1,0 +1,4 @@
+logging.level.com.vlkan.hrrs: TRACE
+spring:
+  main:
+    banner-mode: "off"

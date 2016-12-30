@@ -27,6 +27,7 @@ public class HttpRequestRecordReaderFileSource implements HttpRequestRecordReade
         this.file = checkNotNull(file, "file");
         this.charset = checkNotNull(charset, "charset");
         this.reader = createReader(file, charset);
+        LOGGER.trace("instantiated (file={}, charset={})", file, charset);
     }
 
     private static BufferedReader createReader(File file, Charset charset) {
@@ -60,13 +61,9 @@ public class HttpRequestRecordReaderFileSource implements HttpRequestRecordReade
     }
 
     @Override
-    public void close() {
-        try {
-            reader.close();
-        } catch (Throwable error) {
-            String message = String.format("failed closing (file=%s)", file);
-            LOGGER.error(message, error);
-        }
+    public void close() throws IOException {
+        LOGGER.trace("closing");
+        reader.close();
     }
 
     @Override

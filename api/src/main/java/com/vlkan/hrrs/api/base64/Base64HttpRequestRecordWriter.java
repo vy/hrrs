@@ -25,14 +25,16 @@ public class Base64HttpRequestRecordWriter implements HttpRequestRecordWriter {
     }
 
     @Override
-    public synchronized void write(HttpRequestRecord record) {
+    public void write(HttpRequestRecord record) {
         try {
-            target.write(record.getId());
-            target.write(FIELD_SEPARATOR);
-            byte[] recordBytes = record.toByteArray();
-            String encodedRecordBytes = encoder.encode(recordBytes);
-            target.write(encodedRecordBytes);
-            target.write(RECORD_SEPARATOR);
+            synchronized (this) {
+                target.write(record.getId());
+                target.write(FIELD_SEPARATOR);
+                byte[] recordBytes = record.toByteArray();
+                String encodedRecordBytes = encoder.encode(recordBytes);
+                target.write(encodedRecordBytes);
+                target.write(RECORD_SEPARATOR);
+            }
         } catch (Throwable error) {
             String message = String.format("record serialization failure (id=%s)", record.getId());
             throw new RuntimeException(message, error);
