@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-public abstract class AbstractHrrsFilter implements Filter {
+public abstract class HrrsFilter implements Filter {
 
     private static final HrrsIdGenerator ID_GENERATOR = new HrrsIdGenerator(4);
 
