@@ -11,14 +11,14 @@ import java.io.File;
 import java.io.IOException;
 
 @SpringBootApplication
-public class Main {
+public class HelloApplication {
 
     public static void main(String[] args) {
         run(args);
     }
 
     public static ConfigurableApplicationContext run(String[] args) {
-        return SpringApplication.run(Main.class, args);
+        return SpringApplication.run(HelloApplication.class, args);
     }
 
     @Bean
