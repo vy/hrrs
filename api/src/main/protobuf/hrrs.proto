@@ -50,14 +50,16 @@ message HttpRequestRecord {
 
     string id = 1;
 
-    uint64 timestampMillis = 2;
+    string groupName = 2;
 
-    string uri = 3;
+    uint64 timestampMillis = 3;
 
-    HttpRequestMethod method = 4;
+    string uri = 4;
 
-    repeated HttpRequestHeader headers = 5;
+    HttpRequestMethod method = 5;
 
-    HttpRequestPayload payload = 6;
+    repeated HttpRequestHeader headers = 6;
+
+    HttpRequestPayload payload = 7;
 
 }

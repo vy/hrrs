@@ -6,10 +6,14 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public class GuavaBase64Decoder implements Base64Decoder {
 
-    public static final GuavaBase64Decoder INSTANCE = new GuavaBase64Decoder();
+    private static final GuavaBase64Decoder INSTANCE = new GuavaBase64Decoder();
 
     private GuavaBase64Decoder() {
         // Do nothing.
+    }
+
+    public static GuavaBase64Decoder getInstance() {
+        return INSTANCE;
     }
 
     @Override

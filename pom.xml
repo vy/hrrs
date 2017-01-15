@@ -15,12 +15,15 @@
         <module>examples/jaxrs</module>
         <module>examples/spring</module>
         <module>servlet-filter</module>
+        <module>replayer</module>
     </modules>
 
     <properties>
 
         <!-- common properties -->
-        <java.version>1.6</java.version>
+        <java.major.version>1</java.major.version>
+        <java.minor.version>6</java.minor.version>
+        <java.version>${java.major.version}.${java.minor.version}</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <!-- library versions -->
@@ -29,8 +32,8 @@
         <slf4j.version>1.7.22</slf4j.version>
 
         <!-- plugin versions -->
+        <animal-sniffer-maven-plugin.version>1.15</animal-sniffer-maven-plugin.version>
         <maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>
-        <maven-resources-plugin.version>2.7</maven-resources-plugin.version>
         <maven-source-plugin.version>2.4</maven-source-plugin.version>
 
     </properties>
@@ -41,6 +44,12 @@
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-log4j12</artifactId>
                 <version>${slf4j.version}</version>
             </dependency>
 
@@ -64,6 +73,19 @@
             <plugins>
 
                 <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>animal-sniffer-maven-plugin</artifactId>
+                    <version>${animal-sniffer-maven-plugin.version}</version>
+                    <configuration>
+                        <signature>
+                            <groupId>org.codehaus.mojo.signature</groupId>
+                            <artifactId>java${java.major.version}${java.minor.version}</artifactId>
+                            <version>1.0</version>
+                        </signature>
+                    </configuration>
+                </plugin>
+
+                <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>${maven-compiler-plugin.version}</version>
@@ -74,12 +96,6 @@
                         <showWarnings>true</showWarnings>
                         <showDeprecation>true</showDeprecation>
                     </configuration>
-                </plugin>
-
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-resources-plugin</artifactId>
-                    <version>${maven-resources-plugin.version}</version>
                 </plugin>
 
                 <plugin>

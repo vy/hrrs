@@ -42,17 +42,27 @@ public abstract class HrrsFilter implements Filter {
     }
 
     private HttpRequestRecord createRecord(HttpServletRequest request, byte[] recordedPayloadBytes, long totalPayloadByteCount) {
-        String id = generateId(request);
+        String id = createRequestId(request);
+        String groupName = createRequestGroupName(request);
+        String uri = createRequestUri(request);
         HttpRequestMethod method = HttpRequestMethod.valueOf(request.getMethod());
         HttpRequestPayload payload = createPayload(request, recordedPayloadBytes, totalPayloadByteCount);
         return HttpRequestRecord
                 .newBuilder()
                 .setId(id)
+                .setGroupName(groupName)
                 .setTimestampMillis(System.currentTimeMillis())
-                .setUri(request.getRequestURI())
+                .setUri(uri)
                 .setMethod(method)
                 .setPayload(payload)
                 .build();
+    }
+
+    private static String createRequestUri(HttpServletRequest request) {
+        String uri = request.getRequestURI();
+        String queryString = request.getQueryString();
+        boolean blankQueryString = queryString == null || queryString.matches("^\\s*$");
+        return blankQueryString ? uri : String.format("%s?%s", uri, queryString);
     }
 
     private HttpRequestPayload createPayload(HttpServletRequest request, byte[] recordedPayloadBytes, long totalPayloadByteCount) {
@@ -74,9 +84,25 @@ public abstract class HrrsFilter implements Filter {
     }
 
     /**
-     * Generates a unique identifier for the given request.
+     * Create a group name for the given request.
+     *
+     * Group names are used to group requests and later on are used
+     * as identifiers while reporting statistics in the replayer.
+     * It is strongly recommended to use group names similar to Java
+     * package names.
      */
-    protected String generateId(HttpServletRequest request) {
+    protected String createRequestGroupName(HttpServletRequest request) {
+        String requestUri = createRequestUri(request);
+        return requestUri
+                .replaceFirst("\\?.*", "")      // Replace query parameters.
+                .replaceFirst("^/", "")         // Replace the initial slash.
+                .replaceAll("/", ".");          // Replace all slashes with dots.
+    }
+
+    /**
+     * Creates a unique identifier for the given request.
+     */
+    protected String createRequestId(HttpServletRequest request) {
         return ID_GENERATOR.next();
     }
 

@@ -14,7 +14,7 @@ import javax.ws.rs.core.MediaType;
 public class HelloController {
 
     @RequestMapping(
-            method = RequestMethod.GET,
+            method = RequestMethod.POST,
             consumes = {MediaType.TEXT_PLAIN},
             produces = {MediaType.TEXT_PLAIN})
     public ResponseEntity<String> sayHello(@RequestParam String name, @RequestBody byte[] requestBody) {

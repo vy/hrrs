@@ -27,7 +27,7 @@ public class Base64HrrsFilter extends HrrsFilter {
     public Base64HrrsFilter(File writerTargetFile) {
         this.writerTargetFile = checkNotNull(writerTargetFile, "writerTargetFile");
         this.writerTarget = new HttpRequestRecordWriterFileTarget(writerTargetFile, Base64HttpRequestRecord.CHARSET);
-        this.writer = new Base64HttpRequestRecordWriter(writerTarget, GuavaBase64Encoder.INSTANCE);
+        this.writer = new Base64HttpRequestRecordWriter(writerTarget, GuavaBase64Encoder.getInstance());
     }
 
     public File getWriterTargetFile() {

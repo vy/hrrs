@@ -7,7 +7,7 @@ import javax.ws.rs.core.Response;
 @Path("/hello")
 public class HelloResource {
 
-    @GET
+    @POST
     @Produces({MediaType.TEXT_PLAIN})
     @Consumes({MediaType.TEXT_PLAIN})
     public Response sayHello(@QueryParam("name") String name, byte[] requestBody) {
