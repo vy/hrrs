@@ -9,6 +9,7 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 import java.io.*;
 import java.nio.charset.Charset;
+import java.util.zip.GZIPInputStream;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -33,12 +34,24 @@ public class HttpRequestRecordReaderFileSource implements HttpRequestRecordReade
     private static BufferedReader createReader(File file, Charset charset) {
         try {
             FileInputStream fileInputStream = new FileInputStream(file);
-            InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream, charset);
-            return new BufferedReader(inputStreamReader);
+            try {
+                InputStream readerInputStream = isGzipped(file)
+                        ? new GZIPInputStream(fileInputStream)
+                        : fileInputStream;
+                InputStreamReader inputStreamReader = new InputStreamReader(readerInputStream, charset);
+                return new BufferedReader(inputStreamReader);
+            } catch (IOException error) {
+                fileInputStream.close();
+                throw error;
+            }
         } catch (IOException error) {
             String message = String.format("failed opening file (file=%s, charset=%s)", file, charset);
             throw new RuntimeException(message, error);
         }
+    }
+
+    private static boolean isGzipped(File file) {
+        return file.getAbsolutePath().matches(".*\\.[gG][zZ]$");
     }
 
     public File getFile() {
