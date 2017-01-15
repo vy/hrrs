@@ -9,7 +9,7 @@ import java.util.Iterator;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.vlkan.hrrs.api.base64.Base64HttpRequestRecord.RECORD_SEPARATOR;
+import static com.vlkan.hrrs.api.base64.Base64HttpRequestRecord.*;
 
 @NotThreadSafe
 public class Base64HttpRequestRecordReaderIterator implements Iterator<HttpRequestRecord> {
@@ -41,7 +41,7 @@ public class Base64HttpRequestRecordReaderIterator implements Iterator<HttpReque
     public HttpRequestRecord next() {
         checkArgument(lineIndex >= 0, "hasNext() should have been called first");
         try {
-            int separatorIndex = line.indexOf(RECORD_SEPARATOR);
+            int separatorIndex = line.indexOf(FIELD_SEPARATOR);
             if (separatorIndex < 0) {
                 String message = String.format("could not locate the field separator (lineIndex=%d)", lineIndex);
                 throw new RuntimeException(message);
