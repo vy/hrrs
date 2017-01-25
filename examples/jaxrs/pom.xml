@@ -34,7 +34,7 @@
 
         <dependency>
             <groupId>com.vlkan.hrrs</groupId>
-            <artifactId>hrrs-base64-file-serializer</artifactId>
+            <artifactId>hrrs-serializer-base64</artifactId>
             <version>${project.version}</version>
         </dependency>
 
