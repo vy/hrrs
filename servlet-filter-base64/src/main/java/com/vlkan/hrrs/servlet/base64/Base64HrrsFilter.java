@@ -1,4 +1,4 @@
-package com.vlkan.hrrs.servlet;
+package com.vlkan.hrrs.servlet.base64;
 
 import com.vlkan.hrrs.api.HttpRequestRecordWriter;
 import com.vlkan.hrrs.api.HttpRequestRecordWriterTarget;
@@ -6,6 +6,7 @@ import com.vlkan.hrrs.serializer.base64.Base64HttpRequestRecord;
 import com.vlkan.hrrs.serializer.base64.Base64HttpRequestRecordWriter;
 import com.vlkan.hrrs.serializer.base64.guava.GuavaBase64Encoder;
 import com.vlkan.hrrs.serializer.file.HttpRequestRecordWriterFileTarget;
+import com.vlkan.hrrs.servlet.HrrsFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

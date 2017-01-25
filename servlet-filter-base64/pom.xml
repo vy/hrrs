@@ -9,36 +9,23 @@
         <artifactId>hrrs-parent</artifactId>
         <groupId>com.vlkan.hrrs</groupId>
         <version>1.0-SNAPSHOT</version>
-        <relativePath>../..</relativePath>
+        <relativePath>..</relativePath>
     </parent>
 
-    <artifactId>hrrs-spring-example</artifactId>
-
-    <properties>
-
-        <!-- library versions -->
-        <spring.version>1.4.2.RELEASE</spring.version>
-
-    </properties>
+    <artifactId>hrrs-servlet-filter-base64</artifactId>
 
     <dependencies>
 
         <dependency>
             <groupId>com.vlkan.hrrs</groupId>
-            <artifactId>hrrs-servlet-filter-base64</artifactId>
+            <artifactId>hrrs-servlet-filter</artifactId>
             <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-jersey</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-            <version>${spring.version}</version>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <scope>provided</scope>
         </dependency>
 
     </dependencies>

@@ -1,6 +1,6 @@
 package com.vlkan.hrrs.example.jaxrs;
 
-import com.vlkan.hrrs.servlet.Base64HrrsFilter;
+import com.vlkan.hrrs.servlet.base64.Base64HrrsFilter;
 
 import java.io.File;
 import java.io.IOException;

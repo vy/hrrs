@@ -1,7 +1,7 @@
 package com.vlkan.hrrs.example.spring;
 
-import com.vlkan.hrrs.servlet.Base64HrrsFilter;
 import com.vlkan.hrrs.servlet.HrrsFilter;
+import com.vlkan.hrrs.servlet.base64.Base64HrrsFilter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
