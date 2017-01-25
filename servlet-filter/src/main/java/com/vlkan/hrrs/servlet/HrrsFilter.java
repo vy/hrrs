@@ -1,10 +1,6 @@
 package com.vlkan.hrrs.servlet;
 
-import com.google.protobuf.ByteString;
-import com.vlkan.hrrs.api.HttpRequestMethod;
-import com.vlkan.hrrs.api.HttpRequestPayload;
-import com.vlkan.hrrs.api.HttpRequestRecord;
-import com.vlkan.hrrs.api.HttpRequestRecordWriter;
+import com.vlkan.hrrs.api.*;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -47,14 +43,14 @@ public abstract class HrrsFilter implements Filter {
         String uri = createRequestUri(request);
         HttpRequestMethod method = HttpRequestMethod.valueOf(request.getMethod());
         HttpRequestPayload payload = createPayload(request, recordedPayloadBytes, totalPayloadByteCount);
-        return HttpRequestRecord
-                .newBuilder()
-                .setId(id)
-                .setGroupName(groupName)
-                .setTimestampMillis(System.currentTimeMillis())
-                .setUri(uri)
-                .setMethod(method)
-                .setPayload(payload)
+        return ImmutableHttpRequestRecord
+                .builder()
+                .id(id)
+                .groupName(groupName)
+                .timestampMillis(System.currentTimeMillis())
+                .uri(uri)
+                .method(method)
+                .payload(payload)
                 .build();
     }
 
@@ -68,11 +64,11 @@ public abstract class HrrsFilter implements Filter {
     private HttpRequestPayload createPayload(HttpServletRequest request, byte[] recordedPayloadBytes, long totalPayloadByteCount) {
         String contentType = request.getContentType();
         long missingByteCount = totalPayloadByteCount - recordedPayloadBytes.length;
-        return HttpRequestPayload
-                .newBuilder()
-                .setType(contentType)
-                .setMissingByteCount(missingByteCount)
-                .setBytes(ByteString.copyFrom(recordedPayloadBytes))
+        return ImmutableHttpRequestPayload
+                .builder()
+                .type(contentType)
+                .missingByteCount(missingByteCount)
+                .bytes(recordedPayloadBytes)
                 .build();
     }
 

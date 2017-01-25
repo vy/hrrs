@@ -1,4 +1,4 @@
-package com.vlkan.hrrs.api.base64;
+package com.vlkan.hrrs.serializer.base64;
 
 public interface Base64Encoder {
 

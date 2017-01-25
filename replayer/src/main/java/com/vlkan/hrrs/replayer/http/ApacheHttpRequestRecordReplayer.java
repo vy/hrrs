@@ -155,9 +155,9 @@ public class ApacheHttpRequestRecordReplayer implements HttpRequestRecordReplaye
     }
 
     private static void addHttpRequestPayload(HttpRequestRecord record, HttpEntityEnclosingRequest request) {
-        if (record.hasPayload()) {
-            HttpRequestPayload payload = record.getPayload();
-            byte[] payloadBytes = payload.getBytes().toByteArray();
+        HttpRequestPayload payload = record.getPayload();
+        if (payload != null) {
+            byte[] payloadBytes = payload.getBytes();
             ByteArrayEntity payloadEntity = new ByteArrayEntity(payloadBytes);
             request.setEntity(payloadEntity);
             request.setHeader(HttpHeaders.CONTENT_TYPE, payload.getType());
@@ -165,7 +165,7 @@ public class ApacheHttpRequestRecordReplayer implements HttpRequestRecordReplaye
     }
 
     private void addHttpUriRequestHeaders(HttpUriRequest request, HttpRequestRecord record) {
-        for (HttpRequestHeader header : record.getHeadersList()) {
+        for (HttpRequestHeader header : record.getHeaders()) {
             request.setHeader(header.getName(), header.getValue());
         }
     }

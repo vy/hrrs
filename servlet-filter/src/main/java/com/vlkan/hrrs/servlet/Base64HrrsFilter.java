@@ -2,10 +2,10 @@ package com.vlkan.hrrs.servlet;
 
 import com.vlkan.hrrs.api.HttpRequestRecordWriter;
 import com.vlkan.hrrs.api.HttpRequestRecordWriterTarget;
-import com.vlkan.hrrs.api.base64.Base64HttpRequestRecord;
-import com.vlkan.hrrs.api.base64.Base64HttpRequestRecordWriter;
-import com.vlkan.hrrs.api.base64.guava.GuavaBase64Encoder;
-import com.vlkan.hrrs.api.file.HttpRequestRecordWriterFileTarget;
+import com.vlkan.hrrs.serializer.base64.Base64HttpRequestRecord;
+import com.vlkan.hrrs.serializer.base64.Base64HttpRequestRecordWriter;
+import com.vlkan.hrrs.serializer.base64.guava.GuavaBase64Encoder;
+import com.vlkan.hrrs.serializer.file.HttpRequestRecordWriterFileTarget;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,9 +20,9 @@ public class Base64HrrsFilter extends HrrsFilter {
 
     private final File writerTargetFile;
 
-    private final HttpRequestRecordWriterTarget writerTarget;
+    private final HttpRequestRecordWriterTarget<String> writerTarget;
 
-    private final HttpRequestRecordWriter writer;
+    private final HttpRequestRecordWriter<String> writer;
 
     public Base64HrrsFilter(File writerTargetFile) {
         this.writerTargetFile = checkNotNull(writerTargetFile, "writerTargetFile");
@@ -34,12 +34,12 @@ public class Base64HrrsFilter extends HrrsFilter {
         return writerTargetFile;
     }
 
-    public HttpRequestRecordWriterTarget getWriterTarget() {
+    public HttpRequestRecordWriterTarget<String> getWriterTarget() {
         return writerTarget;
     }
 
     @Override
-    protected HttpRequestRecordWriter getWriter() {
+    protected HttpRequestRecordWriter<String> getWriter() {
         return writer;
     }
 

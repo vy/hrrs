@@ -16,6 +16,7 @@
         <module>examples/spring</module>
         <module>servlet-filter</module>
         <module>replayer</module>
+        <module>base64-file-serializer</module>
     </modules>
 
     <properties>
@@ -27,8 +28,11 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <!-- library versions -->
+        <assertj.version>3.6.1</assertj.version>
         <guava.version>20.0</guava.version>
         <jsr305.version>3.0.1</jsr305.version>
+        <junit.version>4.12</junit.version>
+        <junit-quickcheck.version>0.7</junit-quickcheck.version>
         <slf4j.version>1.7.22</slf4j.version>
 
         <!-- plugin versions -->
@@ -63,6 +67,27 @@
                 <groupId>com.google.code.findbugs</groupId>
                 <artifactId>jsr305</artifactId>
                 <version>${jsr305.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${junit.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>com.pholser</groupId>
+                <artifactId>junit-quickcheck-core</artifactId>
+                <version>${junit-quickcheck.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.assertj</groupId>
+                <artifactId>assertj-core</artifactId>
+                <version>${assertj.version}</version>
+                <scope>test</scope>
             </dependency>
 
         </dependencies>

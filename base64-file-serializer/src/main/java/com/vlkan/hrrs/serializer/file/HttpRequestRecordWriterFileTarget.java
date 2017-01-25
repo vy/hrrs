@@ -1,4 +1,4 @@
-package com.vlkan.hrrs.api.file;
+package com.vlkan.hrrs.serializer.file;
 
 import com.google.common.base.MoreObjects;
 import com.vlkan.hrrs.api.HttpRequestRecordWriterTarget;
@@ -12,7 +12,7 @@ import java.nio.charset.Charset;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 @NotThreadSafe
-public class HttpRequestRecordWriterFileTarget implements HttpRequestRecordWriterTarget {
+public class HttpRequestRecordWriterFileTarget implements HttpRequestRecordWriterTarget<String> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HttpRequestRecordWriterFileTarget.class);
 

@@ -30,6 +30,12 @@
         </dependency>
 
         <dependency>
+            <groupId>com.vlkan.hrrs</groupId>
+            <artifactId>hrrs-base64-file-serializer</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
         </dependency>

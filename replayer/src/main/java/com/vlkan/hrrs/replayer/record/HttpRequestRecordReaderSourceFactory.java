@@ -1,8 +1,8 @@
 package com.vlkan.hrrs.replayer.record;
 
 import com.vlkan.hrrs.api.HttpRequestRecordReaderSource;
-import com.vlkan.hrrs.api.base64.Base64HttpRequestRecord;
-import com.vlkan.hrrs.api.file.HttpRequestRecordReaderFileSource;
+import com.vlkan.hrrs.serializer.base64.Base64HttpRequestRecord;
+import com.vlkan.hrrs.serializer.file.HttpRequestRecordReaderFileSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,7 +20,7 @@ public class HttpRequestRecordReaderSourceFactory {
         LOGGER.debug("instantiated");
     }
 
-    public HttpRequestRecordReaderSource create(File file) {
+    public HttpRequestRecordReaderSource<String> create(File file) {
         checkNotNull(file, "file");
         return new HttpRequestRecordReaderFileSource(file, Base64HttpRequestRecord.CHARSET);
     }

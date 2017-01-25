@@ -1,4 +1,4 @@
-package com.vlkan.hrrs.api.base64;
+package com.vlkan.hrrs.serializer.base64;
 
 import java.nio.charset.Charset;
 

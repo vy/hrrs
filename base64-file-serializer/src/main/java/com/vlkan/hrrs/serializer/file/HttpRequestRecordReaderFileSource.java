@@ -1,4 +1,4 @@
-package com.vlkan.hrrs.api.file;
+package com.vlkan.hrrs.serializer.file;
 
 import com.google.common.base.MoreObjects;
 import com.vlkan.hrrs.api.HttpRequestRecordReaderSource;
@@ -14,7 +14,7 @@ import java.util.zip.GZIPInputStream;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 @NotThreadSafe
-public class HttpRequestRecordReaderFileSource implements HttpRequestRecordReaderSource {
+public class HttpRequestRecordReaderFileSource implements HttpRequestRecordReaderSource<String> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HttpRequestRecordReaderFileSource.class);
 

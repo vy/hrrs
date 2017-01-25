@@ -1,6 +1,6 @@
-package com.vlkan.hrrs.api.base64.guava;
+package com.vlkan.hrrs.serializer.base64.guava;
 
-import com.vlkan.hrrs.api.base64.Base64Decoder;
+import com.vlkan.hrrs.serializer.base64.Base64Decoder;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 

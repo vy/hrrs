@@ -1,4 +1,4 @@
-package com.vlkan.hrrs.api.base64.guava;
+package com.vlkan.hrrs.serializer.base64.guava;
 
 import com.google.common.io.BaseEncoding;
 

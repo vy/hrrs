@@ -12,20 +12,22 @@
         <relativePath>..</relativePath>
     </parent>
 
-    <artifactId>hrrs-api</artifactId>
+    <artifactId>hrrs-base64-file-serializer</artifactId>
 
     <properties>
 
         <!-- library versions -->
         <immutables.version>2.4.1</immutables.version>
-        <protobuf.version>3.1.0</protobuf.version>
-
-        <!-- plugin versions -->
-        <protoc-jar-maven-plugin.version>${protobuf.version}.2</protoc-jar-maven-plugin.version>
 
     </properties>
 
     <dependencies>
+
+        <dependency>
+            <groupId>com.vlkan.hrrs</groupId>
+            <artifactId>hrrs-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -38,20 +40,18 @@
         </dependency>
 
         <dependency>
-            <groupId>com.google.protobuf</groupId>
-            <artifactId>protobuf-java</artifactId>
-            <version>${protobuf.version}</version>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>com.google.code.findbugs</groupId>
-            <artifactId>jsr305</artifactId>
+            <groupId>com.pholser</groupId>
+            <artifactId>junit-quickcheck-core</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>org.immutables</groupId>
-            <artifactId>value</artifactId>
-            <version>${immutables.version}</version>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
         </dependency>
 
     </dependencies>
@@ -72,23 +72,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
-            </plugin>
-
-            <plugin>
-                <groupId>com.github.os72</groupId>
-                <artifactId>protoc-jar-maven-plugin</artifactId>
-                <version>${protoc-jar-maven-plugin.version}</version>
-                <executions>
-                    <execution>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                        <configuration>
-                            <protocVersion>${protobuf.version}</protocVersion>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
 
         </plugins>
