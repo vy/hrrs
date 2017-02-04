@@ -17,7 +17,7 @@ public class HttpRequestRecordReaderFactory {
         LOGGER.debug("instantiated");
     }
 
-    public HttpRequestRecordReader create(HttpRequestRecordReaderSource<String> source) {
+    public HttpRequestRecordReader<String> create(HttpRequestRecordReaderSource<String> source) {
         checkNotNull(source, "source");
         return new Base64HttpRequestRecordReader(source, GuavaBase64Decoder.getInstance());
     }

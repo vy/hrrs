@@ -38,9 +38,9 @@ public class HttpRequestRecordStream {
         LOGGER.debug("consuming (file={})", file);
         boolean resuming = false;
         do {
-            HttpRequestRecordReaderSource readerSource = readerSourceFactory.create(file);
+            HttpRequestRecordReaderSource<String> readerSource = readerSourceFactory.create(file);
             try {
-                HttpRequestRecordReader reader = readerFactory.create(readerSource);
+                HttpRequestRecordReader<String> reader = readerFactory.create(readerSource);
                 Iterator<HttpRequestRecord> iterator = reader.read().iterator();
                 while ((resuming = predicate.call()) && iterator.hasNext()) {
                     HttpRequestRecord record = iterator.next();
