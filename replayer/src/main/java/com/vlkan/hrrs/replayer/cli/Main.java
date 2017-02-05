@@ -19,7 +19,6 @@ import org.slf4j.LoggerFactory;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.io.Closeable;
-import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
@@ -76,10 +75,9 @@ public class Main implements Runnable, Closeable, HttpRequestRecordStreamConsume
     @Override
     public void run() {
         LOGGER.debug("starting to replay");
-        File inputFile = new File(config.getInputFile());
         Callable<Boolean> consumptionPredicate = createConsumptionPredicate();
         metricReporter.start();
-        recordStream.consumeWhile(inputFile, consumptionPredicate, this);
+        recordStream.consumeWhile(config.getInputUri(), consumptionPredicate, this);
         reportMetric();
     }
 
@@ -142,10 +140,10 @@ public class Main implements Runnable, Closeable, HttpRequestRecordStreamConsume
         closed = true;
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args, MainModuleFactory moduleFactory) throws IOException {
         Config config = Config.of(args);
         config.dump();
-        MainModule mainModule = new MainModule(config);
+        MainModule mainModule = moduleFactory.create(config);
         Injector injector = Guice.createInjector(mainModule);
         LoggerLevelAccessor loggerLevelAccessor = injector.getInstance(LoggerLevelAccessor.class);
         applyLoggerLevelSpecs(config, loggerLevelAccessor);

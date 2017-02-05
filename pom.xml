@@ -16,6 +16,7 @@
         <module>examples/spring</module>
         <module>servlet-filter</module>
         <module>replayer</module>
+        <module>replayer-base64</module>
         <module>serializer-base64</module>
         <module>servlet-filter-base64</module>
     </modules>

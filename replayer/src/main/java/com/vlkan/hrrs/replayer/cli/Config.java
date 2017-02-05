@@ -92,14 +92,14 @@ public class Config {
     }
 
     @Parameter(
-            names = {"--inputFile", "-i"},
+            names = {"--inputUri", "-i"},
             validateWith = ReadableFileValidator.class,
-            description = "input file for HTTP records, can have .gz suffix",
+            description = "input URI for HTTP records",
             required = true)
-    private String inputFile;
+    private String inputUri;
 
-    public String getInputFile() {
-        return inputFile;
+    public String getInputUri() {
+        return inputUri;
     }
 
     @Parameter(
@@ -157,7 +157,7 @@ public class Config {
         LOGGER.debug("requestTimeoutSeconds={}", requestTimeoutSeconds);
         LOGGER.debug("rampUpDurationSeconds={}", rampUpDurationSeconds);
         LOGGER.debug("totalDurationSeconds={}", totalDurationSeconds);
-        LOGGER.debug("inputFile={}", inputFile);
+        LOGGER.debug("inputUri={}", inputUri);
         LOGGER.debug("jtlOutputFile={}", jtlOutputFile);
         LOGGER.debug("metricsOutputFile={}", metricsOutputFile);
         LOGGER.debug("metricsOutputPeriodSeconds={}", metricsOutputPeriodSeconds);
