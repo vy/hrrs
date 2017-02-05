@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.util.Iterator;
 import java.util.concurrent.Callable;
 
@@ -25,7 +26,7 @@ public class Base64HttpRequestRecordStream implements HttpRequestRecordStream {
     private static final Logger LOGGER = LoggerFactory.getLogger(Base64HttpRequestRecordStream.class);
 
     @Override
-    public void consumeWhile(String inputUri, Callable<Boolean> predicate, HttpRequestRecordStreamConsumer consumer) {
+    public void consumeWhile(URI inputUri, Callable<Boolean> predicate, HttpRequestRecordStreamConsumer consumer) {
         checkNotNull(inputUri, "inputUri");
         checkNotNull(predicate, "predicate");
         checkNotNull(consumer, "consumer");

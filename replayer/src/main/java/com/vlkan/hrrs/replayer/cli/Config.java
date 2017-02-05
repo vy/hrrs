@@ -7,6 +7,8 @@ import com.vlkan.hrrs.replayer.cli.validator.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.net.URI;
+
 public class Config {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Config.class);
@@ -93,12 +95,12 @@ public class Config {
 
     @Parameter(
             names = {"--inputUri", "-i"},
-            validateWith = ReadableFileValidator.class,
+            validateWith = UriValidator.class,
             description = "input URI for HTTP records",
             required = true)
-    private String inputUri;
+    private URI inputUri;
 
-    public String getInputUri() {
+    public URI getInputUri() {
         return inputUri;
     }
 

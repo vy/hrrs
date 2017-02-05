@@ -1,9 +1,10 @@
 package com.vlkan.hrrs.replayer.record;
 
+import java.net.URI;
 import java.util.concurrent.Callable;
 
 public interface HttpRequestRecordStream {
 
-    void consumeWhile(String inputUri, Callable<Boolean> predicate, HttpRequestRecordStreamConsumer consumer);
+    void consumeWhile(URI inputUri, Callable<Boolean> predicate, HttpRequestRecordStreamConsumer consumer);
 
 }
