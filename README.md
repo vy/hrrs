@@ -213,9 +213,9 @@ cluster (each node handles approximately 600 reqs/sec and requests generally
 contain a payload close to 50KB) without any noticable memory or processing
 overhead.
 
-Additionally, you can override `HrrsFilter#isRequestRecordable()` and
-`getMaxRecordablePayloadByteCount()` methods to have a more fine-grained
-control over the recorded HTTP requests.
+Additionally, you can override `isRequestRecordable()` and
+`getMaxRecordablePayloadByteCount()` methods in `HrrsFilter` to have a more
+fine-grained control over the recorded HTTP requests.
 
 # Replayer Reports
 
