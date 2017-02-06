@@ -233,7 +233,8 @@ at the JMeter JTL file looks as follows:
 <httpSample t="108" lt="108" ts="1486330510795" s="true" rc="200" lb="hello" tn="RateLimitedExecutor-0"/>
 <httpSample t="6" lt="6" ts="1486330510802" s="true" rc="200" lb="hello" tn="RateLimitedExecutor-1"/>
 <httpSample t="3" lt="3" ts="1486330510828" s="true" rc="200" lb="hello" tn="RateLimitedExecutor-0"/>
-...
+<!-- ... -->
+</testResults>
 ```
 
 For an overview or to track the progress, you can also command HRRS to
