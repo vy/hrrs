@@ -54,7 +54,7 @@ public abstract class HrrsFilter implements Filter {
                 .build();
     }
 
-    private static String createRequestUri(HttpServletRequest request) {
+    protected static String createRequestUri(HttpServletRequest request) {
         String uri = request.getRequestURI();
         String queryString = request.getQueryString();
         boolean blankQueryString = queryString == null || queryString.matches("^\\s*$");
