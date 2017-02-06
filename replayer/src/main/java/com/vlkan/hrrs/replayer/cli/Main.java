@@ -135,6 +135,7 @@ public class Main implements Runnable, Closeable, HttpRequestRecordStreamConsume
 
     @Override
     public void close() throws IOException {
+        recordReplayer.close();
         closeableExecutor.close();
         metricReporter.close();
         closed = true;

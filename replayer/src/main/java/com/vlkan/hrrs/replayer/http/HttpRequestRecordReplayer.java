@@ -2,7 +2,9 @@ package com.vlkan.hrrs.replayer.http;
 
 import com.vlkan.hrrs.api.HttpRequestRecord;
 
-public interface HttpRequestRecordReplayer {
+import java.io.Closeable;
+
+public interface HttpRequestRecordReplayer extends Closeable {
 
     void replay(HttpRequestRecord record);
 

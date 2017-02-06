@@ -23,7 +23,7 @@ import java.util.concurrent.TimeUnit;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 @Singleton
-public class ApacheHttpRequestRecordReplayer implements HttpRequestRecordReplayer, Closeable {
+public class ApacheHttpRequestRecordReplayer implements HttpRequestRecordReplayer {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ApacheHttpRequestRecordReplayer.class);
 
