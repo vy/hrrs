@@ -322,15 +322,6 @@ to have such a level of verbosity while executing the actual performance tests.
 
 # License
 
-Copyright 2017 Yazıcı, Volkan.
-
-Licensed under the
-[Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0)
-(the "License"); you may not use this file except in compliance with the
-License.
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+The [HRRS](https://github.com/vy/hrrs/) by [Volkan Yazıcı](http://vlkan.com/)
+is licensed under the [Creative Commons Attribution 4.0 International
+License](http://creativecommons.org/licenses/by/4.0/).
