@@ -321,6 +321,36 @@ As a starting point, adding `--loggerLevelSpecs "*=info,com.vlkan.hrrs=trace"`
 to the replayer arguments is generally a good idea. Note that, you don't want
 to have such a level of verbosity while executing the actual performance tests.
 
+# F.A.Q.
+
+- **What's wrong with JMeter, Gatling, etc.?** There is nothing wrong with
+  them. In fact, they are fantastic tools. I use them on a daily basis for
+  performance tests. Though they do not provide any integration solutions
+  for recording the HTTP traffic of a web application.
+
+- **Then why not just using JMeter, Gatling, etc. as a replayer?** I first
+  started my pursuit by trying to make JMeter replay the HTTP request records
+  that I collected. After wrestling with JMeter and its BeanShell Pre-Processor
+  for days, I implemented a custom fully-fledged replayer using
+  [Apache HTTP Client](http://hc.apache.org/httpcomponents-client-ga/) in a
+  single day. Though it is a lot easier to pull that out using Gatling compared
+  to JMeter. Long story short, I needed JMeter JTL files to integrate my test
+  results in our test infrastructure at work, and a simple replayer did the
+  trick. Though, I welcome any patches for replacing the custom replayer with
+  JMeter and/or Gatling.
+
+- **You could have sniffed HTTP from the raw network traffic.** That would
+  be great! Actually, that is a fantastic idea! Then HRRS would be totally
+  programming language and framework agnostic. Though many Java network packet
+  capturing solutions ([Pcap4j](https://www.pcap4j.org/),
+  [jNetPcap](http://jnetpcap.com/), etc.) require the native
+  [libpcap](http://www.tcpdump.org/) library to be installed on the system.
+  This might be a bold assumption for many deployment environments. Further,
+  deploying a separate executable along with your application might not always
+  be a viable option. As a matter of fact, many deployment environments that I
+  know in the industry still do expect a single JAR/WAR file as a deployable
+  unit.
+
 # License
 
 The [HRRS](https://github.com/vy/hrrs/) by [Volkan Yazıcı](http://vlkan.com/)
