@@ -378,6 +378,15 @@ to have such a level of verbosity while executing the actual performance tests.
 
 # License
 
-The [HRRS](https://github.com/vy/hrrs/) by [Volkan Yazıcı](http://vlkan.com/)
-is licensed under the [Creative Commons Attribution 4.0 International
-License](http://creativecommons.org/licenses/by/4.0/).
+Copyright &copy; 2017 [Volkan Yazıcı](http://vlkan.com/)
+
+HRRS is free software: you can redistribute it and/or modify it under the terms
+of the GNU General Public License as published by the Free Software Foundation,
+either version 3 of the License, or (at your option) any later version.
+
+HRRS is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with
+this program. If not, see [http://www.gnu.org/licenses/].
