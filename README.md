@@ -104,13 +104,37 @@ Here each line corresponds to an HTTP request record, where it is associated
 with an identifier and the details (URI, method, headers, payload, etc.) are
 in Base64-encoded binary.
 
+There is also an on/off switch of the recorder accessible via `isEnabled()` and
+`setEnabled(boolean)` methods in `HrrsFilter`. You can expose these via a REST
+endpoint as well. But we cover you there too: `HrrsServlet` provides handlers
+for `GET` and `PUT ?enabled=(true|false)` endpoints. You can easily add
+`HrrsServlet` to your Spring web application as follows:
+
+```java
+@Configuration
+public class HrrsConfig {
+
+    // ...
+
+    @Bean
+    public ServletRegistrationBean provideHrrsServlet() {
+        HrrsServlet hrrsServlet = new HrrsServlet();
+        return new ServletRegistrationBean(hrrsServlet, "/hrrs");
+    }
+
+}
+```
+
+This will allow you to query (`curl http://hostname/hrrs`) and change
+(`curl -X PUT http://hostname/hrrs?enabled=false`) the state of the recorder
+at runtime.
+
 Once you start recording HTTP requests, you
 can setup [logrotate](https://github.com/logrotate/logrotate) to periodically
 rotate and compress the record output file. You can even take one step further
 and schedule a cron job to copy these records to a directory accessible by your
-test environment.
-
-You can replay HTTP request records using the replayer provided by HRRS:
+test environment. There you can replay HTTP request records using the replayer
+provided by HRRS:
 
 ```bash
 $ java \
@@ -349,7 +373,8 @@ to have such a level of verbosity while executing the actual performance tests.
   deploying a separate executable along with your application might not always
   be a viable option. As a matter of fact, many deployment environments that I
   know in the industry still do expect a single JAR/WAR file as a deployable
-  unit.
+  unit. Thus sticking close to the web application itself in Java serves a
+  purpose here.
 
 # License
 
