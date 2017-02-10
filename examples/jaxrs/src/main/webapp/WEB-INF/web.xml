@@ -26,7 +26,18 @@
 
     <servlet-mapping>
         <servlet-name>com.vlkan.hrrs.example.jaxrs.HelloApplication</servlet-name>
-        <url-pattern>/*</url-pattern>
+        <url-pattern>/hello</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>com.vlkan.hrrs.servlet.HrrsServlet</servlet-name>
+        <servlet-class>com.vlkan.hrrs.servlet.HrrsServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>com.vlkan.hrrs.servlet.HrrsServlet</servlet-name>
+        <url-pattern>/hrrs</url-pattern>
     </servlet-mapping>
 
 </web-app>

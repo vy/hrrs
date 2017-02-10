@@ -1,33 +1,55 @@
 package com.vlkan.hrrs.servlet;
 
 import com.vlkan.hrrs.api.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
+
 public abstract class HrrsFilter implements Filter {
 
-    private static final HrrsIdGenerator ID_GENERATOR = new HrrsIdGenerator(4);
+    private static final Logger LOGGER = LoggerFactory.getLogger(HrrsFilter.class);
+
+    public static final String SERVLET_CONTEXT_ATTRIBUTE_KEY = HrrsFilter.class.getCanonicalName();
+
+    private final HrrsIdGenerator idGenerator = new HrrsIdGenerator(4);
+
+    private volatile boolean enabled = true;
+
+    private ServletContext servletContext = null;
+
+    public HrrsFilter() {
+        // Do nothing.
+    }
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         if (isRequestRecordable(request)) {
             ByteArrayOutputStream requestOutputStream = new ByteArrayOutputStream();
             HttpServletRequest httpRequest = (HttpServletRequest) request;
-            TeeServletInputStream teeServletInputStream = new TeeServletInputStream(httpRequest.getInputStream(), requestOutputStream, getMaxRecordablePayloadByteCount());
+            TeeServletInputStream teeServletInputStream = new TeeServletInputStream(
+                    httpRequest.getInputStream(),
+                    requestOutputStream,
+                    getMaxRecordablePayloadByteCount());
             HttpServletRequest teeRequest = new HrrsHttpServletRequestWrapper(httpRequest, teeServletInputStream);
             chain.doFilter(teeRequest, response);
             long totalPayloadByteCount = teeServletInputStream.getByteCount();
             byte[] recordedPayloadBytes = requestOutputStream.toByteArray();
             HttpRequestRecord record = createRecord(httpRequest, recordedPayloadBytes, totalPayloadByteCount);
             getWriter().write(record);
+        } else {
+            chain.doFilter(request, response);
         }
     }
 
     private boolean isRequestRecordable(ServletRequest request) {
-        return request instanceof HttpServletRequest && isRequestRecordable((HttpServletRequest) request);
+        return enabled && request instanceof HttpServletRequest && isRequestRecordable((HttpServletRequest) request);
     }
 
     /**
@@ -37,12 +59,21 @@ public abstract class HrrsFilter implements Filter {
         return true;
     }
 
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+        LOGGER.trace("switched state (enabled={})", enabled);
+    }
+
     private HttpRequestRecord createRecord(HttpServletRequest request, byte[] recordedPayloadBytes, long totalPayloadByteCount) {
         String id = createRequestId(request);
         String groupName = createRequestGroupName(request);
         String uri = createRequestUri(request);
         HttpRequestMethod method = HttpRequestMethod.valueOf(request.getMethod());
-        HttpRequestPayload payload = createPayload(request, recordedPayloadBytes, totalPayloadByteCount);
+        HttpRequestPayload payload = createPayload(recordedPayloadBytes, totalPayloadByteCount);
         return ImmutableHttpRequestRecord
                 .builder()
                 .id(id)
@@ -61,12 +92,10 @@ public abstract class HrrsFilter implements Filter {
         return blankQueryString ? uri : String.format("%s?%s", uri, queryString);
     }
 
-    private HttpRequestPayload createPayload(HttpServletRequest request, byte[] recordedPayloadBytes, long totalPayloadByteCount) {
-        String contentType = request.getContentType();
+    private HttpRequestPayload createPayload(byte[] recordedPayloadBytes, long totalPayloadByteCount) {
         long missingByteCount = totalPayloadByteCount - recordedPayloadBytes.length;
         return ImmutableHttpRequestPayload
                 .builder()
-                .type(contentType)
                 .missingByteCount(missingByteCount)
                 .bytes(recordedPayloadBytes)
                 .build();
@@ -75,7 +104,7 @@ public abstract class HrrsFilter implements Filter {
     /**
      * Maximum amount of bytes that can be recorded per request.
      */
-    protected long getMaxRecordablePayloadByteCount() {
+    public long getMaxRecordablePayloadByteCount() {
         return Long.MAX_VALUE;
     }
 
@@ -99,19 +128,26 @@ public abstract class HrrsFilter implements Filter {
      * Creates a unique identifier for the given request.
      */
     protected String createRequestId(HttpServletRequest request) {
-        return ID_GENERATOR.next();
+        return idGenerator.next();
     }
 
     abstract protected HttpRequestRecordWriter getWriter();
 
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
-        // Do nothing.
+    public synchronized void init(FilterConfig filterConfig) throws ServletException {
+        checkArgument(servletContext == null, "servlet context is already initialized");
+        servletContext = filterConfig.getServletContext();
+        Object prevAttribute = servletContext.getAttribute(SERVLET_CONTEXT_ATTRIBUTE_KEY);
+        checkArgument(prevAttribute == null, "servlet context attribute is already initialized");
+        servletContext.setAttribute(SERVLET_CONTEXT_ATTRIBUTE_KEY, this);
+        LOGGER.trace("initialized");
     }
 
     @Override
-    public void destroy() {
-        // Do nothing.
+    public synchronized void destroy() {
+        checkNotNull(servletContext, "servlet context is not initialized");
+        servletContext.removeAttribute(SERVLET_CONTEXT_ATTRIBUTE_KEY);
+        LOGGER.trace("destroyed");
     }
 
 }
