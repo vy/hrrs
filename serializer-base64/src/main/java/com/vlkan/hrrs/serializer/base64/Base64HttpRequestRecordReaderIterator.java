@@ -2,7 +2,6 @@ package com.vlkan.hrrs.serializer.base64;
 
 import com.vlkan.hrrs.api.*;
 
-import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
@@ -14,7 +13,8 @@ import java.util.List;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.vlkan.hrrs.serializer.base64.Base64HttpRequestRecord.*;
+import static com.vlkan.hrrs.serializer.base64.Base64HttpRequestRecord.FIELD_SEPARATOR;
+import static com.vlkan.hrrs.serializer.base64.Base64HttpRequestRecord.RECORD_SEPARATOR;
 
 @NotThreadSafe
 public class Base64HttpRequestRecordReaderIterator implements Iterator<HttpRequestRecord> {
@@ -121,17 +121,7 @@ public class Base64HttpRequestRecordReaderIterator implements Iterator<HttpReque
 
     }
 
-    @Nullable
     private static HttpRequestPayload readPayload(DataInputStream stream) throws IOException {
-
-        // Check if the payload is present.
-        boolean hasPayload = stream.readBoolean();
-        if (!hasPayload) {
-            return null;
-        }
-
-        // Read type.
-        String type = stream.readUTF();
 
         // Read missing byte count.
         long missingByteCount = stream.readLong();
@@ -146,7 +136,6 @@ public class Base64HttpRequestRecordReaderIterator implements Iterator<HttpReque
 
         return ImmutableHttpRequestPayload
                 .builder()
-                .type(type)
                 .missingByteCount(missingByteCount)
                 .bytes(bytes)
                 .build();

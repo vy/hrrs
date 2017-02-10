@@ -2,7 +2,6 @@ package com.vlkan.hrrs.api;
 
 import org.immutables.value.Value;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 @Value.Immutable
@@ -20,7 +19,6 @@ public interface HttpRequestRecord {
 
     List<HttpRequestHeader> getHeaders();
 
-    @Nullable
     HttpRequestPayload getPayload();
 
 }

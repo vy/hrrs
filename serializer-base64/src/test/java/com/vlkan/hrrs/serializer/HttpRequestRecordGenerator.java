@@ -30,10 +30,7 @@ public class HttpRequestRecordGenerator extends Generator<HttpRequestRecord> {
         String uri = String.format("/hello/%s?id=%s", groupName, id);
         HttpRequestMethod method = gen().type(HttpRequestMethod.class).generate(sourceOfRandomness, generationStatus);
         List<HttpRequestHeader> headers = generateHeaders(sourceOfRandomness, generationStatus);
-        boolean hasPayload = sourceOfRandomness.nextBoolean();
-        HttpRequestPayload payload = hasPayload
-                ? gen().make(HttpRequestPayloadGenerator.class).generate(sourceOfRandomness, generationStatus)
-                : null;
+        HttpRequestPayload payload = gen().make(HttpRequestPayloadGenerator.class).generate(sourceOfRandomness, generationStatus);
 
         // Create the record.
         return ImmutableHttpRequestRecord

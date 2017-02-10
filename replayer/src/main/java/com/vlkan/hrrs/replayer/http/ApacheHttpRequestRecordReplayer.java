@@ -6,7 +6,10 @@ import com.vlkan.hrrs.api.HttpRequestPayload;
 import com.vlkan.hrrs.api.HttpRequestRecord;
 import com.vlkan.hrrs.replayer.cli.Config;
 import com.vlkan.hrrs.replayer.jtl.JtlPrinter;
-import org.apache.http.*;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpEntityEnclosingRequest;
+import org.apache.http.HttpHost;
+import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.*;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -15,7 +18,6 @@ import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.io.Closeable;
 import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.util.concurrent.TimeUnit;
@@ -156,11 +158,10 @@ public class ApacheHttpRequestRecordReplayer implements HttpRequestRecordReplaye
 
     private static void addHttpRequestPayload(HttpRequestRecord record, HttpEntityEnclosingRequest request) {
         HttpRequestPayload payload = record.getPayload();
-        if (payload != null) {
-            byte[] payloadBytes = payload.getBytes();
+        byte[] payloadBytes = payload.getBytes();
+        if (payloadBytes.length > 0) {
             ByteArrayEntity payloadEntity = new ByteArrayEntity(payloadBytes);
             request.setEntity(payloadEntity);
-            request.setHeader(HttpHeaders.CONTENT_TYPE, payload.getType());
         }
     }
 
