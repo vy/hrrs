@@ -44,10 +44,10 @@ Following artifacts provide this functionality:
 - **hrrs-replayer-base64:** The command line replayer implementation using the
   Base64 serializer.
 
-Per see, HRRS is designed with extensibility in mind. As of now, it only
-supports file sourced/targeted Base64 readers/writers. But all you need is a
-few lines of code to introduce your own serialization schemes powered by a
-storage backend (RDBMS, NoSQL, etc.) of your preference.
+HRRS is designed with extensibility in mind. As of now, it only supports file
+sourced/targeted Base64 readers/writers. But all you need is a few lines of
+code to introduce your own serialization schemes powered by a storage backend
+(RDBMS, NoSQL, etc.) of your preference.
 
 Source code also contains the following modules to exemplify the usage of HRRS
 with certain Java web frameworks:
