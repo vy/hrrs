@@ -387,7 +387,7 @@ to have such a level of verbosity while executing the actual performance tests.
 
 - **Is it possible to query the state of the recorder and enable/disable it at
   runtime?** Yes, see the usage of `HrrsServlet` above, which provides an HTTP
-  API for that purpose. An MBean exposure is being worked on as well.
+  API for that purpose. An MBean exposure is being worked on as well. [TODO]
 
 - **Is using plain text files a good idea for the HTTP records?** Yes and no.
   Yes, because it suits our needs. It is easier to copy between production and
@@ -402,6 +402,15 @@ to have such a level of verbosity while executing the actual performance tests.
   misalignment between production and test environment states are at negligible
   margins. In the tests, we do expect a stable rate in the HTTP 4XX and 5XX
   response codes and that works fine for us.
+
+- **How can I manipulate the recorded HTTP requests prior to replay?** That
+  is a valid and relevant request. For instance, maybe some headers need to be
+  altered to adopt the needs of the test environment, etc. Who knows? But
+  unfortunately we do not provide a utility tool to ease that work yet. What
+  you can do is to write a simple console Java application that uses the
+  relevant `hrrs-serializer-*` artifact to read and write the manipulated
+  records back. That being said, we are thinking of command line tool solution
+  to ease that effort. [TODO]
 
 - **Sounds cool! How can I contribute?** Awesome! Just send a pull request
   over GitHub. In terms of coding conventions, just try to stick to the style
