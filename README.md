@@ -107,6 +107,22 @@ containing the URL (including request parameters), headers, and payload. This
 simple representation makes it easy to employ well-known command line tools
 (`grep`, `sed`, `awk`, etc.) to extract a certain subset of records.
 
+```bash
+$ zcat records.csv.gz | head -n 1 | awk '{print $5}' | base64 --decode | hd
+00000000  00 16 2f 68 65 6c 6c 6f  3f 6e 61 6d 65 3d 54 65  |../hello?name=Te|
+00000010  73 74 4e 61 6d 65 2d 31  00 00 00 05 00 04 68 6f  |stName-1......ho|
+00000020  73 74 00 0e 6c 6f 63 61  6c 68 6f 73 74 3a 38 30  |st..localhost:80|
+00000030  38 30 00 0a 75 73 65 72  2d 61 67 65 6e 74 00 0b  |80..user-agent..|
+00000040  63 75 72 6c 2f 37 2e 34  37 2e 30 00 06 61 63 63  |curl/7.47.0..acc|
+00000050  65 70 74 00 03 2a 2f 2a  00 0c 63 6f 6e 74 65 6e  |ept..*/*..conten|
+00000060  74 2d 74 79 70 65 00 0a  74 65 78 74 2f 70 6c 61  |t-type..text/pla|
+00000070  69 6e 00 0e 63 6f 6e 74  65 6e 74 2d 6c 65 6e 67  |in..content-leng|
+00000080  74 68 00 02 31 33 00 00  00 00 00 00 00 00 00 00  |th..13..........|
+00000090  00 0f 72 61 6e 64 6f 6d  2d 64 61 74 61 2d 31 ff  |..random-data-1.|
+000000a0  ff                                                |.|
+000000a1
+```
+
 There is also an on/off switch of the recorder accessible via `isEnabled()` and
 `setEnabled(boolean)` methods in `HrrsFilter`. You can expose these via a REST
 endpoint as well. But we cover you there too: `HrrsServlet` provides handlers
