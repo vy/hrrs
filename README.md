@@ -95,14 +95,17 @@ of the Base64-serialized HTTP request records:
 
 ```bash
 $ zcat records.csv.gz | head -n 3
-iyt6t60z_1sqtj  AA5peXQ2dDYwel8xc3F0agAFaGVsbG8AAAFaEDO9ywATL2hlbGxvP25hbWU9Zm9vLTEtMQAEUE9TVAAAAAABAAp0ZXh0L3BsYWluAAAAAAAAAAAAAAADX///
-iyt6t61e_le34v  AA5peXQ2dDYxZV9sZTM0dgAFaGVsbG8AAAFaEDO90gATL2hlbGxvP25hbWU9Zm9vLTEtMgAEUE9TVAAAAAABAAp0ZXh0L3BsYWluAAAAAAAAAAAAAAAEcVL//w==
-iyt6t624_5jvlj  AA5peXQ2dDYyNF81anZsagAFaGVsbG8AAAFaEDO97AATL2hlbGxvP25hbWU9Zm9vLTEtMwAEUE9TVAAAAAABAAp0ZXh0L3BsYWluAAAAAAAAAAAAAAAFW2t///8=
+iz4mjlt9_8f89s  20170213-224106.477+0100     hello   POST    ABYvaGVsbG8/bmFtZT1UZXN0TmFtZS0xAAAABQAEaG9zdAAObG9jYWxob3N0OjgwODAACnVzZXItYWdlbnQAC2N1cmwvNy40Ny4wAAZhY2NlcHQAAyovKgAMY29udGVudC10eXBlAAp0ZXh0L3BsYWluAA5jb250ZW50LWxlbmd0aAACMTMAAAAAAAAAAAAAAA9yYW5kb20tZGF0YS0x//8=
+iz4mjlui_1l3bw  20170213-224106.522+0100     hello   POST    ABYvaGVsbG8/bmFtZT1UZXN0TmFtZS0zAAAABQAEaG9zdAAObG9jYWxob3N0OjgwODAACnVzZXItYWdlbnQAC2N1cmwvNy40Ny4wAAZhY2NlcHQAAyovKgAMY29udGVudC10eXBlAAp0ZXh0L3BsYWluAA5jb250ZW50LWxlbmd0aAACMTMAAAAAAAAAAAAAAA9yYW5kb20tZGF0YS0z//8=
+iz4mjlty_sicli  20170213-224106.502+0100     hello   POST    ABYvaGVsbG8/bmFtZT1UZXN0TmFtZS0yAAAABQAEaG9zdAAObG9jYWxob3N0OjgwODAACnVzZXItYWdlbnQAC2N1cmwvNy40Ny4wAAZhY2NlcHQAAyovKgAMY29udGVudC10eXBlAAp0ZXh0L3BsYWluAA5jb250ZW50LWxlbmd0aAACMTMAAAAAAAAAAAAAAA9yYW5kb20tZGF0YS0y//8=
 ```
 
-Here each line corresponds to an HTTP request record, where it is associated
-with an identifier and the details (URI, method, headers, payload, etc.) are
-in Base64-encoded binary.
+Here each line corresponds to an HTTP request record and fields are separated
+by `\t` character. A line first starts with plain text id, timestamp, group
+name, and method fields. There it is followed by a Base64-encoded field
+containing the URL (including request parameters), headers, and payload. This
+simple representation makes it easy to employ well-known command line tools
+(`grep`, `sed`, `awk`, etc.) to extract a certain subset of records.
 
 There is also an on/off switch of the recorder accessible via `isEnabled()` and
 `setEnabled(boolean)` methods in `HrrsFilter`. You can expose these via a REST

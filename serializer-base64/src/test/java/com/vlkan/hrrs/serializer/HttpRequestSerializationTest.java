@@ -3,12 +3,13 @@ package com.vlkan.hrrs.serializer;
 import com.pholser.junit.quickcheck.From;
 import com.pholser.junit.quickcheck.Property;
 import com.pholser.junit.quickcheck.runner.JUnitQuickcheck;
-import com.vlkan.hrrs.api.*;
+import com.vlkan.hrrs.api.HttpRequestRecord;
+import com.vlkan.hrrs.api.HttpRequestRecordReader;
+import com.vlkan.hrrs.api.HttpRequestRecordWriter;
 import com.vlkan.hrrs.serializer.base64.Base64HttpRequestRecordReader;
 import com.vlkan.hrrs.serializer.base64.Base64HttpRequestRecordWriter;
 import com.vlkan.hrrs.serializer.base64.guava.GuavaBase64Decoder;
 import com.vlkan.hrrs.serializer.base64.guava.GuavaBase64Encoder;
-import org.junit.Before;
 import org.junit.runner.RunWith;
 
 import java.util.Iterator;
@@ -17,19 +18,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(JUnitQuickcheck.class)
 public class HttpRequestSerializationTest {
-
-    private HttpRequestRecordReaderSource<String> readerSource;
-
-    private HttpRequestRecordReader<String> reader;
-
-    private HttpRequestRecordWriterTarget<String> writerTarget;
-
-    private HttpRequestRecordWriter<String> writer;
-
-    @Before
-    public void before() {
-
-    }
 
     @Property
     public void should_write_and_read(@From(HttpRequestRecordGenerator.class) HttpRequestRecord record) {

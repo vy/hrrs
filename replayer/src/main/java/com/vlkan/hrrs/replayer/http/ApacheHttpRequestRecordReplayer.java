@@ -92,7 +92,8 @@ public class ApacheHttpRequestRecordReplayer implements HttpRequestRecordReplaye
 
     private void report(HttpRequestRecord record, int statusCode, long durationMillis) {
         String threadName = Thread.currentThread().getName();
-        jtlPrinter.print(record.getTimestampMillis(), record.getGroupName(), statusCode, durationMillis, threadName);
+        long timestampMillis = record.getTimestamp().getTime();
+        jtlPrinter.print(timestampMillis, record.getGroupName(), statusCode, durationMillis, threadName);
         metricRegistry.timer("__all__").update(durationMillis, TimeUnit.MILLISECONDS);
         metricRegistry.timer("__all__." + statusCode).update(durationMillis, TimeUnit.MILLISECONDS);
         metricRegistry.timer(record.getGroupName()).update(durationMillis, TimeUnit.MILLISECONDS);

@@ -6,15 +6,12 @@ import javax.annotation.concurrent.NotThreadSafe;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.vlkan.hrrs.serializer.base64.Base64HttpRequestRecord.DATE_FORMAT;
 import static com.vlkan.hrrs.serializer.base64.Base64HttpRequestRecord.FIELD_SEPARATOR;
-import static com.vlkan.hrrs.serializer.base64.Base64HttpRequestRecord.RECORD_SEPARATOR;
 
 @NotThreadSafe
 public class Base64HttpRequestRecordReaderIterator implements Iterator<HttpRequestRecord> {
@@ -46,34 +43,31 @@ public class Base64HttpRequestRecordReaderIterator implements Iterator<HttpReque
     public HttpRequestRecord next() {
         checkArgument(lineIndex >= 0, "hasNext() should have been called first");
         try {
-            int separatorIndex = line.indexOf(FIELD_SEPARATOR);
-            if (separatorIndex < 0) {
-                String message = String.format("could not locate the field separator (lineIndex=%d)", lineIndex);
-                throw new RuntimeException(message);
-            }
-            String encodedRecordBytes = line.substring(separatorIndex + RECORD_SEPARATOR.length());
+            String[] fields = line.split(FIELD_SEPARATOR, 5);
+            checkArgument(fields.length == 5, "insufficient field count (fieldCount=%d)", fields.length);
+            String id = fields[0];
+            Date timestamp = DATE_FORMAT.parse(fields[1]);
+            String groupName = fields[2];
+            HttpRequestMethod method = HttpRequestMethod.valueOf(fields[3]);
+            String encodedRecordBytes = fields[4];
             byte[] recordBytes = decoder.decode(encodedRecordBytes);
-            return readRecord(recordBytes);
-        } catch (IOException error) {
-            throw new RuntimeException(error);
+            return readRecord(id, timestamp, groupName, method, recordBytes);
+        } catch (Throwable error) {
+            String message = String.format("failed parsing record (lineIndex=%d)", lineIndex);
+            throw new RuntimeException(message, error);
         }
     }
 
-    private static HttpRequestRecord readRecord(byte[] recordBytes) throws IOException {
+    private static HttpRequestRecord readRecord(String id, Date timestamp, String groupName, HttpRequestMethod method, byte[] recordBytes) throws IOException {
         ByteArrayInputStream inputStream = new ByteArrayInputStream(recordBytes);
         DataInputStream dataInputStream = new DataInputStream(inputStream);
-        return readRecord(dataInputStream);
+        return readRecord(id, timestamp, groupName, method, dataInputStream);
     }
 
-    private static HttpRequestRecord readRecord(DataInputStream stream) throws IOException {
+    private static HttpRequestRecord readRecord(String id, Date timestamp, String groupName, HttpRequestMethod method, DataInputStream stream) throws IOException {
 
         // Read fields.
-        String id = stream.readUTF();
-        String groupName = stream.readUTF();
-        long timestampMillis = stream.readLong();
-        checkArgument(timestampMillis > 0, "expected: timestampMillis > 0, found: %s", timestampMillis);
         String uri = stream.readUTF();
-        HttpRequestMethod method = readMethod(stream);
         List<HttpRequestHeader> headers = readHeaders(stream);
         HttpRequestPayload payload = readPayload(stream);
 
@@ -82,18 +76,13 @@ public class Base64HttpRequestRecordReaderIterator implements Iterator<HttpReque
                 .builder()
                 .id(id)
                 .groupName(groupName)
-                .timestampMillis(timestampMillis)
+                .timestamp(timestamp)
                 .uri(uri)
                 .method(method)
                 .headers(headers)
                 .payload(payload)
                 .build();
 
-    }
-
-    private static HttpRequestMethod readMethod(DataInputStream stream) throws IOException {
-        String methodName = stream.readUTF();
-        return HttpRequestMethod.valueOf(methodName);
     }
 
     private static List<HttpRequestHeader> readHeaders(DataInputStream stream) throws IOException {

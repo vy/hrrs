@@ -8,6 +8,7 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.*;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -70,17 +71,20 @@ public abstract class HrrsFilter implements Filter {
 
     private HttpRequestRecord createRecord(HttpServletRequest request, byte[] recordedPayloadBytes, long totalPayloadByteCount) {
         String id = createRequestId(request);
+        Date timestamp = new Date();
         String groupName = createRequestGroupName(request);
         String uri = createRequestUri(request);
         HttpRequestMethod method = HttpRequestMethod.valueOf(request.getMethod());
+        List<HttpRequestHeader> headers = createHeaders(request);
         HttpRequestPayload payload = createPayload(recordedPayloadBytes, totalPayloadByteCount);
         return ImmutableHttpRequestRecord
                 .builder()
                 .id(id)
+                .timestamp(timestamp)
                 .groupName(groupName)
-                .timestampMillis(System.currentTimeMillis())
                 .uri(uri)
                 .method(method)
+                .headers(headers)
                 .payload(payload)
                 .build();
     }
@@ -90,6 +94,25 @@ public abstract class HrrsFilter implements Filter {
         String queryString = request.getQueryString();
         boolean blankQueryString = queryString == null || queryString.matches("^\\s*$");
         return blankQueryString ? uri : String.format("%s?%s", uri, queryString);
+    }
+
+    private List<HttpRequestHeader> createHeaders(HttpServletRequest request) {
+        List<HttpRequestHeader> headers = Collections.emptyList();
+        Enumeration<String> names = request.getHeaderNames();
+        while (names.hasMoreElements()) {
+            String name = names.nextElement();
+            String value = request.getHeader(name);
+            ImmutableHttpRequestHeader header = ImmutableHttpRequestHeader
+                    .builder()
+                    .name(name)
+                    .value(value)
+                    .build();
+            if (headers.isEmpty()) {
+                headers = new ArrayList<HttpRequestHeader>();
+            }
+            headers.add(header);
+        }
+        return headers;
     }
 
     private HttpRequestPayload createPayload(byte[] recordedPayloadBytes, long totalPayloadByteCount) {

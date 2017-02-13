@@ -7,6 +7,7 @@ import com.vlkan.hrrs.api.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 public class HttpRequestRecordGenerator extends Generator<HttpRequestRecord> {
@@ -26,7 +27,7 @@ public class HttpRequestRecordGenerator extends Generator<HttpRequestRecord> {
         String id = Long.toString(sourceOfRandomness.nextLong(), Character.MAX_RADIX);
         int groupId = Math.abs(id.hashCode()) % MAX_GROUP_COUNT;
         String groupName = String.format("group-%d", groupId);
-        long timestampMillis = System.currentTimeMillis();
+        Date timestamp = new Date();
         String uri = String.format("/hello/%s?id=%s", groupName, id);
         HttpRequestMethod method = gen().type(HttpRequestMethod.class).generate(sourceOfRandomness, generationStatus);
         List<HttpRequestHeader> headers = generateHeaders(sourceOfRandomness, generationStatus);
@@ -36,8 +37,8 @@ public class HttpRequestRecordGenerator extends Generator<HttpRequestRecord> {
         return ImmutableHttpRequestRecord
                 .builder()
                 .id(id)
+                .timestamp(timestamp)
                 .groupName(groupName)
-                .timestampMillis(timestampMillis)
                 .uri(uri)
                 .method(method)
                 .headers(headers)

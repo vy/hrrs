@@ -8,8 +8,7 @@ import java.io.IOException;
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.vlkan.hrrs.serializer.base64.Base64HttpRequestRecord.FIELD_SEPARATOR;
-import static com.vlkan.hrrs.serializer.base64.Base64HttpRequestRecord.RECORD_SEPARATOR;
+import static com.vlkan.hrrs.serializer.base64.Base64HttpRequestRecord.*;
 
 public class Base64HttpRequestRecordWriter implements HttpRequestRecordWriter<String> {
 
@@ -33,6 +32,12 @@ public class Base64HttpRequestRecordWriter implements HttpRequestRecordWriter<St
             synchronized (this) {
                 target.write(record.getId());
                 target.write(FIELD_SEPARATOR);
+                target.write(DATE_FORMAT.format(record.getTimestamp()));
+                target.write(FIELD_SEPARATOR);
+                target.write(record.getGroupName());
+                target.write(FIELD_SEPARATOR);
+                target.write(record.getMethod().toString());
+                target.write(FIELD_SEPARATOR);
                 byte[] recordBytes = writeRecord(record);
                 String encodedRecordBytes = encoder.encode(recordBytes);
                 target.write(encodedRecordBytes);
@@ -53,11 +58,7 @@ public class Base64HttpRequestRecordWriter implements HttpRequestRecordWriter<St
     }
 
     private static void writeRecord(HttpRequestRecord record, DataOutputStream stream) throws IOException {
-        stream.writeUTF(record.getId());
-        stream.writeUTF(record.getGroupName());
-        stream.writeLong(record.getTimestampMillis());
         stream.writeUTF(record.getUri());
-        stream.writeUTF(record.getMethod().toString());
         writeHeaders(record.getHeaders(), stream);
         writePayload(record.getPayload(), stream);
     }
