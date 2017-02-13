@@ -150,20 +150,20 @@ Below is the list of parameters supported by the replayer.
 
 | Parameter | Required | Default | Description |
 | --------- | -------- | ------- | ----------- |
-| --help, -h | N | false | display this help and exit |
-| --inputUri, -i | Y | | input URI for HTTP records (Base64 replayer can accept input URIs with `.gz` suffix.) |
-| --jtlOutputFile, -oj | N | | Apache JMeter JTL output file for test results |
-| --localAddress, -l | N | | address to bind to when making outgoing connections |
-| --loggerLevelSpecs, -L | N | `*=warn,com.vlkan.hrrs=info` | comma-separated list of `loggerName=loggerLevel` pairs |
-| --maxRequestCountPerSecond, -r | N | 1 | number of concurrent requests per second |
-| --metricsOutputFile, -om | N | | output file to dump Dropwizard metrics |
-| --metricsOutputPeriodSeconds, -mp | N | 10 | Dropwizard metrics report frequency in seconds |
-| --rampUpDurationSeconds, -d | N | 1 | ramp up duration in seconds to reach to the maximum number of requests |
-| --requestTimeoutSeconds, -t | N | 10 | HTTP request connect/write/read timeout in seconds |
-| --targetHost, -th | Y | | remote HTTP server host |
-| --targetPort, -tp | Y | | remote HTTP server port |
-| --threadCount, -n | N | 2 | HTTP request worker pool size |
-| --totalDurationSeconds, -D | N | 10 | total run duration in seconds |
+| `--help`, `-h` | N | false | display this help and exit |
+| `--inputUri`, `-i` | Y | | input URI for HTTP records (Base64 replayer can accept input URIs with `.gz` suffix.) |
+| `--jtlOutputFile`, `-oj` | N | | Apache JMeter JTL output file for test results |
+| `--localAddress`, `-l` | N | | address to bind to when making outgoing connections |
+| `--loggerLevelSpecs`, `-L` | N | `*=warn,com.vlkan.hrrs=info` | comma-separated list of `loggerName=loggerLevel` pairs |
+| `--maxRequestCountPerSecond`, `-r` | N | 1 | number of concurrent requests per second |
+| `--metricsOutputFile`, `-om` | N | | output file to dump Dropwizard metrics |
+| `--metricsOutputPeriodSeconds`, `-mp` | N | 10 | Dropwizard metrics report frequency in seconds |
+| `--rampUpDurationSeconds`, `-d` | N | 1 | ramp up duration in seconds to reach to the maximum number of requests |
+| `--requestTimeoutSeconds`, `-t` | N | 10 | HTTP request connect/write/read timeout in seconds |
+| `--targetHost`, `-th` | Y | | remote HTTP server host |
+| `--targetPort`, `-tp` | Y | | remote HTTP server port |
+| `--threadCount`, `-n` | N | 2 | HTTP request worker pool size |
+| `--totalDurationSeconds`, `-D` | N | 10 | total run duration in seconds |
 
 # Recorder Configuration
 
