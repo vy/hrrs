@@ -376,6 +376,37 @@ to have such a level of verbosity while executing the actual performance tests.
   unit. Thus sticking close to the web application itself in Java serves a
   purpose here.
 
+- **Are you recording the entire HTTP request payload, even if it is not
+  used?** Short answer is *no*. First, the `InputStream` of a request is
+  wrapped and recorded only if `HrrsFilter#isRequestRecordable(HttpServletRequest)`
+  returns `true`. Second, the payload is recorded as long as it is consumed.
+  If the request handler does not consume the payload, then HRRS will not
+  record it either. Additionally, `HrrsFilter#getMaxRecordablePayloadByteCount()`
+  provides a hardcoded upper bound on the maximum number of bytes HRRS is
+  allowed to record.
+
+- **Is it possible to query the state of the recorder and enable/disable it at
+  runtime?** Yes, see the usage of `HrrsServlet` above, which provides an HTTP
+  API for that purpose. An MBean exposure is being worked on as well.
+
+- **Is using plain text files a good idea for the HTTP records?** Yes and no.
+  Yes, because it suits our needs. It is easier to copy between production and
+  test environments. It is easier to reason about. And you can leverage command
+  line tools (`grep`, `sed`, `awk`, etc.) to manipulate or take a subset of the
+  records. That being said, you can easily implement your own serializers (for
+  instance, using an `RDBMS`) according to your needs.
+
+- **What if the state of the services (e.g., database contents) differ in test
+  and production environments?** We also suffer from the same issue, but that
+  is a totally different problem domain. In our case, the magnitude of the
+  misalignment between production and test environment states are at negligible
+  margins. In the tests, we do expect a stable rate in the HTTP 4XX and 5XX
+  response codes and that works fine for us.
+
+- **Sounds cool! How can I contribute?** Awesome! Just send a pull request
+  over GitHub. In terms of coding conventions, just try to stick to the style
+  in the source code.
+
 # License
 
 Copyright &copy; 2017 [Volkan Yazıcı](http://vlkan.com/)
