@@ -1,10 +1,10 @@
 package com.vlkan.hrrs.replayer.base64;
 
 import com.vlkan.hrrs.replayer.cli.Config;
-import com.vlkan.hrrs.replayer.cli.MainModule;
+import com.vlkan.hrrs.replayer.cli.ReplayerModule;
 import com.vlkan.hrrs.replayer.record.HttpRequestRecordStream;
 
-public class Base64MainModule extends MainModule {
+public class Base64MainModule extends ReplayerModule {
 
     public Base64MainModule(Config config) {
         super(config);

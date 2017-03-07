@@ -32,7 +32,7 @@
               <transformers>
                 <transformer />
                 <transformer>
-                  <mainClass>com.vlkan.hrrs.replayer.cli.Main</mainClass>
+                  <mainClass>com.vlkan.hrrs.replayer.cli.Replayer</mainClass>
                 </transformer>
               </transformers>
             </configuration>

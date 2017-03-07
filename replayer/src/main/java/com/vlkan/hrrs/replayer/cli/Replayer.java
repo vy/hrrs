@@ -27,9 +27,9 @@ import java.util.concurrent.atomic.AtomicLong;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 @Singleton
-public class Main implements Runnable, Closeable, HttpRequestRecordStreamConsumer {
+public class Replayer implements Runnable, Closeable, HttpRequestRecordStreamConsumer {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Replayer.class);
 
     private final Config config;
 
@@ -46,7 +46,7 @@ public class Main implements Runnable, Closeable, HttpRequestRecordStreamConsume
     private volatile boolean closed = false;
 
     @Inject
-    public Main(
+    public Replayer(
             Config config,
             CloseableExecutor closeableExecutor,
             HttpRequestRecordStream recordStream,
@@ -141,18 +141,18 @@ public class Main implements Runnable, Closeable, HttpRequestRecordStreamConsume
         closed = true;
     }
 
-    public static void main(String[] args, MainModuleFactory moduleFactory) throws IOException {
+    public static void main(String[] args, ReplayerModuleFactory moduleFactory) throws IOException {
         Config config = Config.of(args);
         config.dump();
-        MainModule mainModule = moduleFactory.create(config);
+        ReplayerModule mainModule = moduleFactory.create(config);
         Injector injector = Guice.createInjector(mainModule);
         LoggerLevelAccessor loggerLevelAccessor = injector.getInstance(LoggerLevelAccessor.class);
         applyLoggerLevelSpecs(config, loggerLevelAccessor);
-        Main main = injector.getInstance(Main.class);
+        Replayer replayer = injector.getInstance(Replayer.class);
         try {
-            main.run();
+            replayer.run();
         } finally {
-            main.close();
+            replayer.close();
         }
     }
 

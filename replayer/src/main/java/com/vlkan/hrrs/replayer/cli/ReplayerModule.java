@@ -21,11 +21,11 @@ import java.io.FileNotFoundException;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-public class MainModule extends AbstractModule {
+public class ReplayerModule extends AbstractModule {
 
     private final Config config;
 
-    public MainModule(Config config) {
+    public ReplayerModule(Config config) {
         this.config = checkNotNull(config, "config");
     }
 

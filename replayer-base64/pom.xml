@@ -81,7 +81,7 @@
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>com.vlkan.hrrs.replayer.base64.Base64Main</mainClass>
+                                    <mainClass>com.vlkan.hrrs.replayer.base64.Base64Replayer</mainClass>
                                 </transformer>
                             </transformers>
                         </configuration>
