@@ -32,6 +32,7 @@
         <!-- library versions -->
         <assertj.version>3.6.1</assertj.version>
         <guava.version>20.0</guava.version>
+        <jcommander.version>1.58</jcommander.version>
         <jsr305.version>3.0.1</jsr305.version>
         <junit.version>4.12</junit.version>
         <junit-quickcheck.version>0.7</junit-quickcheck.version>
@@ -94,6 +95,12 @@
                 <groupId>org.assertj</groupId>
                 <artifactId>assertj-core</artifactId>
                 <version>${assertj.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.beust</groupId>
+                <artifactId>jcommander</artifactId>
+                <version>${jcommander.version}</version>
             </dependency>
 
         </dependencies>

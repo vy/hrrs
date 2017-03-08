@@ -19,7 +19,6 @@
         <!-- library versions -->
         <guice.version>4.1.0</guice.version>
         <httpclient.version>4.5.2</httpclient.version>
-        <jcommander.version>1.58</jcommander.version>
         <metrics-core.version>3.1.2</metrics-core.version>
 
     </properties>
@@ -51,7 +50,6 @@
         <dependency>
             <groupId>com.beust</groupId>
             <artifactId>jcommander</artifactId>
-            <version>${jcommander.version}</version>
         </dependency>
 
         <dependency>
