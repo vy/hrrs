@@ -33,23 +33,14 @@
 
         <dependency>
             <groupId>com.vlkan.hrrs</groupId>
-            <artifactId>hrrs-serializer-base64</artifactId>
+            <artifactId>hrrs-commons</artifactId>
             <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.beust</groupId>
-            <artifactId>jcommander</artifactId>
+            <groupId>com.vlkan.hrrs</groupId>
+            <artifactId>hrrs-serializer-base64</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>

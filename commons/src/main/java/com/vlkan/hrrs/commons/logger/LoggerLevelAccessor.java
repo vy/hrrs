@@ -1,4 +1,4 @@
-package com.vlkan.hrrs.replayer.logger;
+package com.vlkan.hrrs.commons.logger;
 
 public interface LoggerLevelAccessor {
 

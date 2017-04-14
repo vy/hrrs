@@ -12,6 +12,7 @@
 
     <modules>
         <module>api</module>
+        <module>commons</module>
         <module>examples/jaxrs</module>
         <module>examples/spring</module>
         <module>servlet-filter</module>

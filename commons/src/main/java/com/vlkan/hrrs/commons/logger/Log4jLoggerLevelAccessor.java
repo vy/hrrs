@@ -1,20 +1,23 @@
-package com.vlkan.hrrs.replayer.logger;
+package com.vlkan.hrrs.commons.logger;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
-import javax.inject.Singleton;
-
 import static com.google.common.base.Preconditions.checkNotNull;
 
-@Singleton
 public class Log4jLoggerLevelAccessor implements LoggerLevelAccessor {
 
     private static final org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger(Log4jLoggerLevelAccessor.class);
 
-    public Log4jLoggerLevelAccessor() {
+    private static final Log4jLoggerLevelAccessor INSTANCE = new Log4jLoggerLevelAccessor();
+
+    private Log4jLoggerLevelAccessor() {
         LOGGER.debug("instantiated");
+    }
+
+    public static Log4jLoggerLevelAccessor getInstance() {
+        return INSTANCE;
     }
 
     @Override

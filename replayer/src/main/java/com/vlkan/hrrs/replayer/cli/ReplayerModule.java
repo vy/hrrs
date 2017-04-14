@@ -3,6 +3,8 @@ package com.vlkan.hrrs.replayer.cli;
 import com.codahale.metrics.MetricRegistry;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
+import com.vlkan.hrrs.commons.logger.Log4jLoggerLevelAccessor;
+import com.vlkan.hrrs.commons.logger.LoggerLevelAccessor;
 import com.vlkan.hrrs.replayer.executor.CloseableExecutor;
 import com.vlkan.hrrs.replayer.executor.RateLimitedExecutor;
 import com.vlkan.hrrs.replayer.http.ApacheHttpRequestRecordReplayer;
@@ -10,8 +12,6 @@ import com.vlkan.hrrs.replayer.http.HttpRequestRecordReplayer;
 import com.vlkan.hrrs.replayer.jtl.JtlFilePrinter;
 import com.vlkan.hrrs.replayer.jtl.JtlNullPrinter;
 import com.vlkan.hrrs.replayer.jtl.JtlPrinter;
-import com.vlkan.hrrs.replayer.logger.Log4jLoggerLevelAccessor;
-import com.vlkan.hrrs.replayer.logger.LoggerLevelAccessor;
 import com.vlkan.hrrs.replayer.metric.MetricFileReporter;
 import com.vlkan.hrrs.replayer.metric.MetricNullReporter;
 import com.vlkan.hrrs.replayer.metric.MetricReporter;
@@ -34,7 +34,7 @@ public class ReplayerModule extends AbstractModule {
         bind(Config.class).toInstance(config);
         bind(CloseableExecutor.class).to(RateLimitedExecutor.class);
         bind(HttpRequestRecordReplayer.class).to(ApacheHttpRequestRecordReplayer.class);
-        bind(LoggerLevelAccessor.class).to(Log4jLoggerLevelAccessor.class);
+        bind(LoggerLevelAccessor.class).toInstance(Log4jLoggerLevelAccessor.getInstance());
     }
 
     @Provides

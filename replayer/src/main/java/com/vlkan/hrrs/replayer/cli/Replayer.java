@@ -7,9 +7,10 @@ import com.google.common.util.concurrent.RateLimiter;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.vlkan.hrrs.api.HttpRequestRecord;
+import com.vlkan.hrrs.commons.logger.LoggerLevelAccessor;
+import com.vlkan.hrrs.commons.logger.LoggerLevels;
 import com.vlkan.hrrs.replayer.executor.CloseableExecutor;
 import com.vlkan.hrrs.replayer.http.HttpRequestRecordReplayer;
-import com.vlkan.hrrs.replayer.logger.LoggerLevelAccessor;
 import com.vlkan.hrrs.replayer.metric.MetricReporter;
 import com.vlkan.hrrs.replayer.record.HttpRequestRecordStream;
 import com.vlkan.hrrs.replayer.record.HttpRequestRecordStreamConsumer;
@@ -147,28 +148,12 @@ public class Replayer implements Runnable, Closeable, HttpRequestRecordStreamCon
         ReplayerModule mainModule = moduleFactory.create(config);
         Injector injector = Guice.createInjector(mainModule);
         LoggerLevelAccessor loggerLevelAccessor = injector.getInstance(LoggerLevelAccessor.class);
-        applyLoggerLevelSpecs(config, loggerLevelAccessor);
+        LoggerLevels.applyLoggerLevelSpecs(config.getLoggerLevelSpecs(), loggerLevelAccessor);
         Replayer replayer = injector.getInstance(Replayer.class);
         try {
             replayer.run();
         } finally {
             replayer.close();
-        }
-    }
-
-    private static void applyLoggerLevelSpecs(Config config, LoggerLevelAccessor loggerLevelAccessor) {
-        String loggerLevelSpecs = config.getLoggerLevelSpecs();
-        if (loggerLevelSpecs != null) {
-            for (String loggerNameAndLoggerLevel : loggerLevelSpecs.split(",")) {
-                String[] fields = loggerNameAndLoggerLevel.split("=", 2);
-                String loggerName = fields[0];
-                String loggerLevel = fields[1];
-                if ("*".equals(loggerName)) {
-                    loggerLevelAccessor.setRootLevel(loggerLevel);
-                } else {
-                    loggerLevelAccessor.setLevel(loggerName, loggerLevel);
-                }
-            }
         }
     }
 

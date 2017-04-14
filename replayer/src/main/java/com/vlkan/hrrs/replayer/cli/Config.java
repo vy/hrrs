@@ -1,15 +1,15 @@
 package com.vlkan.hrrs.replayer.cli;
 
-import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParameterException;
-import com.vlkan.hrrs.replayer.cli.validator.*;
+import com.vlkan.hrrs.commons.jcommander.JCommanderConfig;
+import com.vlkan.hrrs.commons.jcommander.JCommanderConfigs;
+import com.vlkan.hrrs.commons.jcommander.validator.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.URI;
 
-public class Config {
+public class Config implements JCommanderConfig {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Config.class);
 
@@ -150,6 +150,11 @@ public class Config {
             description = "display this help and exit")
     private boolean help;
 
+    @Override
+    public boolean isHelp() {
+        return help;
+    }
+
     public void dump() {
         LOGGER.debug("localAddress={}", localAddress);
         LOGGER.debug("targetHost={}", targetHost);
@@ -167,20 +172,7 @@ public class Config {
     }
 
     public static Config of(String[] args) {
-        Config config = new Config();
-        JCommander jCommander = null;
-        try {
-            jCommander = new JCommander(config, args);
-        } catch (ParameterException error) {
-            System.err.println(error.getMessage());
-            System.err.println("Run with --help, -h for the list of available parameters.");
-            System.exit(1);
-        }
-        if (config.help) {
-            jCommander.usage();
-            System.exit(0);
-        }
-        return config;
+        return JCommanderConfigs.create(args, new Config());
     }
 
 }

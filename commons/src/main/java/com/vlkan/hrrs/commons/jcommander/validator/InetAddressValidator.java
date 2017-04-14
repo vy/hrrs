@@ -1,4 +1,4 @@
-package com.vlkan.hrrs.replayer.cli.validator;
+package com.vlkan.hrrs.commons.jcommander.validator;
 
 import com.beust.jcommander.IParameterValidator;
 import com.beust.jcommander.ParameterException;
