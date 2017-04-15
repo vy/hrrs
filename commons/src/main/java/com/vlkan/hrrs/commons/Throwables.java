@@ -1,4 +1,4 @@
-package com.vlkan.hrrs.replayer.util;
+package com.vlkan.hrrs.commons;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 

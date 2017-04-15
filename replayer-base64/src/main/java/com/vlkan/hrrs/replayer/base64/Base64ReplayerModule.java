@@ -4,9 +4,9 @@ import com.vlkan.hrrs.replayer.cli.Config;
 import com.vlkan.hrrs.replayer.cli.ReplayerModule;
 import com.vlkan.hrrs.replayer.record.HttpRequestRecordStream;
 
-public class Base64MainModule extends ReplayerModule {
+public class Base64ReplayerModule extends ReplayerModule {
 
-    public Base64MainModule(Config config) {
+    public Base64ReplayerModule(Config config) {
         super(config);
     }
 

@@ -19,7 +19,7 @@ import java.util.Iterator;
 import java.util.concurrent.Callable;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.vlkan.hrrs.replayer.util.Throwables.throwCheckedException;
+import static com.vlkan.hrrs.commons.Throwables.throwCheckedException;
 
 public class Base64HttpRequestRecordStream implements HttpRequestRecordStream {
 

@@ -8,7 +8,7 @@ public class Base64ReplayerModuleFactory implements ReplayerModuleFactory {
 
     @Override
     public ReplayerModule create(Config config) {
-        return new Base64MainModule(config);
+        return new Base64ReplayerModule(config);
     }
 
 }

@@ -13,6 +13,7 @@
     <modules>
         <module>api</module>
         <module>commons</module>
+        <module>distiller</module>
         <module>examples/jaxrs</module>
         <module>examples/spring</module>
         <module>servlet-filter</module>
@@ -20,6 +21,7 @@
         <module>replayer-base64</module>
         <module>serializer-base64</module>
         <module>servlet-filter-base64</module>
+        <module>distiller-base64</module>
     </modules>
 
     <properties>
@@ -33,6 +35,7 @@
         <!-- library versions -->
         <assertj.version>3.6.1</assertj.version>
         <guava.version>20.0</guava.version>
+        <guice.version>4.1.0</guice.version>
         <jcommander.version>1.58</jcommander.version>
         <jsr305.version>3.0.1</jsr305.version>
         <junit.version>4.12</junit.version>
@@ -43,6 +46,7 @@
         <!-- plugin versions -->
         <animal-sniffer-maven-plugin.version>1.15</animal-sniffer-maven-plugin.version>
         <maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>
+        <maven-shade-plugin.version>2.4.3</maven-shade-plugin.version>
         <maven-source-plugin.version>2.4</maven-source-plugin.version>
 
     </properties>
@@ -66,6 +70,12 @@
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
                 <version>${guava.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.google.inject</groupId>
+                <artifactId>guice</artifactId>
+                <version>${guice.version}</version>
             </dependency>
 
             <dependency>
@@ -149,6 +159,12 @@
                             </goals>
                         </execution>
                     </executions>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-shade-plugin</artifactId>
+                    <version>${maven-shade-plugin.version}</version>
                 </plugin>
 
             </plugins>
