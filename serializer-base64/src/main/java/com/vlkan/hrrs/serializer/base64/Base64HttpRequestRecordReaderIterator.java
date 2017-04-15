@@ -44,7 +44,7 @@ public class Base64HttpRequestRecordReaderIterator implements Iterator<HttpReque
         checkArgument(lineIndex >= 0, "hasNext() should have been called first");
         try {
             String[] fields = line.split(FIELD_SEPARATOR, 5);
-            checkArgument(fields.length == 5, "insufficient field count (fieldCount=%d)", fields.length);
+            checkArgument(fields.length == 5, "insufficient field count (fieldCount=%s)", fields.length);
             String id = fields[0];
             Date timestamp = DATE_FORMAT.parse(fields[1]);
             String groupName = fields[2];
@@ -120,8 +120,8 @@ public class Base64HttpRequestRecordReaderIterator implements Iterator<HttpReque
         int byteCount = stream.readInt();
         checkArgument(byteCount >= 0, "expected: byteCount >= 0, found: %s", byteCount);
         byte[] bytes = new byte[byteCount];
-        int readByteCount = stream.read(bytes);
-        checkArgument(byteCount == readByteCount, "expected: byteCount == readByteCount, found: %s != %s", byteCount, readByteCount);
+        int readByteCount = Math.max(0, stream.read(bytes));
+        checkArgument(byteCount == readByteCount, "expected: %s == readByteCount, found: %s", byteCount, readByteCount);
 
         return ImmutableHttpRequestPayload
                 .builder()
