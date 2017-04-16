@@ -245,6 +245,8 @@ public abstract class HrrsFilter implements Filter {
 
     // ...
 
+    public static final long DEFAULT_MAX_RECORDABLE_PAYLOAD_BYTE_COUNT = 10 * 1024 * 1024;
+
     /**
      * Checks if the given HTTP request is recordable.
      */
@@ -254,9 +256,10 @@ public abstract class HrrsFilter implements Filter {
 
     /**
      * Maximum amount of bytes that can be recorded per request.
+     * Defaults to {@link HrrsFilter#DEFAULT_MAX_RECORDABLE_PAYLOAD_BYTE_COUNT}.
      */
-    protected long getMaxRecordablePayloadByteCount() {
-        return Long.MAX_VALUE;
+    public long getMaxRecordablePayloadByteCount() {
+        return DEFAULT_MAX_RECORDABLE_PAYLOAD_BYTE_COUNT;
     }
 
     /**
