@@ -285,6 +285,14 @@ public abstract class HrrsFilter implements Filter {
         return ID_GENERATOR.next();
     }
 
+    /**
+     * Filters the given record prior to writing.
+     * @return the modified record or null to exclude the record
+     */
+    protected HttpRequestRecord filterRecord(HttpRequestRecord record) {
+        return record;
+    }
+
     // ...
 
 }

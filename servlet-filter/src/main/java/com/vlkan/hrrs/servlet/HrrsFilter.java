@@ -45,7 +45,10 @@ public abstract class HrrsFilter implements Filter {
             long totalPayloadByteCount = teeServletInputStream.getByteCount();
             byte[] recordedPayloadBytes = requestOutputStream.toByteArray();
             HttpRequestRecord record = createRecord(httpRequest, recordedPayloadBytes, totalPayloadByteCount);
-            getWriter().write(record);
+            HttpRequestRecord filteredRecord = filterRecord(record);
+            if (filteredRecord != null) {
+                getWriter().write(record);
+            }
         } else {
             chain.doFilter(request, response);
         }
@@ -155,6 +158,14 @@ public abstract class HrrsFilter implements Filter {
      */
     protected String createRequestId(HttpServletRequest request) {
         return idGenerator.next();
+    }
+
+    /**
+     * Filter the given record prior to writing.
+     * @return the modified record or null to exclude the record
+     */
+    protected HttpRequestRecord filterRecord(HttpRequestRecord record) {
+        return record;
     }
 
     abstract protected HttpRequestRecordWriter getWriter();
