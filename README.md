@@ -32,6 +32,8 @@ HRRS ships the following artifacts:
 - **hrrs-servlet-filter:** Basic servlet filter leveraging the functionality
   of the API interfaces.
 - **hrrs-replayer:** The command line replayer application.
+- **hrrs-distiller:** A command line tool to transform and/or filter stored
+`HttpRequestRecord`s. 
 
 These artifacts provide interfaces for the potential concrete implementations.
 Fortunately, we provide one for you: File-based Base64 implementation. That is,
@@ -42,6 +44,8 @@ Following artifacts provide this functionality:
 - **hrrs-servlet-filter-base64:** Servlet filter implementation using the Base64
   serializer.
 - **hrrs-replayer-base64:** The command line replayer implementation using the
+  Base64 serializer.
+- **hrrs-distiller-base64:** The command line distiller implementation using the
   Base64 serializer.
 
 HRRS is designed with extensibility in mind. As of now, it only supports file
@@ -183,6 +187,51 @@ Below is the list of parameters supported by the replayer.
 | `--targetPort`, `-tp` | Y | | remote HTTP server port |
 | `--threadCount`, `-n` | N | 2 | HTTP request worker pool size |
 | `--totalDurationSeconds`, `-D` | N | 10 | total run duration in seconds |
+
+It is not always desired to replay recorded HTTP requests as is. One might need
+to exclude certain HTTP headers, remove promotion codes from the URL, sanitize
+payload by shadowing sensitive customer information, etc. You can use distiller
+provided by HRRS for this purpose:
+
+```bash
+$ java \
+    -jar /path/to/hrrs-distiller-base64-<version>.jar
+    --inputUri file:///path/to/input-records.csv.gz
+    --outputUri file:///path/to/output-records.csv.gz
+    --scriptUri file:///path/to/transform.js
+```
+
+Distiller passes each read input record to the `transform()` function defined
+in the JavaScript file pointed by `--scriptUri` parameter. `transform()`
+receives a single argument of type `HttpRequestRecord` and returns an
+`HttpRequestRecord`. (Returning `null` lets the distiller to exclude that
+record.) Consider the following example:
+
+```javascript
+var formatter = new java.text.SimpleDateFormat("yyyyMMdd-HHmmss.SSSZ");
+var loTimestamp = formatter.parse("20170415-204551.527+0200");
+var hiTimestamp = formatter.parse("20170415-204551.700+0200");
+
+function transform(input) {
+    var timestamp = input.getTimestamp();
+    if (timestamp.after(loTimestamp) && timestamp.before(hiTimestamp)) {    // Check the timestamp.
+        var newId = input.getId() + "!";
+        var output = input.withId(newId);                                   // Update the id.
+        return output;
+    }
+    return null;
+}
+```
+
+Below is the list of parameters supported by the distiller.
+
+| Parameter | Required | Default | Description |
+| --------- | -------- | ------- | ----------- |
+| `--help`, `-h` | N | false | display this help and exit |
+| `--inputUri`, `-i` | Y | | input URI for HTTP records |
+| `--loggerLevelSpecs`, `-L` | N | `*=warn,com.vlkan.hrrs=info` | comma-separated list of `loggerName=loggerLevel` pairs |
+| `--outputUri`, `-o` | Y | | output URI for HTTP records |
+| `--scriptUri`, `-s` | Y | | input URI for script file |
 
 # Recorder Configuration
 
@@ -421,15 +470,6 @@ to have such a level of verbosity while executing the actual performance tests.
   misalignment between production and test environment states are at negligible
   margins. In the tests, we do expect a stable rate in the HTTP 4XX and 5XX
   response codes and that works fine for us.
-
-- **How can I manipulate the recorded HTTP requests prior to replay?** That
-  is a valid and relevant request. For instance, maybe some headers need to be
-  altered to adopt the needs of the test environment, etc. Who knows? But
-  unfortunately we do not provide a utility tool to ease that work yet. What
-  you can do is to write a simple console Java application that uses the
-  relevant `hrrs-serializer-*` artifact to read and write the manipulated
-  records back. That being said, we are thinking of command line tool solution
-  to ease that effort. [TODO]
 
 - **Sounds cool! How can I contribute?** Awesome! Just send a pull request
   over GitHub. In terms of coding conventions, just try to stick to the style
