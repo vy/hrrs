@@ -25,7 +25,7 @@ problems that HRRS is aiming to solve:
 # Overview
 
 <img alt="HRRS Overview"
-     src="https://raw.github.com/vy/hrrs/master/doc/overview.svg"
+     src="https://cdn.rawgit.com/vy/hrrs/master/doc/overview.svg"
      style="width: 100%; height: auto">
 
 HRRS ships the following artifacts:
