@@ -1,28 +1,37 @@
 package com.vlkan.hrrs.serializer.base64;
 
-import com.pholser.junit.quickcheck.From;
-import com.pholser.junit.quickcheck.Property;
-import com.pholser.junit.quickcheck.runner.JUnitQuickcheck;
-import com.vlkan.hrrs.api.HttpRequestRecord;
-import com.vlkan.hrrs.api.HttpRequestRecordReader;
-import com.vlkan.hrrs.api.HttpRequestRecordWriter;
-import com.vlkan.hrrs.serializer.HttpRequestPayloadGenerator;
-import com.vlkan.hrrs.serializer.HttpRequestRecordGenerator;
+import com.vlkan.hrrs.api.*;
 import com.vlkan.hrrs.serializer.HttpRequestRecordPipe;
 import com.vlkan.hrrs.serializer.base64.guava.GuavaBase64Decoder;
 import com.vlkan.hrrs.serializer.base64.guava.GuavaBase64Encoder;
-import org.junit.runner.RunWith;
+import org.junit.Test;
 
-import java.util.Iterator;
+import java.util.*;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(JUnitQuickcheck.class)
 public class HttpRequestSerializationTest {
 
-    @Property
-    public void should_write_and_read(@From(HttpRequestRecordGenerator.class) HttpRequestRecord record) {
-        HttpRequestRecordPipe pipe = new HttpRequestRecordPipe(HttpRequestPayloadGenerator.MAX_BYTE_COUNT * 8);
+    private static final int RANDOM_RECORD_COUNT = 100;
+
+    private static final int MAX_GROUP_COUNT = 10;
+
+    private static final int MAX_HEADER_COUNT = 10;
+
+    private static final int MAX_BYTE_COUNT = 1024 * 128;      // 128 KB
+
+    @Test
+    public void should_write_and_read() {
+        Random random = new Random(0);
+        for (int testIndex = 0; testIndex < RANDOM_RECORD_COUNT; testIndex++) {
+            HttpRequestRecord record = generateHttpRequestRecord(random);
+            should_write_and_read(record);
+        }
+    }
+
+    private static void should_write_and_read(HttpRequestRecord record) {
+        HttpRequestRecordPipe pipe = new HttpRequestRecordPipe(MAX_BYTE_COUNT * 8);
         HttpRequestRecordReader<String> reader = new Base64HttpRequestRecordReader(pipe, GuavaBase64Decoder.getInstance());
         HttpRequestRecordWriter<String> writer = new Base64HttpRequestRecordWriter(pipe, GuavaBase64Encoder.getInstance());
         writer.write(record);
@@ -31,6 +40,88 @@ public class HttpRequestSerializationTest {
         assertThat(iterator.hasNext()).isTrue();
         HttpRequestRecord readRecord = iterator.next();
         assertThat(readRecord).isEqualTo(record);
+    }
+
+    private static HttpRequestRecord generateHttpRequestRecord(Random random) {
+
+        // Populate fields.
+        String id = Long.toString(generateLong(random, 0, Long.MAX_VALUE), Character.MAX_RADIX);
+        int groupId = Math.abs(id.hashCode()) % MAX_GROUP_COUNT;
+        String groupName = String.format("group-%d", groupId);
+        Date timestamp = new Date();
+        String uri = String.format("/hello/%s?id=%s", groupName, id);
+        HttpRequestMethod method = generateHttpRequestMethod(random);
+        List<HttpRequestHeader> headers = generateHttpRequestHeaders(random);
+        HttpRequestPayload payload = generateHttpRequestPayload(random);
+
+        // Create the record.
+        return ImmutableHttpRequestRecord
+                .builder()
+                .id(id)
+                .timestamp(timestamp)
+                .groupName(groupName)
+                .uri(uri)
+                .method(method)
+                .headers(headers)
+                .payload(payload)
+                .build();
+
+    }
+
+    private static HttpRequestMethod generateHttpRequestMethod(Random random) {
+        HttpRequestMethod[] values = HttpRequestMethod.values();
+        int valueIndex = generateInt(random, 0, values.length);
+        return values[valueIndex];
+    }
+
+    private static List<HttpRequestHeader> generateHttpRequestHeaders(Random random) {
+        int headerCount = generateInt(random, 0, MAX_HEADER_COUNT);
+        if (headerCount < 1) {
+            return Collections.emptyList();
+        }
+        List<HttpRequestHeader> headers = new ArrayList<HttpRequestHeader>(headerCount);
+        for (int headerIndex = 0; headerIndex < headerCount; headerIndex++) {
+            HttpRequestHeader header = generateHttpRequestHeader(random);
+            headers.add(header);
+        }
+        return headers;
+    }
+
+    private static HttpRequestHeader generateHttpRequestHeader(Random random) {
+        int id = Math.abs(random.nextInt());
+        String name = String.format("name-%d", id);
+        String value = String.format("value-%d", id);
+        return ImmutableHttpRequestHeader
+                .builder()
+                .name(name)
+                .value(value)
+                .build();
+    }
+
+    private static HttpRequestPayload generateHttpRequestPayload(Random random) {
+        long missingByteCount = generateLong(random, 0, MAX_BYTE_COUNT);
+        int byteCount = generateInt(random, 0, MAX_BYTE_COUNT);
+        byte[] bytes = new byte[byteCount];
+        random.nextBytes(bytes);
+        return ImmutableHttpRequestPayload
+                .builder()
+                .missingByteCount(missingByteCount)
+                .bytes(bytes)
+                .build();
+    }
+
+    private static int generateInt(Random random, int from, int to) {
+        checkArgument(from <= to, "expecting: from <= to, found: %s > %s", from, to);
+        int range = to - from;
+        int nextInt = random.nextInt(range);
+        return from + nextInt;
+    }
+
+    private static long generateLong(Random random, long from, long to) {
+        checkArgument(from <= to, "expecting: from <= to, found: %s > %s", from, to);
+        long range = to - from;
+        long nextLong = random.nextLong() % range;
+        return from + nextLong;
     }
 
 }
