@@ -1,3 +1,5 @@
+[![Build Status](https://secure.travis-ci.org/vy/hrrs.svg)](http://travis-ci.org/vy/hrrs)
+
 HRRS (HTTP Request Record Suite) is a set of tools that you can leverage to
 record and replay HTTP requests in your JEE and Spring web applications written
 in Java 6 or higher. In essence, HRRS bundles a servlet filter for recording
