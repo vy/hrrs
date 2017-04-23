@@ -1,4 +1,4 @@
-package com.vlkan.hrrs.serializer;
+package com.vlkan.hrrs.serializer.base64;
 
 import com.pholser.junit.quickcheck.From;
 import com.pholser.junit.quickcheck.Property;
@@ -6,8 +6,9 @@ import com.pholser.junit.quickcheck.runner.JUnitQuickcheck;
 import com.vlkan.hrrs.api.HttpRequestRecord;
 import com.vlkan.hrrs.api.HttpRequestRecordReader;
 import com.vlkan.hrrs.api.HttpRequestRecordWriter;
-import com.vlkan.hrrs.serializer.base64.Base64HttpRequestRecordReader;
-import com.vlkan.hrrs.serializer.base64.Base64HttpRequestRecordWriter;
+import com.vlkan.hrrs.serializer.HttpRequestPayloadGenerator;
+import com.vlkan.hrrs.serializer.HttpRequestRecordGenerator;
+import com.vlkan.hrrs.serializer.HttpRequestRecordPipe;
 import com.vlkan.hrrs.serializer.base64.guava.GuavaBase64Decoder;
 import com.vlkan.hrrs.serializer.base64.guava.GuavaBase64Encoder;
 import org.junit.runner.RunWith;
