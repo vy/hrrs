@@ -9,7 +9,9 @@ import org.junit.Test;
 import java.util.*;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
 
 public class HttpRequestSerializationTest {
 
@@ -37,9 +39,9 @@ public class HttpRequestSerializationTest {
         writer.write(record);
         pipe.flush();
         Iterator<HttpRequestRecord> iterator = reader.read().iterator();
-        assertThat(iterator.hasNext()).isTrue();
+        assertThat(iterator.hasNext(), is(true));
         HttpRequestRecord readRecord = iterator.next();
-        assertThat(readRecord).isEqualTo(record);
+        assertThat(readRecord, is(equalTo(record)));
     }
 
     private static HttpRequestRecord generateHttpRequestRecord(Random random) {

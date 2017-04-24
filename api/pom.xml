@@ -14,13 +14,6 @@
 
     <artifactId>hrrs-api</artifactId>
 
-    <properties>
-
-        <!-- library versions -->
-        <immutables.version>2.4.1</immutables.version>
-
-    </properties>
-
     <dependencies>
 
         <dependency>
@@ -36,13 +29,6 @@
         <dependency>
             <groupId>com.google.code.findbugs</groupId>
             <artifactId>jsr305</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.immutables</groupId>
-            <artifactId>value</artifactId>
-            <version>${immutables.version}</version>
-            <scope>provided</scope>
         </dependency>
 
     </dependencies>
