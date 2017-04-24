@@ -122,7 +122,7 @@ public class HttpRequestSerializationTest {
     private static long generateLong(Random random, long from, long to) {
         checkArgument(from <= to, "expecting: from <= to, found: %s > %s", from, to);
         long range = to - from;
-        long nextLong = random.nextLong() % range;
+        long nextLong = Math.abs(random.nextLong()) % range;
         return from + nextLong;
     }
 
