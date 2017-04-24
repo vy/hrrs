@@ -3,6 +3,8 @@ package com.vlkan.hrrs.api;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
+import java.util.Arrays;
+
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -34,7 +36,7 @@ public class ImmutableHttpRequestPayload implements HttpRequestPayload {
         if (o == null || getClass() != o.getClass()) return false;
         ImmutableHttpRequestPayload that = (ImmutableHttpRequestPayload) o;
         return missingByteCount == that.missingByteCount &&
-                Objects.equal(bytes, that.bytes);
+                Arrays.equals(bytes, that.bytes);
     }
 
     @Override
