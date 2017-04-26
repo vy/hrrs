@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.vlkan.hrrs</groupId>
     <artifactId>hrrs-parent</artifactId>
-    <version>0.1-SNAPSHOT</version>
+    <version>0.1</version>
     <packaging>pom</packaging>
 
     <name>HRRS (HTTP Request Record Suite)</name>
@@ -47,7 +45,8 @@
         <url>http://github.com/vy/hrrs</url>
         <connection>scm:git:git@github.com:vy/hrrs.git</connection>
         <developerConnection>scm:git:git@github.com:vy/hrrs.git</developerConnection>
-    </scm>
+      <tag>hrrs-parent-0.1</tag>
+  </scm>
 
     <distributionManagement>
         <snapshotRepository>
