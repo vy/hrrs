@@ -1,9 +1,10 @@
 [![Build Status](https://secure.travis-ci.org/vy/hrrs.svg)](http://travis-ci.org/vy/hrrs)
 
 HRRS (HTTP Request Record Suite) is a set of tools that you can leverage to
-record and replay HTTP requests in your JEE and Spring web applications written
-in Java 6 or higher. In essence, HRRS bundles a servlet filter for recording
-and a standalone command-line Java application for replaying the requests.
+record, transform, and replay HTTP requests in your Java EE and Spring web
+applications written in Java 6 or higher. In essence, HRRS bundles a servlet
+filter for recording and a standalone command-line Java application for
+replaying the requests.
 
 # Rationale
 
@@ -317,9 +318,9 @@ two issues with this approach:
 It is possible to use a fixed (thread local?) memory pool to avoid extra memory
 allocations for each request. Further, encoding and storing can also be
 performed in a separate thread to not block the request handler thread.
-These being said, HRRS is successfully deployed on a 6-node JEE aplication
+These being said, HRRS is successfully deployed on a 6-node Java EE application
 cluster (each node handles approximately 600 reqs/sec and requests generally
-contain a payload close to 50KB) without any noticable memory or processing
+contain a payload close to 50KB) without any noticeable memory or processing
 overhead.
 
 Additionally, you can override `isRequestRecordable()` and
