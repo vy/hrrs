@@ -45,8 +45,8 @@
 
     <scm>
         <url>http://github.com/vy/hrrs</url>
-        <connection>scm:git:git://github.com/vy/hrrs.git</connection>
-        <developerConnection>scm:git:git://github.com/vy/hrrs.git</developerConnection>
+        <connection>scm:git:git@github.com:vy/hrrs.git</connection>
+        <developerConnection>scm:git:git@github.com:vy/hrrs.git</developerConnection>
     </scm>
 
     <distributionManagement>
