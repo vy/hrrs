@@ -10,6 +10,58 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
+    <name>HRRS (HTTP Request Record Suite)</name>
+    <description>
+        HRRS (HTTP Request Record Suite) is a set of tools that you can leverage to
+        record, transform, and replay HTTP requests in your Java EE and Spring web
+        applications written in Java 6 or higher. In essence, HRRS bundles a servlet
+        filter for recording and a standalone command-line Java application for
+        replaying the requests.
+    </description>
+    <url>https://github.com/vy/hrrs</url>
+
+    <licenses>
+        <license>
+            <name>GNU General Public License</name>
+            <url>https://www.gnu.org/licenses/gpl.html</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <id>vy</id>
+            <name>Volkan Yazıcı</name>
+            <email>volkan.yazici@gmail.com</email>
+            <organization>Volkan Yazıcı's Soap Co.</organization>
+            <organizationUrl>http://vlkan.com/</organizationUrl>
+            <roles>
+                <role>Project-Administrator</role>
+                <role>Developer</role>
+            </roles>
+            <timezone>UTC+01:00</timezone>
+        </developer>
+    </developers>
+
+    <scm>
+        <url>http://github.com/vy/hrrs</url>
+        <connection>scm:git:git://github.com/vy/hrrs.git</connection>
+        <developerConnection>scm:git:git://github.com/vy/hrrs.git</developerConnection>
+    </scm>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>sonatype-nexus-snapshots</id>
+            <name>Sonatype Nexus snapshot repository</name>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>sonatype-nexus-staging</id>
+            <name>Sonatype Nexus release repository</name>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
+
     <modules>
         <module>api</module>
         <module>commons</module>
