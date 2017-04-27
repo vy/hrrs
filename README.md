@@ -1,4 +1,5 @@
 [![Build Status](https://secure.travis-ci.org/vy/hrrs.svg)](http://travis-ci.org/vy/hrrs)
+[![Maven Central](https://img.shields.io/maven-central/v/com.vlkan.hrrs/hrrs-parent.svg)](https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.vlkan.hrrs%22)
 
 HRRS (HTTP Request Record Suite) is a set of tools that you can leverage to
 record, transform, and replay HTTP requests in your Java EE and Spring web
