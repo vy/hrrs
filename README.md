@@ -27,6 +27,13 @@ problems that HRRS is aiming to solve:
   leveraged to record the problem on production and replay it on development
   environment for further inspection.
 
+- **Warming up standby service caches:** Standby systems are an inevitable
+  part of modern software architectures: reliability, separation of read &
+  write clusters, etc. While replacing primaries with secondary systems, a
+  cold replacement is anticipated to initially yield a degraded performance,
+  which might not be desirable for certain systems. HRRS can be used to warm
+  up the secondaries prior to deployment and alleviate this problem.
+
 # Overview
 
 <img alt="HRRS Overview"
