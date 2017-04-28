@@ -8,6 +8,21 @@ filter for recording (`hrrs-servlet-filter`) and standalone command-line
 Java applications for transforming (`hrrs-distiller`) and replaying
 (`hrrs-replayer`) the requests.
 
+# Table of Contents
+
+- [Rationale](#rationale)
+- [Overview](#overview)
+- [Getting Started](#getting-started) (setting up a Spring web application,
+  running distiller and replayer)
+- [Recorder Configuration](#recorder-configuration)
+- [Recorder Performance](#recorder-performance)
+- [Replayer Reports](#replayer-reports) (Dropwizard Metrics and JMeter reports)
+- [Distiller & Replayer Debugging](#debugging)
+- [F.A.Q.](#faq)
+- [License](#license)
+
+<a name="rationale"></a>
+
 # Rationale
 
 Why would someone want to record HTTP requests as is? There are two major
@@ -33,6 +48,8 @@ problems that HRRS is aiming to solve:
   cold replacement is anticipated to initially yield a degraded performance,
   which might not be desirable for certain systems. HRRS can be used to warm
   up the secondaries prior to deployment and alleviate this problem.
+
+<a name="overview"></a>
 
 # Overview
 
@@ -74,6 +91,8 @@ with certain Java web frameworks:
 
 - **hrrs-example-jaxrs**
 - **hrrs-example-spring**
+
+<a name="getting-started"></a>
 
 # Getting Started
 
@@ -249,6 +268,8 @@ Below is the list of parameters supported by the distiller.
 | `--outputUri`, `-o` | Y | | output URI for HTTP records |
 | `--scriptUri`, `-s` | Y | | input URI for script file |
 
+<a name="recorder-configuration"></a>
+
 # Recorder Configuration
 
 By default, HRRS servlet filter records every HTTP request along with its
@@ -314,6 +335,8 @@ public abstract class HrrsFilter implements Filter {
 }
 ```
 
+<a name="recorder-performance"></a>
+
 # Recorder Performance
 
 HRRS provided servlet filter wraps the input stream of the HTTP request model.
@@ -335,6 +358,8 @@ overhead.
 Additionally, you can override `isRequestRecordable()` and
 `getMaxRecordablePayloadByteCount()` methods in `HrrsFilter` to have a more
 fine-grained control over the recorded HTTP requests.
+
+<a name="replayer-reports"></a>
 
 # Replayer Reports
 
@@ -432,13 +457,18 @@ Here HRRS updates a Dropwizard timer with label `<groupName>.<responseCode>`
 for each executed request. It also updates the metrics of a pseudo group,
 called `__all__`, which covers all the existing groups.
 
-# Replayer Debugging
+<a name="debugging"></a>
 
-Sometimes it becomes handy to have more insight into the replayer internals.
-For such cases, you can increase the logging verbosity of certain packages.
-As a starting point, adding `--loggerLevelSpecs "*=info,com.vlkan.hrrs=trace"`
-to the replayer arguments is generally a good idea. Note that, you don't want
-to have such a level of verbosity while executing the actual performance tests.
+# Distiller & Replayer Debugging
+
+Sometimes it becomes handy to have more insight into the distiller and replayer
+internals. For such cases, you can increase the logging verbosity of certain
+packages. As a starting point, adding `--loggerLevelSpecs "*=info,com.vlkan.hrrs=trace"`
+to the command line arguments is generally a good idea. Note that, you don't
+want to have such a level of verbosity while executing the actual performance
+tests.
+
+<a name="faq"></a>
 
 # F.A.Q.
 
@@ -501,6 +531,8 @@ to have such a level of verbosity while executing the actual performance tests.
 - **Sounds cool! How can I contribute?** Awesome! Just send a pull request
   over GitHub. In terms of coding conventions, just try to stick to the style
   in the source code.
+
+<a name="license"></a>
 
 # License
 
