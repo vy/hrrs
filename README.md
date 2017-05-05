@@ -99,7 +99,7 @@ with certain Java web frameworks:
 In order to start recording HTTP requests, all you need is to plug the HRRS
 servlet filter into your Java web application. Below, we will use Base64
 serialization for recording HTTP requests in a Spring web application. (See
-`example` directory for the actual sources and the JAX-RS example.)
+`examples` directory for the actual sources and the JAX-RS example.)
 
 Add the HRRS servlet filter Maven dependency in your `pom.xml`:
 
@@ -128,7 +128,7 @@ public class HrrsConfig {
 ```
 
 And that's it! The incoming HTTP requests will be recorded into
-`writerTargetFile`. (You can also run `HelloApplication` of `example/spring`
+`writerTargetFile`. (You can also run `HelloApplication` of `examples/spring`
 in your IDE to see it in action.) Let's take a quick look at the contents
 of the Base64-serialized HTTP request records:
 
