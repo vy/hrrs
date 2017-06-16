@@ -6,7 +6,7 @@
     <parent>
         <artifactId>hrrs-parent</artifactId>
         <groupId>com.vlkan.hrrs</groupId>
-        <version>0.2</version>
+        <version>0.3-SNAPSHOT</version>
         <relativePath>../..</relativePath>
     </parent>
 
