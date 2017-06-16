@@ -6,4 +6,16 @@ public interface HttpRequestHeader {
 
     String getValue();
 
+    Builder toBuilder();
+
+    interface Builder {
+
+        Builder setName(String name);
+
+        Builder setValue(String value);
+
+        HttpRequestHeader build();
+
+    }
+
 }

@@ -83,14 +83,14 @@ public abstract class HrrsFilter implements Filter {
         List<HttpRequestHeader> headers = createHeaders(request);
         HttpRequestPayload payload = createPayload(recordedPayloadBytes, totalPayloadByteCount);
         return ImmutableHttpRequestRecord
-                .builder()
-                .id(id)
-                .timestamp(timestamp)
-                .groupName(groupName)
-                .uri(uri)
-                .method(method)
-                .headers(headers)
-                .payload(payload)
+                .newBuilder()
+                .setId(id)
+                .setTimestamp(timestamp)
+                .setGroupName(groupName)
+                .setUri(uri)
+                .setMethod(method)
+                .setHeaders(headers)
+                .setPayload(payload)
                 .build();
     }
 
@@ -109,8 +109,8 @@ public abstract class HrrsFilter implements Filter {
             String value = request.getHeader(name);
             ImmutableHttpRequestHeader header = ImmutableHttpRequestHeader
                     .builder()
-                    .name(name)
-                    .value(value)
+                    .setName(name)
+                    .setValue(value)
                     .build();
             if (headers.isEmpty()) {
                 headers = new ArrayList<HttpRequestHeader>();
@@ -123,9 +123,9 @@ public abstract class HrrsFilter implements Filter {
     private HttpRequestPayload createPayload(byte[] recordedPayloadBytes, long totalPayloadByteCount) {
         long missingByteCount = totalPayloadByteCount - recordedPayloadBytes.length;
         return ImmutableHttpRequestPayload
-                .builder()
-                .missingByteCount(missingByteCount)
-                .bytes(recordedPayloadBytes)
+                .newBuilder()
+                .setMissingByteCount(missingByteCount)
+                .setBytes(recordedPayloadBytes)
                 .build();
     }
 

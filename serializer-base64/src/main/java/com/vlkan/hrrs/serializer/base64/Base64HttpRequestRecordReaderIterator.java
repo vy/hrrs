@@ -73,14 +73,14 @@ public class Base64HttpRequestRecordReaderIterator implements Iterator<HttpReque
 
         // Create record.
         return ImmutableHttpRequestRecord
-                .builder()
-                .id(id)
-                .groupName(groupName)
-                .timestamp(timestamp)
-                .uri(uri)
-                .method(method)
-                .headers(headers)
-                .payload(payload)
+                .newBuilder()
+                .setId(id)
+                .setGroupName(groupName)
+                .setTimestamp(timestamp)
+                .setUri(uri)
+                .setMethod(method)
+                .setHeaders(headers)
+                .setPayload(payload)
                 .build();
 
     }
@@ -101,8 +101,8 @@ public class Base64HttpRequestRecordReaderIterator implements Iterator<HttpReque
             String value = stream.readUTF();
             ImmutableHttpRequestHeader header = ImmutableHttpRequestHeader
                     .builder()
-                    .name(name)
-                    .value(value)
+                    .setName(name)
+                    .setValue(value)
                     .build();
             headers.add(header);
         }
@@ -124,9 +124,9 @@ public class Base64HttpRequestRecordReaderIterator implements Iterator<HttpReque
         checkArgument(byteCount == readByteCount, "expected: %s == readByteCount, found: %s", byteCount, readByteCount);
 
         return ImmutableHttpRequestPayload
-                .builder()
-                .missingByteCount(missingByteCount)
-                .bytes(bytes)
+                .newBuilder()
+                .setMissingByteCount(missingByteCount)
+                .setBytes(bytes)
                 .build();
 
     }

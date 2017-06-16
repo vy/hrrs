@@ -76,10 +76,6 @@ public class ImmutableHttpRequestRecord implements HttpRequestRecord {
         return payload;
     }
 
-    public static Builder builder() {
-        return new Builder();
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -113,7 +109,24 @@ public class ImmutableHttpRequestRecord implements HttpRequestRecord {
                 .toString();
     }
 
-    public static class Builder {
+    @Override
+    public Builder toBuilder() {
+        Builder builder = new Builder();
+        builder.id = id;
+        builder.timestamp = timestamp;
+        builder.groupName = groupName;
+        builder.uri = uri;
+        builder.method = method;
+        builder.headers = headers;
+        builder.payload = payload;
+        return builder;
+    }
+
+    public static Builder newBuilder() {
+        return new Builder();
+    }
+
+    public static class Builder implements HttpRequestRecord.Builder {
 
         private String id;
 
@@ -133,41 +146,49 @@ public class ImmutableHttpRequestRecord implements HttpRequestRecord {
             // Do nothing.
         }
 
-        public Builder id(String id) {
+        @Override
+        public Builder setId(String id) {
             this.id = id;
             return this;
         }
 
-        public Builder timestamp(Date timestamp) {
+        @Override
+        public Builder setTimestamp(Date timestamp) {
             this.timestamp = timestamp;
             return this;
         }
 
-        public Builder groupName(String groupName) {
+        @Override
+        public Builder setGroupName(String groupName) {
             this.groupName = groupName;
             return this;
         }
 
-        public Builder uri(String uri) {
+        @Override
+        public Builder setUri(String uri) {
             this.uri = uri;
             return this;
         }
 
-        public Builder method(HttpRequestMethod method) {
+        @Override
+        public Builder setMethod(HttpRequestMethod method) {
             this.method = method;
             return this;
         }
 
-        public Builder headers(List<HttpRequestHeader> headers) {
+        @Override
+        public Builder setHeaders(List<HttpRequestHeader> headers) {
             this.headers = headers;
             return this;
         }
 
-        public Builder payload(HttpRequestPayload payload) {
+        @Override
+        public Builder setPayload(HttpRequestPayload payload) {
             this.payload = payload;
             return this;
         }
 
+        @Override
         public ImmutableHttpRequestRecord build() {
             return new ImmutableHttpRequestRecord(id, timestamp, groupName, uri, method, headers, payload);
         }

@@ -58,14 +58,14 @@ public class HttpRequestSerializationTest {
 
         // Create the record.
         return ImmutableHttpRequestRecord
-                .builder()
-                .id(id)
-                .timestamp(timestamp)
-                .groupName(groupName)
-                .uri(uri)
-                .method(method)
-                .headers(headers)
-                .payload(payload)
+                .newBuilder()
+                .setId(id)
+                .setTimestamp(timestamp)
+                .setGroupName(groupName)
+                .setUri(uri)
+                .setMethod(method)
+                .setHeaders(headers)
+                .setPayload(payload)
                 .build();
 
     }
@@ -95,8 +95,8 @@ public class HttpRequestSerializationTest {
         String value = String.format("value-%d", id);
         return ImmutableHttpRequestHeader
                 .builder()
-                .name(name)
-                .value(value)
+                .setName(name)
+                .setValue(value)
                 .build();
     }
 
@@ -106,9 +106,9 @@ public class HttpRequestSerializationTest {
         byte[] bytes = new byte[byteCount];
         random.nextBytes(bytes);
         return ImmutableHttpRequestPayload
-                .builder()
-                .missingByteCount(missingByteCount)
-                .bytes(bytes)
+                .newBuilder()
+                .setMissingByteCount(missingByteCount)
+                .setBytes(bytes)
                 .build();
     }
 

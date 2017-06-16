@@ -53,11 +53,19 @@ public class ImmutableHttpRequestPayload implements HttpRequestPayload {
                 .toString();
     }
 
-    public static Builder builder() {
+    @Override
+    public Builder toBuilder() {
+        Builder builder = new Builder();
+        builder.missingByteCount = missingByteCount;
+        builder.bytes = bytes;
+        return builder;
+    }
+
+    public static Builder newBuilder() {
         return new Builder();
     }
 
-    public static class Builder {
+    public static class Builder implements HttpRequestPayload.Builder {
 
         private long missingByteCount;
 
@@ -67,16 +75,19 @@ public class ImmutableHttpRequestPayload implements HttpRequestPayload {
             // Do nothing.
         }
 
-        public Builder missingByteCount(long missingByteCount) {
+        @Override
+        public Builder setMissingByteCount(long missingByteCount) {
             this.missingByteCount = missingByteCount;
             return this;
         }
 
-        public Builder bytes(byte[] bytes) {
+        @Override
+        public Builder setBytes(byte[] bytes) {
             this.bytes = bytes;
             return this;
         }
 
+        @Override
         public ImmutableHttpRequestPayload build() {
             return new ImmutableHttpRequestPayload(missingByteCount, bytes);
         }

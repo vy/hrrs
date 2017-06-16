@@ -48,11 +48,19 @@ public class ImmutableHttpRequestHeader implements HttpRequestHeader {
                 .toString();
     }
 
+    @Override
+    public Builder toBuilder() {
+        Builder builder = new Builder();
+        builder.name = name;
+        builder.value = value;
+        return builder;
+    }
+
     public static Builder builder() {
         return new Builder();
     }
 
-    public static class Builder {
+    public static class Builder implements HttpRequestHeader.Builder {
 
         private String name;
 
@@ -62,16 +70,19 @@ public class ImmutableHttpRequestHeader implements HttpRequestHeader {
             // Do nothing.
         }
 
-        public Builder name(String name) {
+        @Override
+        public Builder setName(String name) {
             this.name = name;
             return this;
         }
 
-        public Builder value(String value) {
+        @Override
+        public Builder setValue(String value) {
             this.value = value;
             return this;
         }
 
+        @Override
         public ImmutableHttpRequestHeader build() {
             return new ImmutableHttpRequestHeader(name, value);
         }
