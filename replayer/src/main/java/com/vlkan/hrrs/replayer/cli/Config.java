@@ -35,9 +35,9 @@ public class Config implements JCommanderConfig {
 
     @Parameter(
             names = {"--targetPort", "-tp"},
-            required = true,
+            validateWith = NonZeroPositiveIntegerValidator.class,
             description = "remote HTTP server port")
-    private int targetPort;
+    private int targetPort = 80;
 
     public int getTargetPort() {
         return targetPort;
