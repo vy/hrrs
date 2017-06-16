@@ -146,7 +146,7 @@ containing the URL (including request parameters), headers, and payload. This
 simple representation makes it easy to employ well-known command line tools
 (`grep`, `sed`, `awk`, etc.) to extract a certain subset of records.
 
-```bash
+```
 $ zcat records.csv.gz | head -n 1 | awk '{print $5}' | base64 --decode | hd
 00000000  00 16 2f 68 65 6c 6c 6f  3f 6e 61 6d 65 3d 54 65  |../hello?name=Te|
 00000010  73 74 4e 61 6d 65 2d 31  00 00 00 05 00 04 68 6f  |stName-1......ho|
@@ -194,7 +194,7 @@ and schedule a cron job to copy these records to a directory accessible by your
 test environment. There you can replay HTTP request records using the replayer
 provided by HRRS:
 
-```bash
+```
 $ java \
     -jar /path/to/hrrs-replayer-base64-<version>.jar \
     --targetHost localhost \
@@ -228,7 +228,7 @@ to exclude certain HTTP headers, remove promotion codes from the URL, sanitize
 payload by shadowing sensitive customer information, etc. You can use distiller
 provided by HRRS for this purpose:
 
-```bash
+```
 $ java \
     -jar /path/to/hrrs-distiller-base64-<version>.jar
     --inputUri file:///path/to/input-records.csv.gz
@@ -247,14 +247,31 @@ var formatter = new java.text.SimpleDateFormat("yyyyMMdd-HHmmss.SSSZ");
 var loTimestamp = formatter.parse("20170415-204551.527+0200");
 var hiTimestamp = formatter.parse("20170415-204551.700+0200");
 
+/**
+* Remove `Host` and `Content-Length` headers.
+*/
+function sanitizeHeaders(oldHeaders) {
+    var newHeaders = [];
+    for (var oldHeaderIndex = 0; oldHeaderIndex < oldHeaders.length; oldHeaderIndex++) {
+        var oldHeader = oldHeaders[oldHeaderIndex];
+        var oldHeaderName = oldHeader.getName();
+        var allowed =
+            !oldHeaderName.equalsIgnoreCase("host") &&
+            !oldHeaderName.equalsIgnoreCase("content-length");
+        if (allowed) {
+            newHeaders.push(oldHeader);
+        }
+    }
+    return newHeaders;
+}
+
 function transform(input) {
     var timestamp = input.getTimestamp();
     if (timestamp.after(loTimestamp) && timestamp.before(hiTimestamp)) {    // Check the timestamp.
-        var newId = input.getId() + "!";
-        var output = input.withId(newId);                                   // Update the id.
-        return output;
+        var newHeaders = sanitizeHeaders(input.getHeaders());               // Sanitize headers.
+        return input.toBuilder().setHeaders(newHeaders).build();            // Reconstruct record with new headers.
     }
-    return null;
+    return null;                                                            // Out of time range, ignore the record.
 }
 ```
 
@@ -267,6 +284,8 @@ Below is the list of parameters supported by the distiller.
 | `--loggerLevelSpecs`, `-L` | N | `*=warn,com.vlkan.hrrs=info` | comma-separated list of `loggerName=loggerLevel` pairs |
 | `--outputUri`, `-o` | Y | | output URI for HTTP records |
 | `--scriptUri`, `-s` | Y | | input URI for script file |
+
+For a more detailed walk-through see [README.md in `examples/spring`](examples/spring/README.md).
 
 <a name="recorder-configuration"></a>
 
