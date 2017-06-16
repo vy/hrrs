@@ -102,7 +102,7 @@ public class Replayer implements Runnable, Closeable, HttpRequestRecordStreamCon
 
             private void reportProgress(long durationMillis) {
                 if (progressReportRateLimiter.tryAcquire()) {
-                    float durationPercentage = 100.0f * durationMillis / totalDurationMillis;
+                    float durationPercentage = Math.max(100.0f, 100.0f * durationMillis / totalDurationMillis);
                     long recordCount = recordCounter.incrementAndGet();
                     System.out.format(
                             "\r%.1f%% (durationMillis=%d, recordCount=%d)",
