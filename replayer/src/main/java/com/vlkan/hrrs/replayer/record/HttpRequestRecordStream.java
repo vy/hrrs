@@ -5,6 +5,6 @@ import java.util.concurrent.Callable;
 
 public interface HttpRequestRecordStream {
 
-    void consumeWhile(URI inputUri, Callable<Boolean> predicate, HttpRequestRecordStreamConsumer consumer);
+    void consumeWhile(URI inputUri, boolean replayOnce, Callable<Boolean> predicate, HttpRequestRecordStreamConsumer consumer);
 
 }

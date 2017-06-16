@@ -78,7 +78,7 @@ public class Replayer implements Runnable, Closeable, HttpRequestRecordStreamCon
         LOGGER.debug("starting to replay");
         Callable<Boolean> consumptionPredicate = createConsumptionPredicate();
         metricReporter.start();
-        recordStream.consumeWhile(config.getInputUri(), consumptionPredicate, this);
+        recordStream.consumeWhile(config.getInputUri(), config.isReplayOnce(), consumptionPredicate, this);
         reportMetric();
     }
 

@@ -26,7 +26,7 @@ public class Base64HttpRequestRecordStream implements HttpRequestRecordStream {
     private static final Logger LOGGER = LoggerFactory.getLogger(Base64HttpRequestRecordStream.class);
 
     @Override
-    public void consumeWhile(URI inputUri, Callable<Boolean> predicate, HttpRequestRecordStreamConsumer consumer) {
+    public void consumeWhile(URI inputUri, boolean replayOnce, Callable<Boolean> predicate, HttpRequestRecordStreamConsumer consumer) {
         checkNotNull(inputUri, "inputUri");
         checkNotNull(predicate, "predicate");
         checkNotNull(consumer, "consumer");
@@ -53,7 +53,7 @@ public class Base64HttpRequestRecordStream implements HttpRequestRecordStream {
                     throwCheckedException(error);
                 }
             }
-        } while (resuming);
+        } while (!replayOnce && resuming);
     }
 
 }

@@ -94,6 +94,15 @@ public class Config implements JCommanderConfig {
     }
 
     @Parameter(
+            names = {"--replayOnce", "-1"},
+            description = "exit once all the records are replayed")
+    private boolean replayOnce = false;
+
+    public boolean isReplayOnce() {
+        return replayOnce;
+    }
+
+    @Parameter(
             names = {"--inputUri", "-i"},
             validateWith = UriValidator.class,
             description = "input URI for HTTP records",
@@ -164,6 +173,7 @@ public class Config implements JCommanderConfig {
         LOGGER.debug("requestTimeoutSeconds={}", requestTimeoutSeconds);
         LOGGER.debug("rampUpDurationSeconds={}", rampUpDurationSeconds);
         LOGGER.debug("totalDurationSeconds={}", totalDurationSeconds);
+        LOGGER.debug("replayOnce={}", replayOnce);
         LOGGER.debug("inputUri={}", inputUri);
         LOGGER.debug("jtlOutputFile={}", jtlOutputFile);
         LOGGER.debug("metricsOutputFile={}", metricsOutputFile);
