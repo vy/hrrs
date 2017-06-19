@@ -218,6 +218,7 @@ Below is the list of parameters supported by the replayer.
 | `--metricsOutputPeriodSeconds`, `-mp` | N | 10 | Dropwizard metrics report frequency in seconds |
 | `--rampUpDurationSeconds`, `-d` | N | 1 | ramp up duration in seconds to reach to the maximum number of requests |
 | `--requestTimeoutSeconds`, `-t` | N | 10 | HTTP request connect/write/read timeout in seconds |
+| `--replayOnce`, `-1` | N | false | exit once all the records are replayed |
 | `--targetHost`, `-th` | Y | | remote HTTP server host |
 | `--targetPort`, `-tp` | Y | | remote HTTP server port |
 | `--threadCount`, `-n` | N | 2 | HTTP request worker pool size |
