@@ -142,7 +142,7 @@ servlet to enable the recorder:
 $ curl http://localhost:8080/hrrs
 {"enabled": false}
 
-$ curl -X PUT http://hostname/hrrs?enabled=true
+$ curl -X PUT http://localhost:8080/hrrs?enabled=true
 ```
 
 After a couple of `GET /hello?name=<name>` queries, let's take a quick look at
