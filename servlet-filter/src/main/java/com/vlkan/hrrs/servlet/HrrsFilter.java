@@ -23,7 +23,7 @@ public abstract class HrrsFilter implements Filter {
 
     private final HrrsIdGenerator idGenerator = new HrrsIdGenerator(4);
 
-    private volatile boolean enabled = true;
+    private volatile boolean enabled = false;
 
     private ServletContext servletContext = null;
 

@@ -101,7 +101,7 @@ servlet filter into your Java web application. Below, we will use Base64
 serialization for recording HTTP requests in a Spring web application. (See
 `examples` directory for the actual sources and the JAX-RS example.)
 
-Add the HRRS servlet filter Maven dependency in your `pom.xml`:
+Add the HRRS servlet filter Maven dependency to your `pom.xml`:
 
 ```xml
 <dependency>
@@ -111,8 +111,8 @@ Add the HRRS servlet filter Maven dependency in your `pom.xml`:
 </dependency>
 ```
 
-In the second and last step, you expose the HRRS servlet filter as a bean so
-that Spring can inject it as an interceptor:
+In the second and last step, you expose the HRRS servlet filter as beans so
+that Spring can inject them as interceptors:
 
 ```java
 @Configuration
@@ -124,19 +124,35 @@ public class HrrsConfig {
         return new Base64HrrsFilter(writerTargetFile);
     }
 
+    @Bean
+    public ServletRegistrationBean provideHrrsServlet() {
+        HrrsServlet hrrsServlet = new HrrsServlet();
+        return new ServletRegistrationBean(hrrsServlet, "/hrrs");
+    }
+
 }
 ```
 
 And that's it! The incoming HTTP requests will be recorded into
 `writerTargetFile`. (You can also run `HelloApplication` of `examples/spring`
-in your IDE to see it in action.) Let's take a quick look at the contents
-of the Base64-serialized HTTP request records:
+in your IDE to see it in action.) All you need to do is instructing the HRRS
+servlet to enable the recorder:
+
+```bash
+$ curl http://localhost:8080/hrrs
+{"enabled": false}
+
+$ curl -X PUT http://hostname/hrrs?enabled=true
+```
+
+After a couple of `GET /hello?name=<name>` queries, let's take a quick look at
+the contents of the Base64-serialized HTTP request records:
 
 ```bash
 $ zcat records.csv.gz | head -n 3
-iz4mjlt9_8f89s  20170213-224106.477+0100     hello   POST    ABYvaGVsbG8/bmFtZT1UZXN0TmFtZS0xAAAABQAEaG9zdAAObG9jYWxob3N0OjgwODAACnVzZXItYWdlbnQAC2N1cmwvNy40Ny4wAAZhY2NlcHQAAyovKgAMY29udGVudC10eXBlAAp0ZXh0L3BsYWluAA5jb250ZW50LWxlbmd0aAACMTMAAAAAAAAAAAAAAA9yYW5kb20tZGF0YS0x//8=
-iz4mjlui_1l3bw  20170213-224106.522+0100     hello   POST    ABYvaGVsbG8/bmFtZT1UZXN0TmFtZS0zAAAABQAEaG9zdAAObG9jYWxob3N0OjgwODAACnVzZXItYWdlbnQAC2N1cmwvNy40Ny4wAAZhY2NlcHQAAyovKgAMY29udGVudC10eXBlAAp0ZXh0L3BsYWluAA5jb250ZW50LWxlbmd0aAACMTMAAAAAAAAAAAAAAA9yYW5kb20tZGF0YS0z//8=
-iz4mjlty_sicli  20170213-224106.502+0100     hello   POST    ABYvaGVsbG8/bmFtZT1UZXN0TmFtZS0yAAAABQAEaG9zdAAObG9jYWxob3N0OjgwODAACnVzZXItYWdlbnQAC2N1cmwvNy40Ny4wAAZhY2NlcHQAAyovKgAMY29udGVudC10eXBlAAp0ZXh0L3BsYWluAA5jb250ZW50LWxlbmd0aAACMTMAAAAAAAAAAAAAAA9yYW5kb20tZGF0YS0y//8=
+iz4mjlt9_8f89s  20170213-224106.477+0100  hello  POST  ABYvaGVsbG8/bmFtZT1UZXN0TmFtZS0xAAAABQAEaG9zdAAObG9jYWxob3N0OjgwODAACnVzZXItYWdlbnQAC2N1cmwvNy40Ny4wAAZhY2NlcHQAAyovKgAMY29udGVudC10eXBlAAp0ZXh0L3BsYWluAA5jb250ZW50LWxlbmd0aAACMTMAAAAAAAAAAAAAAA9yYW5kb20tZGF0YS0x//8=
+iz4mjlui_1l3bw  20170213-224106.522+0100  hello  POST  ABYvaGVsbG8/bmFtZT1UZXN0TmFtZS0zAAAABQAEaG9zdAAObG9jYWxob3N0OjgwODAACnVzZXItYWdlbnQAC2N1cmwvNy40Ny4wAAZhY2NlcHQAAyovKgAMY29udGVudC10eXBlAAp0ZXh0L3BsYWluAA5jb250ZW50LWxlbmd0aAACMTMAAAAAAAAAAAAAAA9yYW5kb20tZGF0YS0z//8=
+iz4mjlty_sicli  20170213-224106.502+0100  hello  POST  ABYvaGVsbG8/bmFtZT1UZXN0TmFtZS0yAAAABQAEaG9zdAAObG9jYWxob3N0OjgwODAACnVzZXItYWdlbnQAC2N1cmwvNy40Ny4wAAZhY2NlcHQAAyovKgAMY29udGVudC10eXBlAAp0ZXh0L3BsYWluAA5jb250ZW50LWxlbmd0aAACMTMAAAAAAAAAAAAAAA9yYW5kb20tZGF0YS0y//8=
 ```
 
 Here each line corresponds to an HTTP request record and fields are separated
@@ -161,31 +177,6 @@ $ zcat records.csv.gz | head -n 1 | awk '{print $5}' | base64 --decode | hd
 000000a0  ff                                                |.|
 000000a1
 ```
-
-There is also an on/off switch of the recorder accessible via `isEnabled()` and
-`setEnabled(boolean)` methods in `HrrsFilter`. You can expose these via a REST
-endpoint as well. But we cover you there too: `HrrsServlet` provides handlers
-for `GET` and `PUT ?enabled=(true|false)` endpoints. You can easily add
-`HrrsServlet` to your Spring web application as follows:
-
-```java
-@Configuration
-public class HrrsConfig {
-
-    // ...
-
-    @Bean
-    public ServletRegistrationBean provideHrrsServlet() {
-        HrrsServlet hrrsServlet = new HrrsServlet();
-        return new ServletRegistrationBean(hrrsServlet, "/hrrs");
-    }
-
-}
-```
-
-This will allow you to query (`curl http://hostname/hrrs`) and change
-(`curl -X PUT http://hostname/hrrs?enabled=false`) the state of the recorder
-at runtime.
 
 Once you start recording HTTP requests, you
 can setup [logrotate](https://github.com/logrotate/logrotate) to periodically
