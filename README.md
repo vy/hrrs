@@ -54,7 +54,7 @@ problems that HRRS is aiming to solve:
 # Overview
 
 <img alt="HRRS Overview"
-     src="https://cdn.rawgit.com/vy/hrrs/master/doc/overview.svg"
+     src="https://cdn.rawgit.com/vy/hrrs/master/doc/overview.png"
      width="100%">
 
 HRRS ships the following artifacts:
