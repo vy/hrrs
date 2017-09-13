@@ -4,6 +4,7 @@ import com.beust.jcommander.Parameter;
 import com.vlkan.hrrs.commons.jcommander.JCommanderConfig;
 import com.vlkan.hrrs.commons.jcommander.JCommanderConfigs;
 import com.vlkan.hrrs.commons.jcommander.validator.*;
+import com.vlkan.hrrs.replayer.http.ApacheHttpClientRedirectStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -154,6 +155,15 @@ public class Config implements JCommanderConfig {
     }
 
     @Parameter(
+            names = {"--redirectStrategy", "-rs"},
+            description = "redirect strategy")
+    private ApacheHttpClientRedirectStrategy redirectStrategy = ApacheHttpClientRedirectStrategy.DEFAULT;
+
+    public ApacheHttpClientRedirectStrategy getRedirectStrategy() {
+        return redirectStrategy;
+    }
+
+    @Parameter(
             names = {"--help", "-h"},
             help = true,
             description = "display this help and exit")
@@ -179,6 +189,7 @@ public class Config implements JCommanderConfig {
         LOGGER.debug("metricsOutputFile={}", metricsOutputFile);
         LOGGER.debug("metricsOutputPeriodSeconds={}", metricsOutputPeriodSeconds);
         LOGGER.debug("loggerLevelSpecs={}", loggerLevelSpecs);
+        LOGGER.debug("redirectStrategy={}", redirectStrategy);
     }
 
     public static Config of(String[] args) {

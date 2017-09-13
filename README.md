@@ -208,6 +208,7 @@ Below is the list of parameters supported by the replayer.
 | `--metricsOutputFile`, `-om` | N | | output file to dump Dropwizard metrics |
 | `--metricsOutputPeriodSeconds`, `-mp` | N | 10 | Dropwizard metrics report frequency in seconds |
 | `--rampUpDurationSeconds`, `-d` | N | 1 | ramp up duration in seconds to reach to the maximum number of requests |
+| `--redirectStrategy`, `-rs` | N | `DEFAULT` | redirect strategy (`NONE`, `DEFAULT`, or `LAX`) |
 | `--requestTimeoutSeconds`, `-t` | N | 10 | HTTP request connect/write/read timeout in seconds |
 | `--replayOnce`, `-1` | N | false | exit once all the records are replayed |
 | `--targetHost`, `-th` | Y | | remote HTTP server host |

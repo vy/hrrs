@@ -1,10 +1,12 @@
 package com.vlkan.hrrs.replayer.http;
 
 import com.vlkan.hrrs.replayer.cli.Config;
+import org.apache.http.client.RedirectStrategy;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.config.SocketConfig;
 import org.apache.http.conn.HttpClientConnectionManager;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.slf4j.Logger;
@@ -34,11 +36,14 @@ public class ApacheHttpClientFactory {
     }
 
     public CloseableHttpClient create() {
-        return HttpClients
+        RequestConfig requestConfig = createRequestConfig();
+        HttpClientConnectionManager connectionManager = createConnectionManager();
+        HttpClientBuilder httpClientBuilder = HttpClients
                 .custom()
-                .setDefaultRequestConfig(createRequestConfig())
-                .setConnectionManager(createConnectionManager())
-                .build();
+                .setDefaultRequestConfig(requestConfig)
+                .setConnectionManager(connectionManager);
+        setRedirectStrategy(httpClientBuilder);
+        return httpClientBuilder.build();
     }
 
     private RequestConfig createRequestConfig() {
@@ -66,10 +71,11 @@ public class ApacheHttpClientFactory {
     }
 
     private HttpClientConnectionManager createConnectionManager() {
+        SocketConfig socketConfig = createSocketConfig();
         PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager();
         connectionManager.setMaxTotal(config.getThreadCount());
         connectionManager.setDefaultMaxPerRoute(config.getThreadCount());
-        connectionManager.setDefaultSocketConfig(createSocketConfig());
+        connectionManager.setDefaultSocketConfig(socketConfig);
         return connectionManager;
     }
 
@@ -80,6 +86,15 @@ public class ApacheHttpClientFactory {
                 .setTcpNoDelay(true)
                 .setSoReuseAddress(true)
                 .build();
+    }
+
+    private void setRedirectStrategy(HttpClientBuilder httpClientBuilder) {
+        RedirectStrategy redirectStrategy = config.getRedirectStrategy().getImplementation();
+        if (redirectStrategy == null) {
+            httpClientBuilder.disableRedirectHandling();
+        } else {
+            httpClientBuilder.setRedirectStrategy(redirectStrategy);
+        }
     }
 
 }
