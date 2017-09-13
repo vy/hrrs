@@ -31,7 +31,7 @@ public class HttpRequestRecordWriterFileTarget implements HttpRequestRecordWrite
 
     private static BufferedWriter createWriter(File file, Charset charset) {
         try {
-            FileOutputStream fileOutputStream = new FileOutputStream(file);
+            FileOutputStream fileOutputStream = new FileOutputStream(file, true);
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileOutputStream, charset);
             return new BufferedWriter(outputStreamWriter);
         } catch (IOException error) {
