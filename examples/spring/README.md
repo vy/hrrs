@@ -64,7 +64,9 @@ with querying the state of the servlet filter:
 
 ```
 $ curl http://localhost:8080/hrrs
-{"enabled": true}
+{"enabled": false}
+
+$ curl -X PUT http://localhost:8080/hrrs?enabled=true
 ```
 
 We are good to go. Now we can create some noise.
