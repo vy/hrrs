@@ -6,4 +6,6 @@ public interface HttpRequestRecordWriterTarget<T> extends Closeable {
 
     void write(T value);
 
+    void flush();
+
 }

@@ -155,6 +155,9 @@ iz4mjlui_1l3bw  20170213-224106.522+0100  hello  POST  ABYvaGVsbG8/bmFtZT1UZXN0T
 iz4mjlty_sicli  20170213-224106.502+0100  hello  POST  ABYvaGVsbG8/bmFtZT1UZXN0TmFtZS0yAAAABQAEaG9zdAAObG9jYWxob3N0OjgwODAACnVzZXItYWdlbnQAC2N1cmwvNy40Ny4wAAZhY2NlcHQAAyovKgAMY29udGVudC10eXBlAAp0ZXh0L3BsYWluAA5jb250ZW50LWxlbmd0aAACMTMAAAAAAAAAAAAAAA9yYW5kb20tZGF0YS0y//8=
 ```
 
+(If you can't see any content yet, you can enforce flushing via
+`curl -X POST http://localhost:8080/hrrs`.)
+
 Here each line corresponds to an HTTP request record and fields are separated
 by `\t` character. A line first starts with plain text id, timestamp, group
 name, and method fields. There it is followed by a Base64-encoded field

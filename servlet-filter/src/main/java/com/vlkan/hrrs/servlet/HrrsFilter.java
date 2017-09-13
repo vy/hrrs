@@ -170,6 +170,12 @@ public abstract class HrrsFilter implements Filter {
 
     abstract protected HttpRequestRecordWriter getWriter();
 
+    public void flush() {
+        HttpRequestRecordWriter<?> writer = getWriter();
+        HttpRequestRecordWriterTarget<?> target = writer.getTarget();
+        target.flush();
+    }
+
     @Override
     public synchronized void init(FilterConfig filterConfig) throws ServletException {
         checkArgument(servletContext == null, "servlet context is already initialized");

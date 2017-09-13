@@ -46,6 +46,7 @@ public class HttpRequestRecordPipe implements HttpRequestRecordReaderSource<Stri
         }
     }
 
+    @Override
     public void flush() {
         try {
             writer.flush();

@@ -59,6 +59,15 @@ public class HttpRequestRecordWriterFileTarget implements HttpRequestRecordWrite
     }
 
     @Override
+    public void flush() {
+        try {
+            writer.flush();
+        } catch (IOException error) {
+            throw new RuntimeException("flush failure", error);
+        }
+    }
+
+    @Override
     public void close() throws IOException {
         LOGGER.trace("closing");
         writer.close();

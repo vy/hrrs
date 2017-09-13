@@ -42,4 +42,9 @@ public class HrrsServlet extends HttpServlet {
         response.getOutputStream().close();
     }
 
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        getFilter().flush();
+    }
+
 }
