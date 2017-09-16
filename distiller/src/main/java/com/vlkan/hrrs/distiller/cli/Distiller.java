@@ -3,7 +3,6 @@ package com.vlkan.hrrs.distiller.cli;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.vlkan.hrrs.api.*;
-import com.vlkan.hrrs.commons.Throwables;
 import com.vlkan.hrrs.commons.logger.LoggerLevelAccessor;
 import com.vlkan.hrrs.commons.logger.LoggerLevels;
 import org.slf4j.Logger;
@@ -104,8 +103,7 @@ public class Distiller implements Runnable, Closeable {
                     Object output = invocable.invokeFunction("transform", input);
                     return (HttpRequestRecord) output;
                 } catch (Throwable error) {
-                    Throwables.throwCheckedException(error);
-                    return null;
+                    throw new RuntimeException("failed invoking transform function", error);
                 }
             }
         };

@@ -19,7 +19,6 @@ import java.util.Iterator;
 import java.util.concurrent.Callable;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.vlkan.hrrs.commons.Throwables.throwCheckedException;
 
 public class Base64HttpRequestRecordStream implements HttpRequestRecordStream {
 
@@ -44,13 +43,14 @@ public class Base64HttpRequestRecordStream implements HttpRequestRecordStream {
                     HttpRequestRecord record = iterator.next();
                     consumer.consume(record);
                 }
-            } catch (Exception error) {
-                throwCheckedException(error);
+            } catch (Throwable error) {
+                String message = String.format("failed consuming from record reader (inputUri=%s)", inputUri);
+                throw new RuntimeException(message, error);
             } finally {
                 try {
                     readerSource.close();
                 } catch (IOException error) {
-                    throwCheckedException(error);
+                    LOGGER.error("failed closing reader source (inputUri={})", inputUri);
                 }
             }
         } while (!replayOnce && resuming);
