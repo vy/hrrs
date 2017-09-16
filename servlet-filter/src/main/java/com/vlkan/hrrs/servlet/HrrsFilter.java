@@ -1,14 +1,32 @@
 package com.vlkan.hrrs.servlet;
 
-import com.vlkan.hrrs.api.*;
+import com.vlkan.hrrs.api.HttpRequestHeader;
+import com.vlkan.hrrs.api.HttpRequestMethod;
+import com.vlkan.hrrs.api.HttpRequestPayload;
+import com.vlkan.hrrs.api.HttpRequestRecord;
+import com.vlkan.hrrs.api.HttpRequestRecordWriter;
+import com.vlkan.hrrs.api.HttpRequestRecordWriterTarget;
+import com.vlkan.hrrs.api.ImmutableHttpRequestHeader;
+import com.vlkan.hrrs.api.ImmutableHttpRequestPayload;
+import com.vlkan.hrrs.api.ImmutableHttpRequestRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.servlet.*;
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.List;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -19,16 +37,25 @@ public abstract class HrrsFilter implements Filter {
 
     public static final String SERVLET_CONTEXT_ATTRIBUTE_KEY = HrrsFilter.class.getCanonicalName();
 
+    public static final String DEFAULT_FORM_PARAMETER_ENCODING = "ASCII";
+
     public static final long DEFAULT_MAX_RECORDABLE_PAYLOAD_BYTE_COUNT = 10 * 1024 * 1024;
 
-    private final HrrsIdGenerator idGenerator = new HrrsIdGenerator(4);
+    private final HrrsIdGenerator idGenerator;
+
+    private final HrrsUrlEncodedFormHelper urlEncodedFormHelper;
 
     private volatile boolean enabled = false;
 
     private ServletContext servletContext = null;
 
     public HrrsFilter() {
-        // Do nothing.
+        this(new HrrsIdGenerator(4), new HrrsUrlEncodedFormHelper());
+    }
+
+    public HrrsFilter(HrrsIdGenerator idGenerator, HrrsUrlEncodedFormHelper urlEncodedFormHelper) {
+        this.idGenerator = idGenerator;
+        this.urlEncodedFormHelper = urlEncodedFormHelper;
     }
 
     @Override
@@ -42,9 +69,7 @@ public abstract class HrrsFilter implements Filter {
                     getMaxRecordablePayloadByteCount());
             HttpServletRequest teeRequest = new HrrsHttpServletRequestWrapper(httpRequest, teeServletInputStream);
             chain.doFilter(teeRequest, response);
-            long totalPayloadByteCount = teeServletInputStream.getByteCount();
-            byte[] recordedPayloadBytes = requestOutputStream.toByteArray();
-            HttpRequestRecord record = createRecord(httpRequest, recordedPayloadBytes, totalPayloadByteCount);
+            HttpRequestRecord record = createRecord(httpRequest, requestOutputStream, teeServletInputStream);
             HttpRequestRecord filteredRecord = filterRecord(record);
             if (filteredRecord != null) {
                 getWriter().write(record);
@@ -74,14 +99,17 @@ public abstract class HrrsFilter implements Filter {
         LOGGER.trace("switched state (enabled={})", enabled);
     }
 
-    private HttpRequestRecord createRecord(HttpServletRequest request, byte[] recordedPayloadBytes, long totalPayloadByteCount) {
+    private HttpRequestRecord createRecord(
+            HttpServletRequest request,
+            ByteArrayOutputStream outputStream,
+            TeeServletInputStream teeServletInputStream) {
         String id = createRequestId(request);
         Date timestamp = new Date();
         String groupName = createRequestGroupName(request);
         String uri = createRequestUri(request);
         HttpRequestMethod method = HttpRequestMethod.valueOf(request.getMethod());
         List<HttpRequestHeader> headers = createHeaders(request);
-        HttpRequestPayload payload = createPayload(recordedPayloadBytes, totalPayloadByteCount);
+        HttpRequestPayload payload = createPayload(request, outputStream, teeServletInputStream);
         return ImmutableHttpRequestRecord
                 .newBuilder()
                 .setId(id)
@@ -94,10 +122,10 @@ public abstract class HrrsFilter implements Filter {
                 .build();
     }
 
-    protected static String createRequestUri(HttpServletRequest request) {
+    protected String createRequestUri(HttpServletRequest request) {
         String uri = request.getRequestURI();
         String queryString = request.getQueryString();
-        boolean blankQueryString = queryString == null || queryString.matches("^\\s*$");
+        boolean blankQueryString = HrrsHelper.isBlank(queryString);
         return blankQueryString ? uri : String.format("%s?%s", uri, queryString);
     }
 
@@ -120,7 +148,22 @@ public abstract class HrrsFilter implements Filter {
         return headers;
     }
 
-    private HttpRequestPayload createPayload(byte[] recordedPayloadBytes, long totalPayloadByteCount) {
+    private HttpRequestPayload createPayload(
+            HttpServletRequest request,
+            ByteArrayOutputStream outputStream,
+            TeeServletInputStream teeServletInputStream) {
+        boolean urlEncodedForm = urlEncodedFormHelper.isUrlEncodedForm(request.getContentType());
+        boolean emptyInputStream = teeServletInputStream.getByteCount() == 0;
+        return emptyInputStream && urlEncodedForm
+                ? createPayloadUsingFormParameters(request)
+                : createPayloadUsingInputStream(outputStream, teeServletInputStream);
+    }
+
+    private HttpRequestPayload createPayloadUsingInputStream(
+            ByteArrayOutputStream outputStream,
+            TeeServletInputStream teeServletInputStream) {
+        byte[] recordedPayloadBytes = outputStream.toByteArray();
+        long totalPayloadByteCount = teeServletInputStream.getByteCount();
         long missingByteCount = totalPayloadByteCount - recordedPayloadBytes.length;
         return ImmutableHttpRequestPayload
                 .newBuilder()
@@ -129,11 +172,25 @@ public abstract class HrrsFilter implements Filter {
                 .build();
     }
 
+    private HttpRequestPayload createPayloadUsingFormParameters(HttpServletRequest request) {
+        String defaultFormParameterEncoding = getDefaultFormParameterEncoding();
+        return urlEncodedFormHelper.extractUrlEncodedFormPayload(request, defaultFormParameterEncoding);
+    }
+
+    /**
+     * In the absence of a valid {@code Content-Type}, encoding to be
+     * used as a fallback while URL encoding/decoding form parameters.
+     * Defaults to {@link HrrsFilter#DEFAULT_FORM_PARAMETER_ENCODING}.
+     */
+    protected String getDefaultFormParameterEncoding() {
+        return DEFAULT_FORM_PARAMETER_ENCODING;
+    }
+
     /**
      * Maximum amount of bytes that can be recorded per request.
      * Defaults to {@link HrrsFilter#DEFAULT_MAX_RECORDABLE_PAYLOAD_BYTE_COUNT}.
      */
-    public long getMaxRecordablePayloadByteCount() {
+    protected long getMaxRecordablePayloadByteCount() {
         return DEFAULT_MAX_RECORDABLE_PAYLOAD_BYTE_COUNT;
     }
 
