@@ -47,7 +47,7 @@ public class TeeServletInputStream extends ServletInputStream {
     @Override
     public int read() throws IOException {
         int value = servletInputStream.read();
-        if (byteCountReference.incrementAndGet() < maxByteCount) {
+        if (value != -1 && byteCountReference.incrementAndGet() < maxByteCount) {
             outputStream.write(value);
         }
         return value;
