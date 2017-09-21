@@ -46,11 +46,11 @@ public class Config implements JCommanderConfig {
 
     @Parameter(
             names = {"--maxRequestCountPerSecond", "-r"},
-            validateWith = NonZeroPositiveIntegerValidator.class,
+            validateWith = NonZeroPositiveDoubleValidator.class,
             description = "number of concurrent requests per second")
-    private int maxRequestCountPerSecond = 1;
+    private double maxRequestCountPerSecond = 1;
 
-    public int getMaxRequestCountPerSecond() {
+    public double getMaxRequestCountPerSecond() {
         return maxRequestCountPerSecond;
     }
 
