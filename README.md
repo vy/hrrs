@@ -19,6 +19,7 @@ Java applications for transforming (`hrrs-distiller`) and replaying
 - [Replayer Reports](#replayer-reports) (Dropwizard Metrics and JMeter reports)
 - [Distiller & Replayer Debugging](#debugging)
 - [F.A.Q.](#faq)
+- [Caveats](#caveats)
 - [License](#license)
 
 <a name="rationale"></a>
@@ -523,7 +524,8 @@ tests.
   If the request handler does not consume the payload, then HRRS will not
   record it either. Additionally, `HrrsFilter#getMaxRecordablePayloadByteCount()`
   provides a hardcoded upper bound on the maximum number of bytes HRRS is
-  allowed to record.
+  allowed to record. The only exception to this is `x-www-form-urlencoded`
+  requests, see [Caveats](#caveats) section below.
 
 - **Is it possible to query the state of the recorder and enable/disable it at
   runtime?** Yes, see the usage of `HrrsServlet` above, which provides an HTTP
@@ -546,6 +548,32 @@ tests.
 - **Sounds cool! How can I contribute?** Awesome! Just send a pull request
   over GitHub. In terms of coding conventions, just try to stick to the style
   in the source code.
+
+<a name="caveats"></a>
+
+# Caveats
+
+- **What is up with the `x-www-form-urlencoded` requests?** Long story short,
+  serialization of `x-www-form-urlencoded` requests is an expensive operation
+  and `HrrsFilter#getMaxRecordablePayloadByteCount()` limit is subject to
+  violation.
+
+  In [section SRV.3.1.1 of Servlet spec](https://javaee.github.io/servlet-spec/downloads/servlet-3.1/Final/servlet-3_1-final.pdf),
+  it has been stated that any access to request parameters (e.g. `HttpServletRequest#getParameterMap()`)
+  can trigger the early consumption of the request `InputStream` before it
+  reaches to the handler. If you recall HRRS just wraps the internal
+  `InputStream` to tap the consumed content, this servlet caveat should not
+  constitute a problem. Though parameter parsing methods in Tomcat access the
+  `InputStream` through an internal reference and discard the one that is
+  passed by HRRS. (See [the relevant mailing-list discussion](http://mail-archives.apache.org/mod_mbox/tomcat-users/201709.mbox/browser).)
+  Hence, to be on the safe side, HRRS *re-constructs* the request payload by
+  serializing form parameters back to a byte stream. Additionally, to be
+  able to do that, it also needs to parse and deserialize query parameters
+  and exclude them from the servlet parameters, which is a mixture of both
+  query and form parameters by definition. And unfortunately this nasty
+  operation is relatively more expensive then just cloning an `InputStream`
+  in a regular `POST` request and is not subject to any maximum recordable
+  payload size limits.
 
 <a name="license"></a>
 
