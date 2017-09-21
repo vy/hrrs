@@ -73,6 +73,8 @@ public abstract class HrrsFilter implements Filter {
                 HttpServletRequest teeRequest = new HrrsHttpServletRequestWrapper(httpRequest, teeServletInputStream);
                 chain.doFilter(teeRequest, response);
                 payload = createPayloadUsingInputStream(requestOutputStream, teeServletInputStream);
+            } else {
+                chain.doFilter(request, response);
             }
             HttpRequestRecord record = createRecord(httpRequest, payload);
             HttpRequestRecord filteredRecord = filterRecord(record);
