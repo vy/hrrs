@@ -4,7 +4,6 @@ import javax.servlet.ReadListener;
 import javax.servlet.ServletInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.concurrent.atomic.AtomicLong;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -14,18 +13,19 @@ public class TeeServletInputStream extends ServletInputStream {
 
     private final OutputStream outputStream;
 
-    private final long maxByteCount;
+    private final int maxByteCount;
 
-    private final AtomicLong byteCountReference = new AtomicLong();
+    private volatile int byteCount;
 
-    TeeServletInputStream(ServletInputStream servletInputStream, OutputStream outputStream, long maxByteCount) {
+    TeeServletInputStream(ServletInputStream servletInputStream, OutputStream outputStream, int maxByteCount) {
         this.servletInputStream = servletInputStream;
         this.outputStream = outputStream;
         this.maxByteCount = maxByteCount;
+        this.byteCount = 0;
     }
 
-    public long getByteCount() {
-        return byteCountReference.get();
+    public int getByteCount() {
+        return byteCount;
     }
 
     @Override
@@ -47,8 +47,9 @@ public class TeeServletInputStream extends ServletInputStream {
     @Override
     public int read() throws IOException {
         int value = servletInputStream.read();
-        if (value != -1 && byteCountReference.incrementAndGet() < maxByteCount) {
+        if (value != -1 && byteCount < maxByteCount) {
             outputStream.write(value);
+            byteCount++;
         }
         return value;
     }

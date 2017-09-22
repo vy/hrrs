@@ -47,7 +47,7 @@ public class HttpRequestSerializationTest {
     private static HttpRequestRecord generateHttpRequestRecord(Random random) {
 
         // Populate fields.
-        String id = Long.toString(generateLong(random, 0, Long.MAX_VALUE), Character.MAX_RADIX);
+        String id = Integer.toString(generateInt(random, 0, Integer.MAX_VALUE), Character.MAX_RADIX);
         int groupId = Math.abs(id.hashCode()) % MAX_GROUP_COUNT;
         String groupName = String.format("group-%d", groupId);
         Date timestamp = new Date();
@@ -101,7 +101,7 @@ public class HttpRequestSerializationTest {
     }
 
     private static HttpRequestPayload generateHttpRequestPayload(Random random) {
-        long missingByteCount = generateLong(random, 0, MAX_BYTE_COUNT);
+        int missingByteCount = generateInt(random, 0, MAX_BYTE_COUNT);
         int byteCount = generateInt(random, 0, MAX_BYTE_COUNT);
         byte[] bytes = new byte[byteCount];
         random.nextBytes(bytes);
@@ -117,13 +117,6 @@ public class HttpRequestSerializationTest {
         int range = to - from;
         int nextInt = random.nextInt(range);
         return from + nextInt;
-    }
-
-    private static long generateLong(Random random, long from, long to) {
-        checkArgument(from <= to, "expecting: from <= to, found: %s > %s", from, to);
-        long range = to - from;
-        long nextLong = Math.abs(random.nextLong()) % range;
-        return from + nextLong;
     }
 
 }

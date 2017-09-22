@@ -113,7 +113,7 @@ public class Base64HttpRequestRecordReaderIterator implements Iterator<HttpReque
     private static HttpRequestPayload readPayload(DataInputStream stream) throws IOException {
 
         // Read missing byte count.
-        long missingByteCount = stream.readLong();
+        int missingByteCount = stream.readInt();
         checkArgument(missingByteCount >= 0, "expected: missingByteCount >= 0, found: %s", missingByteCount);
 
         // Read bytes.

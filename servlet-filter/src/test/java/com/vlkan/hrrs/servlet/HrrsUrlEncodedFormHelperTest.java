@@ -44,7 +44,7 @@ public class HrrsUrlEncodedFormHelperTest {
         when(request.getParameterValues("x")).thenReturn(new String[] {"x1", "x2"});
         when(request.getParameterValues("y")).thenReturn(new String[] {"y2"});
         HttpRequestPayload payload = urlEncodedFormHelper.extractUrlEncodedFormPayload(request, null);
-        assertThat(payload.getMissingByteCount(), is(0L));
+        assertThat(payload.getMissingByteCount(), is(0));
         assertThat(new String(payload.getBytes(), Charset.forName(encoding)), is(equalTo("x=x1&x=x2&y=y2")));
     }
 

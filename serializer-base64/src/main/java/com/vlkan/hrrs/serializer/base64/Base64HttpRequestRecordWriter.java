@@ -73,7 +73,7 @@ public class Base64HttpRequestRecordWriter implements HttpRequestRecordWriter<St
     }
 
     private static void writePayload(HttpRequestPayload payload, DataOutputStream stream) throws IOException {
-        stream.writeLong(payload.getMissingByteCount());
+        stream.writeInt(payload.getMissingByteCount());
         stream.writeInt(payload.getBytes().length);
         stream.write(payload.getBytes());
     }

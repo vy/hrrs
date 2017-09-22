@@ -2,7 +2,7 @@ package com.vlkan.hrrs.api;
 
 public interface HttpRequestPayload {
 
-    long getMissingByteCount();
+    int getMissingByteCount();
 
     byte[] getBytes();
 
@@ -10,7 +10,7 @@ public interface HttpRequestPayload {
 
     interface Builder {
 
-        Builder setMissingByteCount(long missingByteCount);
+        Builder setMissingByteCount(int missingByteCount);
 
         Builder setBytes(byte[] bytes);
 

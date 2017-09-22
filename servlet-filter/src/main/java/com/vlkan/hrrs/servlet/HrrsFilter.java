@@ -40,7 +40,7 @@ public abstract class HrrsFilter implements Filter {
 
     public static final String DEFAULT_FORM_PARAMETER_ENCODING = "ASCII";
 
-    public static final long DEFAULT_MAX_RECORDABLE_PAYLOAD_BYTE_COUNT = 10 * 1024 * 1024;
+    public static final int DEFAULT_MAX_RECORDABLE_PAYLOAD_BYTE_COUNT = 10 * 1024 * 1024;
 
     private final HrrsIdGenerator idGenerator;
 
@@ -165,8 +165,8 @@ public abstract class HrrsFilter implements Filter {
             ByteArrayOutputStream outputStream,
             TeeServletInputStream teeServletInputStream) {
         byte[] recordedPayloadBytes = outputStream.toByteArray();
-        long totalPayloadByteCount = teeServletInputStream.getByteCount();
-        long missingByteCount = totalPayloadByteCount - recordedPayloadBytes.length;
+        int totalPayloadByteCount = teeServletInputStream.getByteCount();
+        int missingByteCount = totalPayloadByteCount - recordedPayloadBytes.length;
         return ImmutableHttpRequestPayload
                 .newBuilder()
                 .setMissingByteCount(missingByteCount)
@@ -187,7 +187,7 @@ public abstract class HrrsFilter implements Filter {
      * Maximum amount of bytes that can be recorded per request.
      * Defaults to {@link HrrsFilter#DEFAULT_MAX_RECORDABLE_PAYLOAD_BYTE_COUNT}.
      */
-    protected long getMaxRecordablePayloadByteCount() {
+    protected int getMaxRecordablePayloadByteCount() {
         return DEFAULT_MAX_RECORDABLE_PAYLOAD_BYTE_COUNT;
     }
 

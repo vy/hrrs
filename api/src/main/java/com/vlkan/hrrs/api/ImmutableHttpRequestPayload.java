@@ -10,18 +10,18 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public class ImmutableHttpRequestPayload implements HttpRequestPayload {
 
-    private final long missingByteCount;
+    private final int missingByteCount;
 
     private final byte[] bytes;
 
-    private ImmutableHttpRequestPayload(long missingByteCount, byte[] bytes) {
+    private ImmutableHttpRequestPayload(int missingByteCount, byte[] bytes) {
         checkArgument(missingByteCount >= 0, "expecting: missingByteCount >= 0, found: %s", missingByteCount);
         this.missingByteCount = missingByteCount;
         this.bytes = checkNotNull(bytes, "bytes");
     }
 
     @Override
-    public long getMissingByteCount() {
+    public int getMissingByteCount() {
         return missingByteCount;
     }
 
@@ -67,7 +67,7 @@ public class ImmutableHttpRequestPayload implements HttpRequestPayload {
 
     public static class Builder implements HttpRequestPayload.Builder {
 
-        private long missingByteCount;
+        private int missingByteCount;
 
         private byte[] bytes;
 
@@ -76,7 +76,7 @@ public class ImmutableHttpRequestPayload implements HttpRequestPayload {
         }
 
         @Override
-        public Builder setMissingByteCount(long missingByteCount) {
+        public Builder setMissingByteCount(int missingByteCount) {
             this.missingByteCount = missingByteCount;
             return this;
         }
