@@ -136,8 +136,8 @@ public class Replayer implements Runnable, Closeable, HttpRequestRecordStreamCon
 
     @Override
     public void close() throws IOException {
-        recordReplayer.close();
         closeableExecutor.close();
+        recordReplayer.close();
         metricReporter.close();
         closed = true;
     }
