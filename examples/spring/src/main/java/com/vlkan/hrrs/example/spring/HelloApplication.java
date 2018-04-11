@@ -3,6 +3,8 @@ package com.vlkan.hrrs.example.spring;
 import com.vlkan.hrrs.servlet.HrrsFilter;
 import com.vlkan.hrrs.servlet.HrrsServlet;
 import com.vlkan.hrrs.servlet.base64.Base64HrrsFilter;
+import com.vlkan.rfos.RotationConfig;
+import com.vlkan.rfos.policy.DailyRotationPolicy;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
@@ -10,7 +12,6 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 
 import java.io.File;
-import java.io.IOException;
 
 @SpringBootApplication
 public class HelloApplication {
@@ -24,9 +25,17 @@ public class HelloApplication {
     }
 
     @Bean
-    public HrrsFilter provideHrrsFilter() throws IOException {
-        File writerTargetFile = File.createTempFile("hrrs-spring-records-", ".csv");
-        return new Base64HrrsFilter(writerTargetFile);
+    public HrrsFilter provideHrrsFilter() {
+        String tmpPathname = System.getProperty("java.io.tmpdir");
+        String file = new File(tmpPathname, "hrrs-spring-records.csv").getAbsolutePath();
+        String filePattern = new File(tmpPathname, "hrrs-spring-records-%d{yyyyMMdd-HHmmss-SSS}.csv").getAbsolutePath();
+        RotationConfig rotationConfig = RotationConfig
+                .builder()
+                .file(file)
+                .filePattern(filePattern)
+                .policy(DailyRotationPolicy.getInstance())
+                .build();
+        return new Base64HrrsFilter(rotationConfig);
     }
 
     @Bean

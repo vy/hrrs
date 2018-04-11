@@ -121,8 +121,16 @@ public class HrrsConfig {
 
     @Bean
     public HrrsFilter provideHrrsFilter() throws IOException {
-        File writerTargetFile = File.createTempFile("hrrs-spring-records-", ".csv");
-        return new Base64HrrsFilter(writerTargetFile);
+        String tmpPathname = System.getProperty("java.io.tmpdir");
+        String file = new File(tmpPathname, "hrrs-spring-records.csv").getAbsolutePath();
+        String filePattern = new File(tmpPathname, "hrrs-spring-records-%d{yyyyMMdd-HHmmss-SSS}.csv").getAbsolutePath();
+        RotationConfig rotationConfig = RotationConfig
+                .builder()
+                .file(file)
+                .filePattern(filePattern)
+                .policy(DailyRotationPolicy.getInstance())
+                .build();
+        return new Base64HrrsFilter(rotationConfig);
     }
 
     @Bean

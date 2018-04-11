@@ -1,6 +1,5 @@
 package com.vlkan.hrrs.servlet;
 
-import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -21,7 +20,7 @@ public class HrrsServlet extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String payload = String.format("{\"enabled\": %s}%n", getFilter().isEnabled());
         response.setStatus(HttpServletResponse.SC_OK);
         response.setContentType("application/json");
@@ -34,7 +33,7 @@ public class HrrsServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String enabledString = request.getParameter("enabled");
         boolean enabled = Boolean.valueOf(enabledString);
         getFilter().setEnabled(enabled);
@@ -43,7 +42,7 @@ public class HrrsServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) {
         getFilter().flush();
     }
 

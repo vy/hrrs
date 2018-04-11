@@ -4,11 +4,12 @@ Project employs the following components of the `hrrs-servlet-filter-base64`
 artifact:
 
 - `Base64HrrsFilter` is used to inject a servlet filter to record incoming
-  HTTP requests. The recorded requests are written to a file created at
-  start-up via `java.io.File.createTempFile("hrrs-spring-records-", ".csv")`.
+  HTTP requests. The recorded requests are written to a rotating file created
+  at start-up with `hrrs-spring-records-%d{yyyyMMdd-HHmmss-SSS}.csv` pattern
+  in the directory pointed by `java.io.tmpdir` property.
 
 - `HrrsServlet` is mapped to `/hrrs` endpoint to enable/disable the servlet
-  filter dynamically.
+  filter at runtime.
 
 You can start the application either through `exec:java` Maven goal or by
 running the `HelloApplication#main()` method in your IDE. The provided
@@ -37,7 +38,7 @@ $ mvn -pl examples/spring exec:java             # run the exec:java goal
 2017-05-05 11:14:23.780  INFO 7590 --- [lication.main()] org.apache.catalina.core.StandardEngine  : Starting Servlet Engine: Apache Tomcat/8.5.6
 2017-05-05 11:14:23.906  INFO 7590 --- [ost-startStop-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
 2017-05-05 11:14:23.907  INFO 7590 --- [ost-startStop-1] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 1593 ms
-2017-05-05 11:14:24.042 TRACE 7590 --- [ost-startStop-1] .h.s.f.HttpRequestRecordWriterFileTarget : instantiated (file=/tmp/hrrs-spring-records-1919023531293728658.csv, charset=US-ASCII)
+2017-05-05 11:14:24.042 TRACE 7590 --- [ost-startStop-1] ttpRequestRecordWriterRotatingFileTarget : instantiated (file=/tmp/hrrs-spring-records.csv, charset=US-ASCII)
 2017-05-05 11:14:24.108  INFO 7590 --- [ost-startStop-1] o.s.b.w.servlet.ServletRegistrationBean  : Mapping servlet: 'hrrsServlet' to [/hrrs]
 2017-05-05 11:14:24.110  INFO 7590 --- [ost-startStop-1] o.s.b.w.servlet.ServletRegistrationBean  : Mapping servlet: 'dispatcherServlet' to [/]
 2017-05-05 11:14:24.114  INFO 7590 --- [ost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'characterEncodingFilter' to: [/*]
@@ -58,9 +59,9 @@ $ mvn -pl examples/spring exec:java             # run the exec:java goal
 2017-05-05 11:14:24.864  INFO 7590 --- [lication.main()] c.v.h.example.spring.HelloApplication    : Started HelloApplication in 3.353 seconds (JVM running for 5.843)
 ```
 
-See the `/tmp/hrrs-spring-records-1919023531293728658.csv` file in the output?
-That's the file where the recorded HTTP requests will be stored. Let's start
-with querying the state of the servlet filter:
+See the `/tmp/hrrs-spring-records.csv` file in the output? That's the file
+where the recorded HTTP requests will be stored. Let's start with querying
+and changing the state of the servlet filter:
 
 ```
 $ curl http://localhost:8080/hrrs
@@ -77,24 +78,25 @@ Hello, Volkan! (19)
 ```
 
 Note the `Hello, Volkan! (19)` reply we got from the endpoint. Let's create
-some more noise to force JVM to flush the file buffers.
+some more noise to force JVM to flush the file buffers. (You can also enforce
+HRRS to flush via `curl -X POST http://localhost:8080/hrrs`.)
 
 ```
 $ for iter in $(seq 100); do
   curl -H "Content-Type: text/plain" -d "payload-$iter" "http://localhost:8080/hello?name=User-$iter";
   done
-Hello, User-1! (22)
-Hello, User-2! (22)
+Hello, User-1! (9)
+Hello, User-2! (9)
 ...
-Hello, User-98! (24)
-Hello, User-99! (24)
-Hello, User-100! (26)
+Hello, User-98! (10)
+Hello, User-99! (10)
+Hello, User-100! (11)
 ```
 
 Now we can examine the recorded HTTP requests:
 
 ```bash
-$ head -n 1 /tmp/hrrs-spring-records-1919023531293728658.csv
+$ head -n 1 /tmp/hrrs-spring-records.csv
 j2bntok7_1ncux  20170505-115026.455+0200  hello  POST  ABIvaGVsbG8/bmFtZT1Wb2xrYW4AAAAFAARob3N0AA5sb2NhbGhvc3Q6ODA4MAAKdXNlci1hZ2VudAALY3VybC83LjQ3LjAABmFjY2VwdAADKi8qAA5jb250ZW50LWxlbmd0aAACMTkADGNvbnRlbnQtdHlwZQAhYXBwbGljYXRpb24veC13d3ctZm9ybS11cmxlbmNvZGVkAAAAAAAAAAAAAAAA
 
 $ head -n 3 /tmp/hrrs-spring-records-9056751296977530502.csv | awk '{print $5}' | base64 --decode | hd
@@ -141,6 +143,7 @@ script.
 /**
  * Distiller transformation script.
  * Removes `Host` and `Content-Length` headers.
+ * File is shipped with the source code in `examples/transform.js`.
  */
 
 function sanitizeHeaders(oldHeaders) {
