@@ -9,10 +9,9 @@ import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.Collections;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -30,7 +29,7 @@ public class HrrsUrlEncodedFormHelperTest {
         };
         for (String contentType : contentTypes) {
             String message = String.format("content-type: %s", contentType);
-            assertTrue(message, urlEncodedFormHelper.isUrlEncodedForm(contentType));
+            assertThat(message, urlEncodedFormHelper.isUrlEncodedForm(contentType), is(true));
         }
     }
 

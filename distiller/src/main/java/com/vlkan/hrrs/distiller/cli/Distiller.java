@@ -35,8 +35,8 @@ public class Distiller implements Runnable, Closeable {
     @Inject
     public Distiller(
             Config config,
-            HttpRequestRecordReader reader,
-            HttpRequestRecordWriter writer) {
+            HttpRequestRecordReader<?> reader,
+            HttpRequestRecordWriter<?> writer) {
         this.config = config;
         this.reader = reader;
         this.writer = writer;

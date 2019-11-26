@@ -223,7 +223,7 @@ public abstract class HrrsFilter implements Filter {
         return record;
     }
 
-    abstract protected HttpRequestRecordWriter getWriter();
+    abstract protected HttpRequestRecordWriter<?> getWriter();
 
     public void flush() {
         HttpRequestRecordWriter<?> writer = getWriter();

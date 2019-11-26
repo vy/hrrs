@@ -1,9 +1,7 @@
 package com.vlkan.hrrs.distiller.base64;
 
 import com.google.inject.Provides;
-import com.vlkan.hrrs.api.HttpRequestRecordReader;
 import com.vlkan.hrrs.api.HttpRequestRecordReaderSource;
-import com.vlkan.hrrs.api.HttpRequestRecordWriter;
 import com.vlkan.hrrs.distiller.cli.Config;
 import com.vlkan.hrrs.distiller.cli.DistillerModule;
 import com.vlkan.hrrs.serializer.base64.Base64HttpRequestRecord;
@@ -24,7 +22,7 @@ public class Base64DistillerModule extends DistillerModule {
     }
 
     @Provides
-    public HttpRequestRecordReader provideReader(Config config) {
+    public Base64HttpRequestRecordReader provideReader(Config config) {
         URI inputUri = config.getInputUri();
         File inputFile = new File(inputUri);
         HttpRequestRecordReaderSource<String> readerSource = new HttpRequestRecordReaderFileSource(inputFile, Base64HttpRequestRecord.CHARSET);
@@ -32,7 +30,7 @@ public class Base64DistillerModule extends DistillerModule {
     }
 
     @Provides
-    public HttpRequestRecordWriter provideWriter(Config config) {
+    public Base64HttpRequestRecordWriter provideWriter(Config config) {
         URI outputUri = config.getOutputUri();
         File outputFile = new File(outputUri);
         HttpRequestRecordWriterFileTarget writerTarget = new HttpRequestRecordWriterFileTarget(outputFile, Base64HttpRequestRecord.CHARSET);

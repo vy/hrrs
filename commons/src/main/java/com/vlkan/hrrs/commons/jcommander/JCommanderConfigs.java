@@ -8,7 +8,8 @@ public enum JCommanderConfigs {;
     public static <C extends JCommanderConfig> C create(String[] args, C config) {
         JCommander jCommander = null;
         try {
-            jCommander = new JCommander(config, args);
+            jCommander = new JCommander(config);
+            jCommander.parse(args);
         } catch (ParameterException error) {
             System.err.println(error.getMessage());
             System.err.println("Run with --help, -h for the list of available parameters.");
