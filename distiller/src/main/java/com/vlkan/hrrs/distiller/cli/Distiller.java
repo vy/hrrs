@@ -18,7 +18,7 @@ import java.net.URI;
 
 public class Distiller implements Runnable, Closeable {
 
-    private static Logger LOGGER = LoggerFactory.getLogger(Distiller.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Distiller.class);
 
     private final Config config;
 
@@ -96,21 +96,18 @@ public class Distiller implements Runnable, Closeable {
     }
 
     private static Transformer createTransformer(final Invocable invocable) {
-        return new Transformer() {
-            @Override
-            public HttpRequestRecord transform(HttpRequestRecord input) {
-                try {
-                    Object output = invocable.invokeFunction("transform", input);
-                    return (HttpRequestRecord) output;
-                } catch (Throwable error) {
-                    throw new RuntimeException("failed invoking transform function", error);
-                }
+        return input -> {
+            try {
+                Object output = invocable.invokeFunction("transform", input);
+                return (HttpRequestRecord) output;
+            } catch (Throwable error) {
+                throw new RuntimeException("failed invoking transform function", error);
             }
         };
     }
 
     @Override
-    public void close() throws IOException {
+    public void close() {
 
         // Close the reader source.
         try {
@@ -130,18 +127,15 @@ public class Distiller implements Runnable, Closeable {
 
     }
 
-    public static void main(String[] args, DistillerModuleFactory moduleFactory) throws IOException {
+    public static void main(String[] args, DistillerModuleFactory moduleFactory) {
         Config config = Config.of(args);
         config.dump();
         DistillerModule module = moduleFactory.create(config);
         Injector injector = Guice.createInjector(module);
         LoggerLevelAccessor loggerLevelAccessor = injector.getInstance(LoggerLevelAccessor.class);
         LoggerLevels.applyLoggerLevelSpecs(config.getLoggerLevelSpecs(), loggerLevelAccessor);
-        Distiller distiller = injector.getInstance(Distiller.class);
-        try {
+        try (Distiller distiller = injector.getInstance(Distiller.class)) {
             distiller.run();
-        } finally {
-            distiller.close();
         }
     }
 

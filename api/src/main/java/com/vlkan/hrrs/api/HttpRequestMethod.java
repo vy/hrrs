@@ -16,6 +16,6 @@ public enum HttpRequestMethod {
 
     PUT,
 
-    TRACE;
+    TRACE
 
 }

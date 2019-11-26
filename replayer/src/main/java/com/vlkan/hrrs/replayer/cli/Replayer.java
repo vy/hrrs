@@ -126,12 +126,7 @@ public class Replayer implements Runnable, Closeable, HttpRequestRecordStreamCon
 
     @Override
     public void consume(final HttpRequestRecord record) {
-        closeableExecutor.execute(new Runnable() {
-            @Override
-            public void run() {
-                recordReplayer.replay(record);
-            }
-        });
+        closeableExecutor.execute(() -> recordReplayer.replay(record));
     }
 
     @Override
@@ -149,11 +144,8 @@ public class Replayer implements Runnable, Closeable, HttpRequestRecordStreamCon
         Injector injector = Guice.createInjector(mainModule);
         LoggerLevelAccessor loggerLevelAccessor = injector.getInstance(LoggerLevelAccessor.class);
         LoggerLevels.applyLoggerLevelSpecs(config.getLoggerLevelSpecs(), loggerLevelAccessor);
-        Replayer replayer = injector.getInstance(Replayer.class);
-        try {
+        try (Replayer replayer = injector.getInstance(Replayer.class)) {
             replayer.run();
-        } finally {
-            replayer.close();
         }
     }
 

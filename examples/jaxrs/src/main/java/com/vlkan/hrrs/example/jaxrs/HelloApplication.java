@@ -7,7 +7,7 @@ import java.util.Set;
 public class HelloApplication extends Application {
 
     public Set<Class<?>> getClasses() {
-        return Collections.<Class<?>>singleton(HelloResource.class);
+        return Collections.singleton(HelloResource.class);
     }
 
 }

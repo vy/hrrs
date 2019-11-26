@@ -8,19 +8,15 @@ import java.io.*;
 
 public class HttpRequestRecordPipe implements HttpRequestRecordReaderSource<String>, HttpRequestRecordWriterTarget<String> {
 
-    private final PipedOutputStream outputStream;
-
     private final Writer writer;
-
-    private final PipedInputStream inputStream;
 
     private final BufferedReader reader;
 
     public HttpRequestRecordPipe(int pipeSize) {
-        this.outputStream = new PipedOutputStream();
+        PipedOutputStream outputStream = new PipedOutputStream();
         this.writer = new OutputStreamWriter(outputStream);
         try {
-            this.inputStream = new PipedInputStream(outputStream, pipeSize);
+            PipedInputStream inputStream = new PipedInputStream(outputStream, pipeSize);
             this.reader = new BufferedReader(new InputStreamReader(inputStream));
         } catch (IOException error) {
             throw new RuntimeException("failed creating piped input stream", error);

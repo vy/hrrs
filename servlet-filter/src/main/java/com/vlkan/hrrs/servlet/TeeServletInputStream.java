@@ -47,10 +47,12 @@ public class TeeServletInputStream extends ServletInputStream {
     @Override
     public int read() throws IOException {
         int value = servletInputStream.read();
-        if (value != -1 && byteCount < maxByteCount) {
+        int localByteCount = byteCount;
+        if (value != -1 && localByteCount < maxByteCount) {
             outputStream.write(value);
-            byteCount++;
+            localByteCount++;
         }
+        byteCount = localByteCount;
         return value;
     }
 

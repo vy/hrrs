@@ -30,7 +30,7 @@ public class Base64HttpRequestRecordStream implements HttpRequestRecordStream {
         checkNotNull(predicate, "predicate");
         checkNotNull(consumer, "consumer");
         LOGGER.debug("consuming (inputUri={})", inputUri);
-        boolean resuming = false;
+        boolean resuming;
         do {
             File inputFile = new File(inputUri);
             HttpRequestRecordReaderSource<String> readerSource =

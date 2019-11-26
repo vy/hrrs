@@ -95,7 +95,7 @@ public class Base64HttpRequestRecordReaderIterator implements Iterator<HttpReque
         }
 
         // Read headers.
-        List<HttpRequestHeader> headers = new ArrayList<HttpRequestHeader>(headerCount);
+        List<HttpRequestHeader> headers = new ArrayList<>(headerCount);
         for (int headerIndex = 0; headerIndex < headerCount; headerIndex++) {
             String name = stream.readUTF();
             String value = stream.readUTF();

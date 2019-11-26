@@ -24,18 +24,15 @@ public class HrrsServlet extends HttpServlet {
         String payload = String.format("{\"enabled\": %s}%n", getFilter().isEnabled());
         response.setStatus(HttpServletResponse.SC_OK);
         response.setContentType("application/json");
-        ServletOutputStream outputStream = response.getOutputStream();
-        try {
+        try (ServletOutputStream outputStream = response.getOutputStream()) {
             outputStream.print(payload);
-        } finally {
-            outputStream.close();
         }
     }
 
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String enabledString = request.getParameter("enabled");
-        boolean enabled = Boolean.valueOf(enabledString);
+        boolean enabled = Boolean.parseBoolean(enabledString);
         getFilter().setEnabled(enabled);
         response.setStatus(HttpServletResponse.SC_NO_CONTENT);
         response.getOutputStream().close();

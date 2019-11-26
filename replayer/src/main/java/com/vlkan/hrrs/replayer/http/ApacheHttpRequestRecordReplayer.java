@@ -76,8 +76,7 @@ public class ApacheHttpRequestRecordReplayer implements HttpRequestRecordReplaye
 
     private int execute(HttpRequestRecord record) throws IOException {
         HttpUriRequest httpUriRequest = createHttpUriRequest(record);
-        CloseableHttpResponse httpResponse = httpClient.execute(httpHost, httpUriRequest);
-        try {
+        try (CloseableHttpResponse httpResponse = httpClient.execute(httpHost, httpUriRequest)) {
             HttpEntity entity = httpResponse.getEntity();
             if (entity != null) {
                 entity.getContent().close();
@@ -85,8 +84,6 @@ public class ApacheHttpRequestRecordReplayer implements HttpRequestRecordReplaye
             return httpResponse.getStatusLine().getStatusCode();
         } catch (SocketTimeoutException error) {
             return HttpStatus.SC_GATEWAY_TIMEOUT;
-        } finally {
-            httpResponse.close();
         }
     }
 

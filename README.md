@@ -4,7 +4,7 @@
 
 HRRS (HTTP Request Record Suite) is a set of tools that you can leverage to
 record, transform, and replay HTTP requests in your Java EE and Spring web
-applications written in Java 6 or higher. In essence, HRRS bundles a servlet
+applications written in Java 8 or higher. In essence, HRRS bundles a servlet
 filter for recording (`hrrs-servlet-filter`) and standalone command-line
 Java applications for transforming (`hrrs-distiller`) and replaying
 (`hrrs-replayer`) the requests.

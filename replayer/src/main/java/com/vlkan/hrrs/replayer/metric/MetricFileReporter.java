@@ -51,11 +51,8 @@ public class MetricFileReporter extends Thread implements MetricReporter {
         File file = new File(config.getMetricsOutputFile());
         try {
             FileOutputStream fileOutputStream = new FileOutputStream(file);
-            PrintStream printStream = new PrintStream(fileOutputStream);
-            try {
+            try (PrintStream printStream = new PrintStream(fileOutputStream)) {
                 run(printStream);
-            } finally {
-                printStream.close();
             }
         } catch (IOException error) {
             String message = String.format("failed opening metric output file (file=%s)", file);

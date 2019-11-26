@@ -36,7 +36,7 @@ class HrrsIdGenerator {
             long positiveNumber = number == Long.MIN_VALUE ? Long.MAX_VALUE : Math.abs(number);
             String encodedNumber = encodeLong(positiveNumber);
             if (encodedNumber.length() > availRandomSuffixLength) {
-                builder.append(encodedNumber.substring(0, availRandomSuffixLength + 1));
+                builder.append(encodedNumber, 0, availRandomSuffixLength + 1);
                 availRandomSuffixLength = 0;
             } else {
                 builder.append(encodedNumber);

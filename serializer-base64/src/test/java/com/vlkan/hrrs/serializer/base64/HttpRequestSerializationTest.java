@@ -81,7 +81,7 @@ public class HttpRequestSerializationTest {
         if (headerCount < 1) {
             return Collections.emptyList();
         }
-        List<HttpRequestHeader> headers = new ArrayList<HttpRequestHeader>(headerCount);
+        List<HttpRequestHeader> headers = new ArrayList<>(headerCount);
         for (int headerIndex = 0; headerIndex < headerCount; headerIndex++) {
             HttpRequestHeader header = generateHttpRequestHeader(random);
             headers.add(header);

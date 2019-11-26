@@ -89,14 +89,14 @@ public class HrrsUrlEncodedFormHelper {
             String name = parametersEnum.nextElement();
             List<String> queryParameterValues = queryParameters.get(name);
             String[] parameterValues = request.getParameterValues(name);
-            List<String> formParameterValues = new LinkedList<String>();
+            List<String> formParameterValues = new LinkedList<>();
             for (String parameterValue : parameterValues) {
                 if (queryParameterValues == null || !queryParameterValues.contains(parameterValue)) {
                     formParameterValues.add(parameterValue);
                 }
             }
             if (formParameters.isEmpty()) {
-                formParameters = new LinkedHashMap<String, List<String>>();
+                formParameters = new LinkedHashMap<>();
             }
             formParameters.put(name, formParameterValues);
         }
@@ -112,7 +112,7 @@ public class HrrsUrlEncodedFormHelper {
         if (entries.length == 0) {
             return Collections.emptyMap();
         }
-        Map<String, List<String>> map = new LinkedHashMap<String, List<String>>();
+        Map<String, List<String>> map = new LinkedHashMap<>();
         for (String entry : entries) {
             try {
                 int splitterIndex = entry.indexOf('=');
@@ -127,12 +127,7 @@ public class HrrsUrlEncodedFormHelper {
                     String encodedValue = entry.substring(splitterIndex + 1);
                     value = URLDecoder.decode(encodedValue, encoding);
                 }
-                List<String> values = map.get(key);
-                if (values == null) {
-                    values = new LinkedList<String>();
-                    map.put(key, values);
-                }
-                values.add(value);
+                map.computeIfAbsent(key, ignored -> new LinkedList<>()).add(value);
             } catch (UnsupportedEncodingException error) {
                 String message = String.format("failed to read query parameter (entry=%s)", entry);
                 LOGGER.error(message, error);

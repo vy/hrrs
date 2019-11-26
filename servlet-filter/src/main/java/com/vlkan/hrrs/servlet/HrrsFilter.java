@@ -23,6 +23,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -38,7 +39,7 @@ public abstract class HrrsFilter implements Filter {
 
     public static final String SERVLET_CONTEXT_ATTRIBUTE_KEY = HrrsFilter.class.getCanonicalName();
 
-    public static final String DEFAULT_FORM_PARAMETER_ENCODING = "ASCII";
+    public static final String DEFAULT_FORM_PARAMETER_ENCODING = StandardCharsets.US_ASCII.name();
 
     public static final int DEFAULT_MAX_RECORDABLE_PAYLOAD_BYTE_COUNT = 10 * 1024 * 1024;
 
@@ -93,7 +94,7 @@ public abstract class HrrsFilter implements Filter {
     /**
      * Checks if the given HTTP request is recordable.
      */
-    protected boolean isRequestRecordable(HttpServletRequest request) {
+    protected boolean isRequestRecordable(HttpServletRequest ignored) {
         return true;
     }
 
@@ -144,7 +145,7 @@ public abstract class HrrsFilter implements Filter {
                     .setValue(value)
                     .build();
             if (headers.isEmpty()) {
-                headers = new ArrayList<HttpRequestHeader>();
+                headers = new ArrayList<>();
             }
             headers.add(header);
         }
@@ -210,7 +211,7 @@ public abstract class HrrsFilter implements Filter {
     /**
      * Creates a unique identifier for the given request.
      */
-    protected String createRequestId(HttpServletRequest request) {
+    protected String createRequestId(HttpServletRequest ignored) {
         return idGenerator.next();
     }
 
@@ -231,7 +232,7 @@ public abstract class HrrsFilter implements Filter {
     }
 
     @Override
-    public synchronized void init(FilterConfig filterConfig) throws ServletException {
+    public synchronized void init(FilterConfig filterConfig) {
         checkArgument(servletContext == null, "servlet context is already initialized");
         servletContext = filterConfig.getServletContext();
         Object prevAttribute = servletContext.getAttribute(SERVLET_CONTEXT_ATTRIBUTE_KEY);

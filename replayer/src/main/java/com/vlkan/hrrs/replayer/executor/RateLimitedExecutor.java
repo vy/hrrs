@@ -9,7 +9,6 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -46,13 +45,10 @@ public class RateLimitedExecutor implements CloseableExecutor {
         final String name = RateLimitedExecutor.class.getSimpleName();
         final AtomicInteger threadCounter = new AtomicInteger();
         final ThreadGroup threadGroup = Thread.currentThread().getThreadGroup();
-        return Executors.newFixedThreadPool(threadCount, new ThreadFactory() {
-            @Override
-            public Thread newThread(Runnable runnable) {
-                checkNotNull(runnable, "runnable");
-                String threadName = String.format("%s-%s", name, threadCounter.getAndIncrement());
-                return new Thread(threadGroup, runnable, threadName);
-            }
+        return Executors.newFixedThreadPool(threadCount, runnable -> {
+            checkNotNull(runnable, "runnable");
+            String threadName = String.format("%s-%s", name, threadCounter.getAndIncrement());
+            return new Thread(threadGroup, runnable, threadName);
         });
     }
 
