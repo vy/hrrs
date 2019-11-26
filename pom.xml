@@ -5,7 +5,7 @@
 
     <groupId>com.vlkan.hrrs</groupId>
     <artifactId>hrrs-parent</artifactId>
-    <version>0.6</version>
+    <version>0.7-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>HRRS (HTTP Request Record Suite)</name>
@@ -45,7 +45,7 @@
         <url>http://github.com/vy/hrrs</url>
         <connection>scm:git:git@github.com:vy/hrrs.git</connection>
         <developerConnection>scm:git:git@github.com:vy/hrrs.git</developerConnection>
-      <tag>hrrs-parent-0.6</tag>
+      <tag>HEAD</tag>
   </scm>
 
     <distributionManagement>
