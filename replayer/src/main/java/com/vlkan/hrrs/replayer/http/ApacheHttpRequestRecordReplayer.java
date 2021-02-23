@@ -165,6 +165,10 @@ public class ApacheHttpRequestRecordReplayer implements HttpRequestRecordReplaye
 
     private void addHttpUriRequestHeaders(HttpUriRequest request, HttpRequestRecord record) {
         for (HttpRequestHeader header : record.getHeaders()) {
+            if (header.getName().equalsIgnoreCase("content-length")) {
+                //skipping as this header has been added automatically
+                continue;
+            }
             request.setHeader(header.getName(), header.getValue());
         }
     }
