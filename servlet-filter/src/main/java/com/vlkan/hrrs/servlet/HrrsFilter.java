@@ -80,7 +80,7 @@ public abstract class HrrsFilter implements Filter {
             HttpRequestRecord record = createRecord(httpRequest, payload);
             HttpRequestRecord filteredRecord = filterRecord(record);
             if (filteredRecord != null) {
-                getWriter().write(record);
+                getWriter().write(modifyRecord(record));
             }
         } else {
             chain.doFilter(request, response);
@@ -220,6 +220,14 @@ public abstract class HrrsFilter implements Filter {
      * @return the modified record or null to exclude the record
      */
     protected HttpRequestRecord filterRecord(HttpRequestRecord record) {
+        return record;
+    }
+
+    /**
+     * Modify the given record prior to writing.
+     * @return the modified record
+     */
+    protected HttpRequestRecord modifyRecord(HttpRequestRecord record) {
         return record;
     }
 
