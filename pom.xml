@@ -85,7 +85,7 @@
 
         <!-- library versions -->
         <guava.version>29.0-jre</guava.version>
-        <guice.version>4.2.2</guice.version>
+        <guice.version>5.1.0</guice.version>
         <jcommander.version>1.78</jcommander.version>
         <jsr305.version>3.0.2</jsr305.version>
         <junit.version>4.13.1</junit.version>
