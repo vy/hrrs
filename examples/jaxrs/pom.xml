@@ -16,7 +16,7 @@
     <properties>
 
         <!-- library versions -->
-        <javax.ws.rs-api.version>2.0.1</javax.ws.rs-api.version>
+        <javax.ws.rs-api.version>2.1.1</javax.ws.rs-api.version>
         <jaxrs-ri.version>2.25</jaxrs-ri.version>
 
     </properties>
