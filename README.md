@@ -1,4 +1,20 @@
-[![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fvy%2Fhrrs%2Fbadge%3Fref%3Dmaster&style=flat)](https://actions-badge.atrox.dev/vy/hrrs/goto?ref=master)
+<!---
+ Copyright 2016-2022 Volkan Yazıcı
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permits and
+ limitations under the License.
+-->
+
+[![Actions Status](https://github.com/vy/hrrs/workflows/build/badge.svg)](https://github.com/vy/hrrs/actions)
 [![Maven Central](https://img.shields.io/maven-central/v/com.vlkan.hrrs/hrrs-parent.svg)](https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.vlkan.hrrs%22)
 [![License](https://img.shields.io/github/license/vy/hrrs.svg)](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
