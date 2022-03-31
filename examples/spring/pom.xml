@@ -15,7 +15,7 @@
     <properties>
 
         <!-- library versions -->
-        <spring.version>1.4.2.RELEASE</spring.version>
+        <spring.version>2.6.5</spring.version>
 
     </properties>
 

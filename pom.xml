@@ -85,15 +85,15 @@
         <revision>0.7.0-SNAPSHOT</revision>
 
         <!-- library versions -->
-        <guava.version>29.0-jre</guava.version>
-        <guice.version>4.2.2</guice.version>
-        <jcommander.version>1.78</jcommander.version>
+        <guava.version>31.1-jre</guava.version>
+        <guice.version>5.1.0</guice.version>
+        <jcommander.version>1.82</jcommander.version>
         <jsr305.version>3.0.2</jsr305.version>
-        <junit.version>4.13.1</junit.version>
-        <mockito.version>3.1.0</mockito.version>
-        <rotating-fos.version>0.8</rotating-fos.version>
+        <junit.version>4.13.2</junit.version>
+        <mockito.version>4.4.0</mockito.version>
+        <rotating-fos.version>0.9.4</rotating-fos.version>
         <servlet-api.version>4.0.1</servlet-api.version>
-        <slf4j.version>1.7.22</slf4j.version>
+        <slf4j.version>1.7.36</slf4j.version>
 
         <!-- plugin versions -->
         <animal-sniffer-maven-plugin.version>1.15</animal-sniffer-maven-plugin.version>
@@ -105,8 +105,9 @@
         <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
         <maven-javadoc-plugin.version>2.10.4</maven-javadoc-plugin.version>
         <maven-release-plugin.version>2.5.3</maven-release-plugin.version>
-        <maven-shade-plugin.version>3.2.0</maven-shade-plugin.version>
+        <maven-shade-plugin.version>3.3.0</maven-shade-plugin.version>
         <maven-source-plugin.version>2.4</maven-source-plugin.version>
+        <versions-maven-plugin.version>2.10.0</versions-maven-plugin.version>
 
     </properties>
 
@@ -232,6 +233,36 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>
                 <version>${maven-release-plugin.version}</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>versions-maven-plugin</artifactId>
+                <version>${versions-maven-plugin.version}</version>
+                <configuration>
+                    <rulesUri>${project.baseUri}/maven-version-rules.xml</rulesUri>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>3.0.0</version>
+                <executions>
+                    <execution>
+                        <id>enforce-maven</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireMavenVersion>
+                                    <version>3.1.0</version>
+                                </requireMavenVersion>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
 
         </plugins>

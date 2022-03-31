@@ -16,7 +16,7 @@
 
         <!-- library versions -->
         <httpclient.version>4.5.13</httpclient.version>
-        <metrics-core.version>3.1.2</metrics-core.version>
+        <metrics-core.version>4.2.9</metrics-core.version>
 
     </properties>
 
