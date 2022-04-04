@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed code typo breaking filtering of records for servlets. (#16)
+
 ### Changed
 
 - Switched to [semantic versioning](https://semver.org/).

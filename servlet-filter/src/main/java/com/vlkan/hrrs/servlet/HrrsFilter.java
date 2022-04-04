@@ -80,7 +80,7 @@ public abstract class HrrsFilter implements Filter {
             HttpRequestRecord record = createRecord(httpRequest, payload);
             HttpRequestRecord filteredRecord = filterRecord(record);
             if (filteredRecord != null) {
-                getWriter().write(record);
+                getWriter().write(filteredRecord);
             }
         } else {
             chain.doFilter(request, response);
