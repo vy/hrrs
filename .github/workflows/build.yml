@@ -106,13 +106,13 @@ jobs:
             echo "was expecting a release version, found: \"$REVISION\"" 1>&2
             exit 1
           }
-          export CHANGELOG_VERSION=$(grep "^### " CHANGELOG.md | head -n 1 | sed -r 's/^### \(.*\) v(.*)$/\1/')
+          export CHANGELOG_VERSION=$(grep "^## " CHANGELOG.md | head -n 1 | sed -r 's/^## \[(.+)\].*$/\1/')
           [[ "$REVISION" == "$CHANGELOG_VERSION" ]] || {
             echo "version \"$REVISION\" doesn't match the one in the CHANGELOG: \"$CHANGELOG_VERSION\"" 1>&2
             exit 1
           }
           export CURRENT_DATE=$(date +%Y-%m-%d)
-          export CHANGELOG_DATE=$(grep "^### " CHANGELOG.md | head -n 1 | sed -r 's/^### \((.*)\) v.*$/\1/')
+          export CHANGELOG_DATE=$(grep "^## " CHANGELOG.md | head -n 1 | sed -r 's/^## \[.+\] - (.+)$/\1/')
           [[ "$CURRENT_DATE" == "$CHANGELOG_DATE" ]] || {
             echo "current date \"$CURRENT_DATE\" doesn't match the one in the CHANGELOG: \"$CHANGELOG_DATE\"" 1>&2
             exit 1
