@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
 ## [0.7.1] - 2022-06-30
 
 ### Fixed
@@ -40,7 +42,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [0.1] - 2017-04-27
 
-[0.7.1]: https://github.com/vy/hrrs/compare/hrrs-parent-0.7.0...v0.7.1
+[Unreleased]: https://github.com/vy/hrrs/compare/v0.7.1...HEAD
+[0.7.1]: https://github.com/vy/hrrs/compare/v0.7.0...v0.7.1
 [0.7.0]: https://github.com/vy/hrrs/compare/hrrs-parent-6...v0.7.0
 [0.6]: https://github.com/vy/hrrs/compare/hrrs-parent-5...hrrs-parent-6
 [0.5]: https://github.com/vy/hrrs/compare/hrrs-parent-4...hrrs-parent-5
