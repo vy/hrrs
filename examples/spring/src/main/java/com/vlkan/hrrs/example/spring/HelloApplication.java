@@ -24,7 +24,6 @@ import com.vlkan.rfos.policy.DailyRotationPolicy;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 
 import java.io.File;
@@ -33,11 +32,7 @@ import java.io.File;
 public class HelloApplication {
 
     public static void main(String[] args) {
-        run(args);
-    }
-
-    public static ConfigurableApplicationContext run(String[] args) {
-        return SpringApplication.run(HelloApplication.class, args);
+        SpringApplication.run(HelloApplication.class, args);
     }
 
     @Bean
@@ -55,9 +50,9 @@ public class HelloApplication {
     }
 
     @Bean
-    public ServletRegistrationBean provideHrrsServlet() {
+    public ServletRegistrationBean<?> provideHrrsServlet() {
         HrrsServlet hrrsServlet = new HrrsServlet();
-        return new ServletRegistrationBean(hrrsServlet, "/hrrs");
+        return new ServletRegistrationBean<>(hrrsServlet, "/hrrs");
     }
 
 }
