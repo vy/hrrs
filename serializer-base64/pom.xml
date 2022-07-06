@@ -50,11 +50,6 @@
         </dependency>
 
         <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>com.vlkan.rfos</groupId>
             <artifactId>rotating-fos</artifactId>
         </dependency>

@@ -25,8 +25,7 @@ import com.vlkan.hrrs.distiller.cli.DistillerModule;
 import com.vlkan.hrrs.serializer.base64.Base64HttpRequestRecord;
 import com.vlkan.hrrs.serializer.base64.Base64HttpRequestRecordReader;
 import com.vlkan.hrrs.serializer.base64.Base64HttpRequestRecordWriter;
-import com.vlkan.hrrs.serializer.base64.guava.GuavaBase64Decoder;
-import com.vlkan.hrrs.serializer.base64.guava.GuavaBase64Encoder;
+import com.vlkan.hrrs.serializer.base64.JdkBase64Codec;
 import com.vlkan.hrrs.serializer.file.HttpRequestRecordReaderFileSource;
 import com.vlkan.hrrs.serializer.file.HttpRequestRecordWriterFileTarget;
 
@@ -44,7 +43,7 @@ public class Base64DistillerModule extends DistillerModule {
         URI inputUri = config.getInputUri();
         File inputFile = new File(inputUri);
         HttpRequestRecordReaderSource<String> readerSource = new HttpRequestRecordReaderFileSource(inputFile, Base64HttpRequestRecord.CHARSET);
-        return new Base64HttpRequestRecordReader(readerSource, GuavaBase64Decoder.getInstance());
+        return new Base64HttpRequestRecordReader(readerSource, JdkBase64Codec.INSTANCE);
     }
 
     @Provides
@@ -52,7 +51,7 @@ public class Base64DistillerModule extends DistillerModule {
         URI outputUri = config.getOutputUri();
         File outputFile = new File(outputUri);
         HttpRequestRecordWriterFileTarget writerTarget = new HttpRequestRecordWriterFileTarget(outputFile, Base64HttpRequestRecord.CHARSET);
-        return new Base64HttpRequestRecordWriter(writerTarget, GuavaBase64Encoder.getInstance());
+        return new Base64HttpRequestRecordWriter(writerTarget, JdkBase64Codec.INSTANCE);
     }
 
 }

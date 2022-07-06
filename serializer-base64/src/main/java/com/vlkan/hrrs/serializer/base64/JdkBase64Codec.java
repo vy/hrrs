@@ -14,12 +14,22 @@
  * limitations under the License.
  */
 
-package com.vlkan.hrrs.serializer.base64.guava;
+package com.vlkan.hrrs.serializer.base64;
 
-import com.google.common.io.BaseEncoding;
+import java.util.Base64;
 
-enum GuavaBase64 {;
+public enum JdkBase64Codec implements Base64Encoder, Base64Decoder {
 
-    static final BaseEncoding BASE_ENCODING = BaseEncoding.base64();
+    INSTANCE;
+
+    @Override
+    public byte[] decode(String encodedBytes) {
+        return Base64.getDecoder().decode(encodedBytes);
+    }
+
+    @Override
+    public String encode(byte[] bytes) {
+        return Base64.getEncoder().encodeToString(bytes);
+    }
 
 }

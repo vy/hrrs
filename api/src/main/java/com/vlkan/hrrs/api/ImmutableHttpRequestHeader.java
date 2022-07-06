@@ -16,10 +16,7 @@
 
 package com.vlkan.hrrs.api;
 
-import com.google.common.base.MoreObjects;
-import com.google.common.base.Objects;
-
-import static com.google.common.base.Preconditions.checkNotNull;
+import java.util.Objects;
 
 public class ImmutableHttpRequestHeader implements HttpRequestHeader {
 
@@ -28,8 +25,8 @@ public class ImmutableHttpRequestHeader implements HttpRequestHeader {
     private final String value;
 
     private ImmutableHttpRequestHeader(String name, String value) {
-        this.name = checkNotNull(name, "name");
-        this.value = checkNotNull(value, "value");
+        this.name = Objects.requireNonNull(name, "name");
+        this.value = Objects.requireNonNull(value, "value");
     }
 
     @Override
@@ -47,21 +44,21 @@ public class ImmutableHttpRequestHeader implements HttpRequestHeader {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ImmutableHttpRequestHeader that = (ImmutableHttpRequestHeader) o;
-        return Objects.equal(name, that.name) &&
-                Objects.equal(value, that.value);
+        return Objects.equals(name, that.name) &&
+                Objects.equals(value, that.value);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(name, value);
+        return Objects.hash(name, value);
     }
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this)
-                .add("name", name)
-                .add("value", value)
-                .toString();
+        return "ImmutableHttpRequestHeader{" +
+                "name='" + name + '\'' +
+                ", value='" + value + '\'' +
+                '}';
     }
 
     @Override

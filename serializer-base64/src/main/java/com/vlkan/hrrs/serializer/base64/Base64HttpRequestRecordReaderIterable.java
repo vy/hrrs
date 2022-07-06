@@ -20,8 +20,7 @@ import com.vlkan.hrrs.api.HttpRequestRecord;
 import com.vlkan.hrrs.api.HttpRequestRecordReaderSource;
 
 import java.util.Iterator;
-
-import static com.google.common.base.Preconditions.checkNotNull;
+import java.util.Objects;
 
 public class Base64HttpRequestRecordReaderIterable implements Iterable<HttpRequestRecord> {
 
@@ -30,8 +29,8 @@ public class Base64HttpRequestRecordReaderIterable implements Iterable<HttpReque
     private final Base64Decoder decoder;
 
     Base64HttpRequestRecordReaderIterable(HttpRequestRecordReaderSource<String> source, Base64Decoder decoder) {
-        this.source = checkNotNull(source, "source");
-        this.decoder = checkNotNull(decoder, "decoder");
+        this.source = Objects.requireNonNull(source, "source");
+        this.decoder = Objects.requireNonNull(decoder, "decoder");
     }
 
     @Override

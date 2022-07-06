@@ -20,7 +20,7 @@ import com.vlkan.hrrs.api.HttpRequestRecord;
 import com.vlkan.hrrs.api.HttpRequestRecordReader;
 import com.vlkan.hrrs.api.HttpRequestRecordReaderSource;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import java.util.Objects;
 
 public class Base64HttpRequestRecordReader implements HttpRequestRecordReader<String> {
 
@@ -29,8 +29,8 @@ public class Base64HttpRequestRecordReader implements HttpRequestRecordReader<St
     private final Base64Decoder decoder;
 
     public Base64HttpRequestRecordReader(HttpRequestRecordReaderSource<String> source, Base64Decoder decoder) {
-        this.source = checkNotNull(source, "source");
-        this.decoder = checkNotNull(decoder, "decoder");
+        this.source = Objects.requireNonNull(source, "source");
+        this.decoder = Objects.requireNonNull(decoder, "decoder");
     }
 
     @Override

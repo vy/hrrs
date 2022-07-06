@@ -20,7 +20,7 @@ import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import java.util.Objects;
 
 public class Log4jLoggerLevelAccessor implements LoggerLevelAccessor {
 
@@ -44,7 +44,7 @@ public class Log4jLoggerLevelAccessor implements LoggerLevelAccessor {
 
     @Override
     public void setRootLevel(String levelName) {
-        checkNotNull(levelName, "levelName");
+        Objects.requireNonNull(levelName, "levelName");
         LOGGER.debug("updating root logger level (name={})", levelName);
         Level level = Level.toLevel(levelName);
         Logger logger = LogManager.getRootLogger();
@@ -53,15 +53,15 @@ public class Log4jLoggerLevelAccessor implements LoggerLevelAccessor {
 
     @Override
     public String getLevel(String loggerName) {
-        checkNotNull(loggerName, "loggerName");
+        Objects.requireNonNull(loggerName, "loggerName");
         Logger logger = LogManager.getLogger(loggerName);
         return logger == null || logger.getLevel() == null ? null : logger.getLevel().toString();
     }
 
     @Override
     public void setLevel(String loggerName, String levelName) {
-        checkNotNull(loggerName, "loggerName");
-        checkNotNull(levelName, "levelName");
+        Objects.requireNonNull(loggerName, "loggerName");
+        Objects.requireNonNull(levelName, "levelName");
         LOGGER.debug("updating logger level (loggerName={}, levelName={})", loggerName, levelName);
         Logger logger = LogManager.getLogger(loggerName);
         Level level = Level.toLevel(levelName);

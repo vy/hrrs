@@ -23,7 +23,7 @@ import com.vlkan.hrrs.replayer.record.HttpRequestRecordStream;
 import com.vlkan.hrrs.replayer.record.HttpRequestRecordStreamConsumer;
 import com.vlkan.hrrs.serializer.base64.Base64HttpRequestRecord;
 import com.vlkan.hrrs.serializer.base64.Base64HttpRequestRecordReader;
-import com.vlkan.hrrs.serializer.base64.guava.GuavaBase64Decoder;
+import com.vlkan.hrrs.serializer.base64.JdkBase64Codec;
 import com.vlkan.hrrs.serializer.file.HttpRequestRecordReaderFileSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,7 +53,7 @@ public class Base64HttpRequestRecordStream implements HttpRequestRecordStream {
                     new HttpRequestRecordReaderFileSource(inputFile, Base64HttpRequestRecord.CHARSET);
             try {
                 HttpRequestRecordReader<String> reader =
-                        new Base64HttpRequestRecordReader(readerSource, GuavaBase64Decoder.getInstance());
+                        new Base64HttpRequestRecordReader(readerSource, JdkBase64Codec.INSTANCE);
                 Iterator<HttpRequestRecord> iterator = reader.read().iterator();
                 while ((resuming = predicate.call()) && iterator.hasNext()) {
                     HttpRequestRecord record = iterator.next();

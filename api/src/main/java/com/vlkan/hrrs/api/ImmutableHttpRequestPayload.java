@@ -16,13 +16,8 @@
 
 package com.vlkan.hrrs.api;
 
-import com.google.common.base.MoreObjects;
-import com.google.common.base.Objects;
-
 import java.util.Arrays;
-
-import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
+import java.util.Objects;
 
 public class ImmutableHttpRequestPayload implements HttpRequestPayload {
 
@@ -31,9 +26,11 @@ public class ImmutableHttpRequestPayload implements HttpRequestPayload {
     private final byte[] bytes;
 
     private ImmutableHttpRequestPayload(int missingByteCount, byte[] bytes) {
-        checkArgument(missingByteCount >= 0, "expecting: missingByteCount >= 0, found: %s", missingByteCount);
+        if (missingByteCount < 0) {
+            throw new IllegalArgumentException("expecting: missingByteCount >= 0, found: " + missingByteCount);
+        }
         this.missingByteCount = missingByteCount;
-        this.bytes = checkNotNull(bytes, "bytes");
+        this.bytes = Objects.requireNonNull(bytes, "bytes");
     }
 
     @Override
@@ -57,16 +54,15 @@ public class ImmutableHttpRequestPayload implements HttpRequestPayload {
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(missingByteCount, bytes);
+        return Objects.hash(missingByteCount, Arrays.hashCode(bytes));
     }
 
     @Override
     public String toString() {
-        return MoreObjects
-                .toStringHelper(this)
-                .add("missingByteCount", missingByteCount)
-                .add("byteCount", bytes.length)
-                .toString();
+        return "ImmutableHttpRequestPayload{" +
+                "missingByteCount=" + missingByteCount +
+                ", byteCount=" + bytes.length +
+                '}';
     }
 
     @Override

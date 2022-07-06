@@ -16,13 +16,9 @@
 
 package com.vlkan.hrrs.api;
 
-import com.google.common.base.MoreObjects;
-import com.google.common.base.Objects;
-
 import java.util.Date;
 import java.util.List;
-
-import static com.google.common.base.Preconditions.checkNotNull;
+import java.util.Objects;
 
 public class ImmutableHttpRequestRecord implements HttpRequestRecord {
 
@@ -48,13 +44,13 @@ public class ImmutableHttpRequestRecord implements HttpRequestRecord {
             HttpRequestMethod method,
             List<HttpRequestHeader> headers,
             HttpRequestPayload payload) {
-        this.id = checkNotNull(id, "id");
-        this.timestamp = checkNotNull(timestamp, "timestamp");
-        this.groupName = checkNotNull(groupName, "groupName");
-        this.uri = checkNotNull(uri, "uri");
-        this.method = checkNotNull(method, "method");
-        this.headers = checkNotNull(headers, "headers");
-        this.payload = checkNotNull(payload, "payload");
+        this.id = Objects.requireNonNull(id, "id");
+        this.timestamp = Objects.requireNonNull(timestamp, "timestamp");
+        this.groupName = Objects.requireNonNull(groupName, "groupName");
+        this.uri = Objects.requireNonNull(uri, "uri");
+        this.method = Objects.requireNonNull(method, "method");
+        this.headers = Objects.requireNonNull(headers, "headers");
+        this.payload = Objects.requireNonNull(payload, "payload");
     }
 
     @Override
@@ -97,32 +93,31 @@ public class ImmutableHttpRequestRecord implements HttpRequestRecord {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ImmutableHttpRequestRecord that = (ImmutableHttpRequestRecord) o;
-        return Objects.equal(id, that.id) &&
-                Objects.equal(timestamp, that.timestamp) &&
-                Objects.equal(groupName, that.groupName) &&
-                Objects.equal(uri, that.uri) &&
+        return Objects.equals(id, that.id) &&
+                Objects.equals(timestamp, that.timestamp) &&
+                Objects.equals(groupName, that.groupName) &&
+                Objects.equals(uri, that.uri) &&
                 method == that.method &&
-                Objects.equal(headers, that.headers) &&
-                Objects.equal(payload, that.payload);
+                Objects.equals(headers, that.headers) &&
+                Objects.equals(payload, that.payload);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id, timestamp, groupName, uri, method, headers, payload);
+        return Objects.hash(id, timestamp, groupName, uri, method, headers, payload);
     }
 
     @Override
     public String toString() {
-        return MoreObjects
-                .toStringHelper(this)
-                .add("id", id)
-                .add("timestamp", timestamp)
-                .add("groupName", groupName)
-                .add("uri", uri)
-                .add("method", method)
-                .add("headers", headers)
-                .add("payload", payload)
-                .toString();
+        return "ImmutableHttpRequestRecord{" +
+                "id='" + id + '\'' +
+                ", timestamp=" + timestamp +
+                ", groupName='" + groupName + '\'' +
+                ", uri='" + uri + '\'' +
+                ", method=" + method +
+                ", headers=" + headers +
+                ", payload=" + payload +
+                '}';
     }
 
     @Override

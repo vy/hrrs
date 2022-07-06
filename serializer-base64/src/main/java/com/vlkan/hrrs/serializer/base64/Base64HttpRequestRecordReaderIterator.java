@@ -24,8 +24,6 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.util.*;
 
-import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
 import static com.vlkan.hrrs.serializer.base64.Base64HttpRequestRecord.DATE_FORMAT;
 import static com.vlkan.hrrs.serializer.base64.Base64HttpRequestRecord.FIELD_SEPARATOR;
 
@@ -41,8 +39,8 @@ public class Base64HttpRequestRecordReaderIterator implements Iterator<HttpReque
     private String line;
 
     Base64HttpRequestRecordReaderIterator(HttpRequestRecordReaderSource<String> source, Base64Decoder decoder) {
-        this.source = checkNotNull(source, "source");
-        this.decoder = checkNotNull(decoder, "decoder");
+        this.source = Objects.requireNonNull(source, "source");
+        this.decoder = Objects.requireNonNull(decoder, "decoder");
     }
 
     @Override
@@ -57,10 +55,14 @@ public class Base64HttpRequestRecordReaderIterator implements Iterator<HttpReque
 
     @Override
     public HttpRequestRecord next() {
-        checkArgument(lineIndex >= 0, "hasNext() should have been called first");
+        if (lineIndex < 0) {
+            throw new RuntimeException("hasNext() should have been called first");
+        }
         try {
             String[] fields = line.split(FIELD_SEPARATOR, 5);
-            checkArgument(fields.length == 5, "insufficient field count (fieldCount=%s)", fields.length);
+            if (fields.length != 5) {
+                throw new RuntimeException("insufficient field count: " + fields.length);
+            }
             String id = fields[0];
             Date timestamp = DATE_FORMAT.parse(fields[1]);
             String groupName = fields[2];
@@ -105,7 +107,9 @@ public class Base64HttpRequestRecordReaderIterator implements Iterator<HttpReque
 
         // See if there are any headers at all.
         int headerCount = stream.readInt();
-        checkArgument(headerCount >= 0, "expected: headerCount >= 0, found: %s", headerCount);
+        if (headerCount < 0) {
+            throw new RuntimeException("expected: headerCount >= 0, found: " + headerCount);
+        }
         if (headerCount == 0) {
             return Collections.emptyList();
         }
@@ -130,14 +134,21 @@ public class Base64HttpRequestRecordReaderIterator implements Iterator<HttpReque
 
         // Read missing byte count.
         int missingByteCount = stream.readInt();
-        checkArgument(missingByteCount >= 0, "expected: missingByteCount >= 0, found: %s", missingByteCount);
+        if (missingByteCount < 0) {
+            throw new RuntimeException("expected: missingByteCount >= 0, found: " + missingByteCount);
+        }
 
         // Read bytes.
         int byteCount = stream.readInt();
-        checkArgument(byteCount >= 0, "expected: byteCount >= 0, found: %s", byteCount);
+        if (byteCount < 0) {
+            throw new RuntimeException("expected: byteCount >= 0, found: " + byteCount);
+        }
         byte[] bytes = new byte[byteCount];
         int readByteCount = Math.max(0, stream.read(bytes));
-        checkArgument(byteCount == readByteCount, "expected: %s == readByteCount, found: %s", byteCount, readByteCount);
+        if (byteCount != readByteCount) {
+            String message = String.format("expected: %s == readByteCount, found: %s", byteCount, readByteCount);
+            throw new RuntimeException(message);
+        }
 
         return ImmutableHttpRequestPayload
                 .newBuilder()

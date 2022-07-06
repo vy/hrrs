@@ -16,8 +16,8 @@
 
 package com.vlkan.hrrs.replayer.executor;
 
-import com.google.common.util.concurrent.RateLimiter;
 import com.vlkan.hrrs.replayer.cli.Config;
+import com.vlkan.hrrs.replayer.executor.guava.GuavaRateLimiter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,7 +37,7 @@ public class RateLimitedExecutor implements CloseableExecutor {
 
     private final ExecutorService executorService;
 
-    private final RateLimiter rateLimiter;
+    private final GuavaRateLimiter rateLimiter;
 
     @Inject
     public RateLimitedExecutor(Config config) {
@@ -47,7 +47,7 @@ public class RateLimitedExecutor implements CloseableExecutor {
 
         // Set class fields.
         this.executorService = createExecutorService(config.getThreadCount());
-        this.rateLimiter = RateLimiter.create(
+        this.rateLimiter = GuavaRateLimiter.create(
                 config.getMaxRequestCountPerSecond(),
                 config.getRampUpDurationSeconds(),
                 TimeUnit.SECONDS);
@@ -71,7 +71,7 @@ public class RateLimitedExecutor implements CloseableExecutor {
     @Override
     public void execute(Runnable runnable) {
         checkNotNull(runnable, "runnable");
-        rateLimiter.acquire();
+        rateLimiter.acquire(1);
         executorService.execute(runnable);
     }
 

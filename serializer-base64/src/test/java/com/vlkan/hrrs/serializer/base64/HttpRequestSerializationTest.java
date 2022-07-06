@@ -18,13 +18,10 @@ package com.vlkan.hrrs.serializer.base64;
 
 import com.vlkan.hrrs.api.*;
 import com.vlkan.hrrs.serializer.HttpRequestRecordPipe;
-import com.vlkan.hrrs.serializer.base64.guava.GuavaBase64Decoder;
-import com.vlkan.hrrs.serializer.base64.guava.GuavaBase64Encoder;
 import org.junit.Test;
 
 import java.util.*;
 
-import static com.google.common.base.Preconditions.checkArgument;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -50,8 +47,8 @@ public class HttpRequestSerializationTest {
 
     private static void should_write_and_read(HttpRequestRecord record) {
         HttpRequestRecordPipe pipe = new HttpRequestRecordPipe(MAX_BYTE_COUNT * 8);
-        HttpRequestRecordReader<String> reader = new Base64HttpRequestRecordReader(pipe, GuavaBase64Decoder.getInstance());
-        HttpRequestRecordWriter<String> writer = new Base64HttpRequestRecordWriter(pipe, GuavaBase64Encoder.getInstance());
+        HttpRequestRecordReader<String> reader = new Base64HttpRequestRecordReader(pipe, JdkBase64Codec.INSTANCE);
+        HttpRequestRecordWriter<String> writer = new Base64HttpRequestRecordWriter(pipe, JdkBase64Codec.INSTANCE);
         writer.write(record);
         pipe.flush();
         Iterator<HttpRequestRecord> iterator = reader.read().iterator();
@@ -129,7 +126,10 @@ public class HttpRequestSerializationTest {
     }
 
     private static int generateInt(Random random, int from, int to) {
-        checkArgument(from <= to, "expecting: from <= to, found: %s > %s", from, to);
+        if (from > to) {
+            String message = String.format("expecting: from <= to, found: %s > %s", from, to);
+            throw new IllegalArgumentException(message);
+        }
         int range = to - from;
         int nextInt = random.nextInt(range);
         return from + nextInt;

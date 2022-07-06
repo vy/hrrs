@@ -20,7 +20,7 @@ import com.vlkan.hrrs.api.HttpRequestRecordWriter;
 import com.vlkan.hrrs.api.HttpRequestRecordWriterTarget;
 import com.vlkan.hrrs.serializer.base64.Base64HttpRequestRecord;
 import com.vlkan.hrrs.serializer.base64.Base64HttpRequestRecordWriter;
-import com.vlkan.hrrs.serializer.base64.guava.GuavaBase64Encoder;
+import com.vlkan.hrrs.serializer.base64.JdkBase64Codec;
 import com.vlkan.hrrs.serializer.file.HttpRequestRecordWriterRotatingFileTarget;
 import com.vlkan.hrrs.servlet.HrrsFilter;
 import com.vlkan.rfos.RotationConfig;
@@ -28,8 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-
-import static com.google.common.base.Preconditions.checkNotNull;
+import java.util.Objects;
 
 public class Base64HrrsFilter extends HrrsFilter {
 
@@ -40,9 +39,9 @@ public class Base64HrrsFilter extends HrrsFilter {
     private final HttpRequestRecordWriter<String> writer;
 
     public Base64HrrsFilter(RotationConfig rotationConfig) {
-        checkNotNull(rotationConfig, "rotationConfig");
+        Objects.requireNonNull(rotationConfig, "rotationConfig");
         this.writerTarget = new HttpRequestRecordWriterRotatingFileTarget(rotationConfig, Base64HttpRequestRecord.CHARSET);
-        this.writer = new Base64HttpRequestRecordWriter(writerTarget, GuavaBase64Encoder.getInstance());
+        this.writer = new Base64HttpRequestRecordWriter(writerTarget, JdkBase64Codec.INSTANCE);
     }
 
     public HttpRequestRecordWriterTarget<String> getWriterTarget() {

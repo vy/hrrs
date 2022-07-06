@@ -22,8 +22,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 
-import static com.google.common.base.Preconditions.checkNotNull;
 import static com.vlkan.hrrs.serializer.base64.Base64HttpRequestRecord.*;
 
 public class Base64HttpRequestRecordWriter implements HttpRequestRecordWriter<String> {
@@ -33,8 +33,8 @@ public class Base64HttpRequestRecordWriter implements HttpRequestRecordWriter<St
     private final HttpRequestRecordWriterTarget<String> target;
 
     public Base64HttpRequestRecordWriter(HttpRequestRecordWriterTarget<String> target, Base64Encoder encoder) {
-        this.target = checkNotNull(target, "target");
-        this.encoder = checkNotNull(encoder, "encoder");
+        this.target = Objects.requireNonNull(target, "target");
+        this.encoder = Objects.requireNonNull(encoder, "encoder");
     }
 
     @Override

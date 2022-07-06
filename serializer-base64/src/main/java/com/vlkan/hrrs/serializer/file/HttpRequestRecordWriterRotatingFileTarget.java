@@ -16,7 +16,6 @@
 
 package com.vlkan.hrrs.serializer.file;
 
-import com.google.common.base.MoreObjects;
 import com.vlkan.hrrs.api.HttpRequestRecordWriterTarget;
 import com.vlkan.rfos.RotatingFileOutputStream;
 import com.vlkan.rfos.RotationConfig;
@@ -29,8 +28,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
-
-import static com.google.common.base.Preconditions.checkNotNull;
+import java.util.Objects;
 
 @NotThreadSafe
 public class HttpRequestRecordWriterRotatingFileTarget implements HttpRequestRecordWriterTarget<String> {
@@ -44,8 +42,8 @@ public class HttpRequestRecordWriterRotatingFileTarget implements HttpRequestRec
     private final BufferedWriter writer;
 
     public HttpRequestRecordWriterRotatingFileTarget(RotationConfig rotationConfig, Charset charset) {
-        this.rotationConfig = checkNotNull(rotationConfig, "rotationConfig");
-        this.charset = checkNotNull(charset, "charset");
+        this.rotationConfig = Objects.requireNonNull(rotationConfig, "rotationConfig");
+        this.charset = Objects.requireNonNull(charset, "charset");
         this.writer = createWriter(rotationConfig, charset);
         LOGGER.trace("instantiated (file={}, charset={})", rotationConfig.getFile(), charset);
     }
@@ -96,10 +94,10 @@ public class HttpRequestRecordWriterRotatingFileTarget implements HttpRequestRec
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this)
-                .add("file", rotationConfig.getFile())
-                .add("charset", charset)
-                .toString();
+        return "HttpRequestRecordWriterRotatingFileTarget{" +
+                "file=" + rotationConfig.getFile() +
+                ", charset=" + charset +
+                '}';
     }
 
 }
