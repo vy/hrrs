@@ -63,7 +63,7 @@ jobs:
       - name: "[dependabot] Fetch metadata"
         id: metadata
         if: github.event_name == 'pull_request' && github.actor == 'dependabot[bot]'
-        uses: dependabot/fetch-metadata@v1.3.3
+        uses: dependabot/fetch-metadata@v1.3.4
         with:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
 
