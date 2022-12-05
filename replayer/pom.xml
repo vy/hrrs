@@ -32,7 +32,7 @@
     <properties>
 
         <!-- library versions -->
-        <httpclient.version>4.5.13</httpclient.version>
+        <httpclient.version>4.5.14</httpclient.version>
         <metrics-core.version>4.2.13</metrics-core.version>
 
     </properties>
