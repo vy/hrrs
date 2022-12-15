@@ -21,6 +21,12 @@ updates:
       interval: daily
       time: "04:00"
     open-pull-requests-limit: 10
+    ignore:
+      # Ignore Spring Boot 3, since it requires Java 17.
+      - dependency-name: spring-boot-starter-web
+        versions: [ "3.x.x" ]
+      - dependency-name: spring-boot-starter-jersey
+        versions: [ "3.x.x" ]
 
   - package-ecosystem: github-actions
     directory: "/"
