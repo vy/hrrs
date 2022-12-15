@@ -24,9 +24,9 @@ updates:
     ignore:
       # Ignore Spring Boot 3, since it requires Java 17.
       - dependency-name: spring-boot-starter-web
-        versions: [ "3.x.x" ]
+        versions: [ ">= 3.0.0" ]
       - dependency-name: spring-boot-starter-jersey
-        versions: [ "3.x.x" ]
+        versions: [ ">= 3.0.0" ]
 
   - package-ecosystem: github-actions
     directory: "/"
