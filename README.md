@@ -600,6 +600,12 @@ tests.
   in a regular `POST` request and is not subject to any maximum recordable
   payload size limits.
 
+<a name="security"></a>
+
+# Security policy
+
+If you have encountered an unlisted security vulnerability or other unexpected behaviour that has security impact, please report them privately to the [volkan@yazi.ci](mailto:volkan@yazi.ci) email address.
+
 <a name="license"></a>
 
 # License
