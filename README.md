@@ -1,11 +1,11 @@
 <!---
- Copyright 2016-2022 Volkan Yazıcı
+ Copyright 2016-2023 Volkan Yazıcı
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-        http://www.apache.org/licenses/LICENSE-2.0
+        https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,7 +16,7 @@
 
 [![Actions Status](https://github.com/vy/hrrs/workflows/build/badge.svg)](https://github.com/vy/hrrs/actions)
 [![Maven Central](https://img.shields.io/maven-central/v/com.vlkan.hrrs/hrrs-parent.svg)](https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.vlkan.hrrs%22)
-[![License](https://img.shields.io/github/license/vy/hrrs.svg)](http://www.apache.org/licenses/LICENSE-2.0.txt)
+[![License](https://img.shields.io/github/license/vy/hrrs.svg)](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
 HRRS (HTTP Request Record Suite) is a set of tools that you can leverage to
 record, transform, and replay HTTP requests in your Java EE and Spring web
@@ -604,13 +604,13 @@ tests.
 
 # License
 
-Copyright &copy; 2017-2022 [Volkan Yazıcı](http://vlkan.com/)
+Copyright &copy; 2017-2022 [Volkan Yazıcı](https://volkan.yazi.ci/)
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-   http://www.apache.org/licenses/LICENSE-2.0
+   https://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
