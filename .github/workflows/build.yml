@@ -14,7 +14,16 @@
 
 name: build
 
-on: [ push, pull_request ]
+on:
+  push:
+    # Avoid workflow run for _merged_ `dependabot` PRs.
+    # They were (hopefully!) already tested in PR-triggered workflow.
+    branches-ignore: "dependabot/**"
+  pull_request:
+    paths-ignore:
+      - "**.adoc"
+      - "**.md"
+      - "**.txt"
 
 permissions:
   contents: write
