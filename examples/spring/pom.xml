@@ -32,7 +32,7 @@
     <properties>
 
         <!-- library versions -->
-        <spring-boot.version>2.7.5</spring-boot.version>
+        <spring-boot.version>3.0.2</spring-boot.version>
 
     </properties>
 
