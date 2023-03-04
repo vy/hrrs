@@ -23,10 +23,8 @@ updates:
     open-pull-requests-limit: 10
     ignore:
       # Ignore Spring Boot 3, since it requires Java 17.
-      - dependency-name: spring-boot-starter-web
-        versions: [ ">= 3.0.0" ]
-      - dependency-name: spring-boot-starter-jersey
-        versions: [ ">= 3.0.0" ]
+      - dependency-name: "org.springframework.boot:*"
+        update-types: ["version-update:semver-major"]
 
   - package-ecosystem: github-actions
     directory: "/"
