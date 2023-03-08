@@ -22,7 +22,10 @@ updates:
       time: "04:00"
     open-pull-requests-limit: 10
     ignore:
-      # Ignore Spring Boot 3, since it requires Java 17.
+      # Mockito 5 requires Java 11
+      - dependency-name: "org.mockito:*"
+        update-types: ["version-update:semver-major"]
+      # Spring Boot 3 requires Java 17
       - dependency-name: "org.springframework.boot:*"
         update-types: ["version-update:semver-major"]
 
