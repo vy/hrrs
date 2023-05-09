@@ -18,14 +18,13 @@ package com.vlkan.hrrs.example.spring;
 
 import com.vlkan.hrrs.servlet.HrrsFilter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import javax.ws.rs.core.MediaType;
-
 @Controller
-@RequestMapping(path = "/hello", produces = {MediaType.TEXT_PLAIN})
+@RequestMapping(path = "/hello", produces = {MediaType.TEXT_PLAIN_VALUE})
 public class HelloController {
 
     @Autowired
