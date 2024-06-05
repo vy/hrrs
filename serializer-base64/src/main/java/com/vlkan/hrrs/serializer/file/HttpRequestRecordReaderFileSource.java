@@ -81,6 +81,8 @@ public class HttpRequestRecordReaderFileSource implements HttpRequestRecordReade
     public String read() {
         try {
             return reader.readLine();
+        } catch (EOFException ignored) {
+            return null;
         } catch (IOException error) {
             String message = String.format("failed reading line (file=%s)", file);
             throw new RuntimeException(message, error);
