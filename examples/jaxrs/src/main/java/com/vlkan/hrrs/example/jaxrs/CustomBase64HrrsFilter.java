@@ -18,7 +18,7 @@ package com.vlkan.hrrs.example.jaxrs;
 
 import com.vlkan.hrrs.servlet.base64.Base64HrrsFilter;
 import com.vlkan.rfos.RotationConfig;
-import com.vlkan.rfos.policy.DailyRotationPolicy;
+import com.vlkan.rfos.policy.ByteMatchingRotationPolicy;
 
 import java.io.File;
 
@@ -36,7 +36,7 @@ public class CustomBase64HrrsFilter extends Base64HrrsFilter {
                 .builder()
                 .file(file)
                 .filePattern(filePattern)
-                .policy(DailyRotationPolicy.getInstance())
+                .policy(new ByteMatchingRotationPolicy((byte) '\n', 50_000))
                 .build();
     }
 

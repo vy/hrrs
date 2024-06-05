@@ -71,9 +71,7 @@ problems that HRRS is aiming to solve:
 
 # Overview
 
-<img alt="HRRS Overview"
-     src="https://cdn.rawgit.com/vy/hrrs/master/doc/overview.png"
-     width="100%">
+![HRRS Overview](doc/overview.png)
 
 HRRS ships the following artifacts:
 
@@ -145,7 +143,7 @@ public class HrrsConfig {
                 .builder()
                 .file(file)
                 .filePattern(filePattern)
-                .policy(DailyRotationPolicy.getInstance())
+                .policy(new ByteMatchingRotationPolicy((byte) '\n', 50_000))
                 .build();
         return new Base64HrrsFilter(rotationConfig);
     }
@@ -599,6 +597,11 @@ tests.
   operation is relatively more expensive then just cloning an `InputStream`
   in a regular `POST` request and is not subject to any maximum recordable
   payload size limits.
+
+- **Which rotation policies can I use?** This completely depends on the
+  serializer you are using. For line-based serializers (e.g., the predefined
+  Base64-based ones) you must use `ByteMatchingRotationPolicy` with `\n` as
+  the target byte. See #206 for the discussion.
 
 <a name="security"></a>
 
