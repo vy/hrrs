@@ -18,7 +18,8 @@ on:
   push:
     # Avoid workflow run for _merged_ `dependabot` PRs.
     # They were (hopefully!) already tested in PR-triggered workflow.
-    branches-ignore: "dependabot/**"
+    branches-ignore:
+    - "dependabot/**"
   pull_request:
     paths-ignore:
       - "**.adoc"
@@ -44,13 +45,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup JDK 8
+      - name: Set up Java
         uses: actions/setup-java@v4.2.1
         with:
-          distribution: temurin
+          distribution: zulu
           java-version: 8
-          java-package: jdk
-          architecture: x64
           cache: maven
 
       - name: Build with Maven
@@ -94,22 +93,17 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup JDK 8
+      - name: Set up Java
         uses: actions/setup-java@v4.2.1
         with:
-          distribution: temurin
+          distribution: zulu
           java-version: 8
-          java-package: jdk
-          architecture: x64
           cache: maven
-
-      - name: Import GPG private key
-        run: |
-          echo -n "$GPG_PKEY" \
-          | base64 --decode \
-          | gpg -v --batch --import --yes --pinentry-mode error
-        env:
-          GPG_PKEY: ${{ secrets.GPG_PKEY }}
+          server-id: ${{ github.ref == 'refs/heads/master' && 'sonatype-nexus-snapshots' || 'sonatype-nexus-staging' }}
+          server-username: MAVEN_NEXUS_USERNAME
+          server-password: MAVEN_NEXUS_PASSWORD
+          gpg-private-key: ${{ secrets.GPG_PKEY }}
+          gpg-passphrase: MAVEN_GPG_PASSPHRASE
 
       - name: Export artifact version
         run: |
@@ -153,20 +147,14 @@ jobs:
           }
 
       - name: Deploy
-        # "package" phase is necessary before "gpg:sign" goal.
+        env:
+          MAVEN_NEXUS_USERNAME: ${{ secrets.NEXUS_USER }}
+          MAVEN_NEXUS_PASSWORD: ${{ secrets.NEXUS_PASS }}
+          MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_PKEY_PASS }}
         run: |
           ./mvnw \
-            -V -B --no-transfer-progress -e \
-            -DskipTests=true \
-            -DperformRelease=true \
-            -DdeployAtEnd=true \
-            --settings .github/maven-settings.xml \
-            package gpg:sign install:install deploy:deploy
-        env:
-          GPG_PKEY_ID: ${{ secrets.GPG_PKEY_ID }}
-          GPG_PKEY_PASS: ${{ secrets.GPG_PKEY_PASS }}
-          NEXUS_USER: ${{ secrets.NEXUS_USER }}
-          NEXUS_PASS: ${{ secrets.NEXUS_PASS }}
+            --show-version --batch-mode --errors --no-transfer-progress \
+            -P ${{ github.ref == 'refs/heads/master' && 'deploy' || 'deploy,release' }}
 
       - name: Tag version (RELEASE)
         if: startsWith(github.ref, 'refs/heads/release/')
